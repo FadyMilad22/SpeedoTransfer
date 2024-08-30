@@ -33,7 +33,7 @@ fun SpeedoTextField() {
         )
         Spacer(modifier = Modifier.size(10.dp))
         OutlinedTextField(
-            value = text.value, onValueChange = { it ->
+            value = text.value, onValueChange = {
                 text.value = it
             },
             modifier = Modifier
