@@ -17,13 +17,12 @@ import com.example.speedotransfer.ui.theme.G0
 import com.example.speedotransfer.ui.theme.P300
 
 @Composable
-fun SpeedoButton(text:String,enabled :Boolean,modifier: Modifier = Modifier) {
+fun SpeedoButton(text:String,enabled :Boolean,isTransparent:Boolean ,modifier: Modifier = Modifier) {
+
+
     Button(
         onClick = { /*TODO*/ },
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 15.dp, bottom = 15.dp)
-            .height(51.dp),
+        modifier = modifier.fillMaxWidth(),
         border = BorderStroke(1.5.dp, color = P300),
         shape = RoundedCornerShape(6.dp),
         enabled = enabled,
@@ -36,10 +35,16 @@ fun SpeedoButton(text:String,enabled :Boolean,modifier: Modifier = Modifier) {
     ) {
         Text(
             text = text,
-            style = ButtonTextStyle
+            style = ButtonTextStyle , modifier = modifier.padding(vertical = 15.dp)
         )
     }
 
 }
 
 //
+@Preview(showSystemUi = true)
+@Composable
+private fun SpeedoButtonPreview() {
+SpeedoButton(text = "Login", enabled = true , isTransparent = false)
+
+}

@@ -3,15 +3,11 @@ package com.example.speedotransfer.ui.elements
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,19 +15,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.theme.BodyMedium16
-import com.example.speedotransfer.ui.theme.BodyRegular16
-import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.G200
 import com.example.speedotransfer.ui.theme.G40
-import com.example.speedotransfer.ui.theme.G900
-import com.example.speedotransfer.ui.theme.P300
-import com.example.speedotransfer.ui.theme.P50
+
 
 @Composable
 fun ArrowedSmallMenuItem(name: String, descritipn: String, @DrawableRes icon :Int,enableStroke:Boolean, modifier: Modifier = Modifier) {
@@ -53,7 +45,6 @@ fun ArrowedSmallMenuItem(name: String, descritipn: String, @DrawableRes icon :In
 
 
                 Text(text = name , style = BodyMedium16, color = G200,modifier=modifier.padding(start = 16.dp).weight(1f))
-
 
 
 

@@ -2,26 +2,53 @@ package com.example.speedotransfer
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+//            statusBarStyle = SystemBarStyle.light(
+//                android.graphics.Color.TRANSPARENT,
+//                android.graphics.Color.BLUE
+//            ),
+
+        )
         setContent {
-            SpeedoTransferTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { //innerPadding ->
+            SpeedoTransferTheme(darkTheme = false) {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
+                    Login(modifier = Modifier.padding(innerPadding))
                 }
-//                Login()
+
             }
         }
+    }
+}
+
+@Composable
+fun Login(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(
+                color = Color.Blue
+            )
+    ) {
+        Text(text = "Hello")
     }
 }
 
@@ -56,8 +83,6 @@ class MainActivity : ComponentActivity() {
 //        }
 //    }
 //}
-
-
 
 
 @Preview(showBackground = true)
