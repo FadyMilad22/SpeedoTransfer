@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SpeedoTransfer</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="account_number">Account ****%s</string>
+    <string name="sign_trailing">%s %s</string>
+    <string name="already_have_an_account_q">Already have an account?</string>
+    <string name="sign_in_a">Sign in</string>
 </resources>
