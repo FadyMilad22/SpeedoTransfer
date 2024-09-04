@@ -13,6 +13,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.theme.BodyMedium16
+import com.example.speedotransfer.ui.theme.BodyRegular16
 import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.LinkMediumTextStyle
 import com.example.speedotransfer.ui.theme.P300
@@ -40,7 +41,7 @@ fun SignTrailingText(
 //    })
 
 Row() {
-    Text(text = "${stringResource(id = question)} ", style = BodyMedium16, color = G100,)
+    Text(text = "${stringResource(id = question)} ", style = BodyRegular16, color = G100,)
     Text(text = stringResource(id = answer), style = LinkMediumTextStyle, color = P300, textDecoration = TextDecoration.Underline)
 
 }

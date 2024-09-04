@@ -6,4 +6,5 @@
     <string name="sign_trailing">%s %s</string>
     <string name="already_have_an_account_q">Already have an account?</string>
     <string name="sign_in_a">Sign in</string>
+    <string name="sign_up">Sign up</string>
 </resources>
