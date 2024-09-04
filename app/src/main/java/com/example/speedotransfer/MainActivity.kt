@@ -14,7 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.speedotransfer.model.Client
+import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
 
 class MainActivity : ComponentActivity() {
@@ -31,7 +34,11 @@ class MainActivity : ComponentActivity() {
             SpeedoTransferTheme(darkTheme = false) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    Login(modifier = Modifier.padding(innerPadding))
+                    val client = Client("Asmaa Dosuky", "7890")
+                    val list = listOf(client, client, client, client, client,client,client)
+                    TransferAmountDesign(list ,  modifier=Modifier.padding(innerPadding) )
+                    //Login(modifier = Modifier.padding(innerPadding))
+
                 }
 
             }

@@ -26,7 +26,7 @@ import com.example.speedotransfer.ui.theme.G40
 
 
 @Composable
-fun ArrowedSmallMenuItem(name: String, descritipn: String, @DrawableRes icon :Int,enableStroke:Boolean, modifier: Modifier = Modifier) {
+fun ArrowedSmallMenuItem(name: String,  @DrawableRes icon :Int, modifier: Modifier = Modifier) {
 
     Column(modifier.background(Color.Transparent)) {
 
@@ -74,6 +74,6 @@ fun ArrowedSmallMenuItem(name: String, descritipn: String, @DrawableRes icon :In
 @Preview(showSystemUi = true)
 @Composable
 private fun ArrowedSmallMenuItemPreview() {
-    ArrowedSmallMenuItem(name = "Settings", descritipn = "Change your settings" , icon = R.drawable.setting , enableStroke = true)
+    ArrowedSmallMenuItem(name = "Settings",   icon = R.drawable.setting )
 
 }
