@@ -56,7 +56,6 @@ import kotlinx.coroutines.launch
 /*
 * 
 * Todo TextFields edits , Stepper modification to match the Design
-* Todo Star icon isn't Right Size?!
 *
 * */
 
@@ -171,13 +170,14 @@ fun RecipientInformationArea(favouritesList: List<Client>, modifier: Modifier = 
                         contentDescription = "Favourite Icon", tint = P300,
                         modifier = modifier
                             .size(24.dp)
-                            .padding(end = 8.dp),
+
                     )
                     Text(
                         text = "Favourite List",
                         style = BodyRegular16,
                         fontSize = 20.sp,
                         color = P300,
+                        modifier= modifier.padding(start = 8.dp)
                     )
                 }
 

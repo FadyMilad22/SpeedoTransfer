@@ -1,37 +1,22 @@
 package com.example.speedotransfer.ui.elements
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomSheetState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -46,20 +31,19 @@ import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.G40
 import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.G900
-import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
-import com.example.speedotransfer.ui.theme.P75
-import com.example.speedotransfer.ui.theme.TitleSemiBold
 
 
 @Composable
 fun FavListWithButtonsBeneficiaryCard(
     clientName: String,
     accountNumberSuffix: String,
-    modifier: Modifier = Modifier, onEditClick: ()->Unit={}, onDeleteClick:  ()->Unit={}){
+    modifier: Modifier = Modifier,
+    onEditClick : ()->Unit={},
+    //  onEditClick: (String,String) -> Pair<String, String> = {s1,s2 -> Pair(s1,s2)},
+    onDeleteClick: (String,String) -> Unit = {_,_ ->}
+) {
 
-    var edit by remember { mutableStateOf(false) }
-    var delete by remember { mutableStateOf(false) }
 
 
     Row(
@@ -122,7 +106,10 @@ fun FavListWithButtonsBeneficiaryCard(
 
 
         Row(
-            modifier = modifier.padding(16.dp).weight(1f).fillMaxWidth(), // Optional padding around the row
+            modifier = modifier
+                .padding(16.dp)
+                .weight(1f)
+                .fillMaxWidth(), // Optional padding around the row
             horizontalArrangement = Arrangement.End,// Space between the icons
         ) {
             IconButton(
@@ -133,12 +120,14 @@ fun FavListWithButtonsBeneficiaryCard(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.edit),
-                    contentDescription = "Edit", modifier = modifier.size(24.dp)
-                ,tint= G100)
+                    contentDescription = "Edit", modifier = modifier.size(24.dp), tint = G100
+                )
             }
             IconButton(
                 onClick = {
-                   onDeleteClick()
+                    onDeleteClick(clientName ,accountNumberSuffix)
+//
+
                     // Handle delete action here
                 }
 
@@ -154,10 +143,7 @@ fun FavListWithButtonsBeneficiaryCard(
     }
 
 
-
 }
-
-
 
 
 @Preview(showSystemUi = true)

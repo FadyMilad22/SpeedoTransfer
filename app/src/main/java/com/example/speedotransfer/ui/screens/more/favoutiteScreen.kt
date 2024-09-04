@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.more
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
+
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -18,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,14 +41,12 @@ import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
 import com.example.speedotransfer.ui.theme.BodyRegular16
 import com.example.speedotransfer.ui.theme.G700
-import com.example.speedotransfer.ui.theme.G90
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
 
 
 /*
-* edit Icon not in the right Size
 * Error when Click on the Fields of the sheet
 * Background Color
 * On Delete
@@ -56,7 +58,12 @@ import com.example.speedotransfer.ui.theme.TitleSemiBold
 @Composable
 fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) {
 
+
+
     val sheetState = rememberModalBottomSheetState()
+    var clickedListIndex by remember { mutableStateOf<Int?>(null) }
+
+    //val sheetState = remember { SheetState(false) }
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
     var edit by remember { mutableStateOf<Boolean>(false) }
@@ -80,17 +87,18 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
 
 
         LazyColumn {
-            items(favouriteList) {
+            itemsIndexed(favouriteList) {index ,item ->
                 FavListWithButtonsBeneficiaryCard(
-                    clientName = it.Name,
-                    accountNumberSuffix = it.accountNumber,
+                    clientName = item.Name,
+                    accountNumberSuffix = item.accountNumber,
                     onEditClick = {
                         edit = true
                         showBottomSheet = true
-                        accountNameEdit = it.Name
-                        accountNumberEdit = it.accountNumber
+                       // clickedListIndex = index
+
+
                     },
-                    onDeleteClick = {
+                    onDeleteClick = {name: String, accountNumber: String ->
                         edit = false
                         showBottomSheet = true
                     }
@@ -103,7 +111,7 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
     if (showBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = {
-                showBottomSheet = false
+            //    showBottomSheet = false
 
             },
             sheetState = sheetState,
@@ -129,13 +137,15 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
                             contentDescription = "Edit Icon", tint = P300,
                             modifier = modifier
                                 .size(24.dp)
-                                .padding(end = 8.dp),
+                                //.padding(end = 8.dp),
                         )
                         Text(
                             text = "Edit",
                             style = BodyRegular16,
                             fontSize = 20.sp,
                             color = G700,
+                            modifier = modifier.padding(start = 8.dp)
+
                         )
                     }
 
@@ -143,7 +153,7 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
 
                     SpeedoTextField(
                         labelText = "Recipient Account",
-                        value = accountNumberEdit,
+                        value = accountNumberEdit, //.also { accountNameEdit = favouriteList.get(index = clickedListIndex!!).accountNumber },
                         onValueChange = { accountNumberEdit = it },
                         placeholderText = "Enter Cardholder Account Number",
                         icon = R.drawable.transparent_image,
@@ -152,7 +162,7 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
                     Spacer(modifier = modifier.padding(bottom = 8.dp))
                     SpeedoTextField(
                         labelText = "Recipient Name",
-                        value = accountNameEdit,
+                        value = accountNameEdit , //.also { accountNameEdit = favouriteList.get(index = clickedListIndex!!).Name },
                         onValueChange = { accountNameEdit = it },
                         placeholderText = "Enter Cardholder Name",
                         icon = R.drawable.transparent_image,
@@ -160,7 +170,7 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
                     )
 
                     Spacer(modifier = modifier.padding(bottom = 32.dp))
-                    SpeedoButton(text = "Save", enabled = true, isTransparent = true)
+                    SpeedoButton(text = "Save", enabled = true, isTransparent = true , modifier =modifier.clickable { showBottomSheet = false })
                     Spacer(modifier = modifier.padding(bottom = 16.dp))
 
                 }
@@ -168,6 +178,9 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
             } else {
 
                 //Delete UI
+
+
+
             }
 
         }
