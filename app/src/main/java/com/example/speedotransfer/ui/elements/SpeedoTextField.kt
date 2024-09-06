@@ -35,6 +35,111 @@ import com.example.speedotransfer.ui.theme.G0
 import com.example.speedotransfer.ui.theme.G70
 import com.example.speedotransfer.ui.theme.G700
 
+//@Composable
+//fun SpeedoTextField(
+//    labelText: String,
+//    value: String,
+//    onValueChange: (String) -> Unit,
+//    placeholderText: String,
+//    icon: Int,
+//    modifier: Modifier = Modifier,
+//    isError: Boolean = false,
+//    errorMessage: String? = null,
+//    isPasswordVisible: Boolean = false,
+////    isFocused: Boolean = false,
+//
+//    onTrailingIconClick: (() -> Unit)? = null,
+//    keyboardOptions: KeyboardOptions,
+//    visualTransformation: VisualTransformation = VisualTransformation.None,
+//    isEnabled: Boolean = true
+//) {
+//    Column {
+//        Text(
+//            text = labelText,
+//            style = BodyRegular16,
+//            color = G700,
+//            modifier = modifier
+//                .fillMaxWidth()
+//                .height(24.dp)
+//        )
+//        OutlinedTextField(
+//            value = value,
+//            onValueChange = onValueChange,
+//            textStyle = BodyRegular14,
+//            placeholder = {
+//                Text(
+//                    text = placeholderText,
+//                    style = BodyRegular14,
+//                    color = G70
+//                )
+//            },
+//            trailingIcon = {
+//                if (onTrailingIconClick != null) {
+//                    Icon(
+//                        painter = painterResource(id = icon),
+//                        contentDescription = null,
+//                        modifier = modifier
+//                            .size(24.dp)
+//                            .clickable(enabled = isEnabled, onClick = onTrailingIconClick),
+//                        tint = when {
+//                            isError -> D300
+//                            isPasswordVisible -> G700
+////                            isFocused -> G700
+//                            !isEnabled -> G70
+//                            else -> G70
+//                        }
+//                    )
+//                } else {
+//                    Icon(
+//                        painter = painterResource(id = icon),
+//                        contentDescription = null,
+//                        modifier = modifier.size(24.dp),
+//                        tint = when {
+//                            isError -> D300
+////                            !isFocused -> G700
+//                            !isEnabled -> G70
+//                            else -> G70
+//                        }
+//                    )
+//                }
+//            },
+//            colors = OutlinedTextFieldDefaults.colors(
+//                focusedTextColor = if (isEnabled) G700 else G70,
+//                focusedBorderColor = if (isError) D300 else if (isEnabled) G700 else G70,
+//                unfocusedBorderColor = if (isError) D300 else G70,
+//                cursorColor = if (isEnabled) G700 else G70,
+//                disabledPlaceholderColor = G70,
+//                disabledTrailingIconColor = G70,
+//                focusedTrailingIconColor = G700,
+//                disabledBorderColor = G70,
+//                errorBorderColor = D300,
+//                errorTrailingIconColor = D300
+//            ),
+//            shape = RoundedCornerShape(6.dp),
+//            keyboardOptions = keyboardOptions,
+//            visualTransformation = visualTransformation,
+//            modifier = modifier
+//                .padding(vertical = 8.dp)
+//                .fillMaxWidth()
+//                .background(G0),
+//            isError = isError,
+//            enabled = isEnabled
+//        )
+//
+//        if (isError && !errorMessage.isNullOrEmpty()) {
+//            Text(
+//                text = errorMessage!!,
+//                style = BodyRegular14,
+//                color = D300,
+//                modifier = modifier
+//                    .fillMaxWidth()
+//                    .padding(vertical = 8.dp)
+//                    .height(21.dp)
+//            )
+//        }
+//    }
+//}
+
 @Composable
 fun SpeedoTextField(
     labelText: String,
@@ -48,7 +153,8 @@ fun SpeedoTextField(
     onTrailingIconClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    isEnabled: Boolean = true
 ) {
     Column {
         Text(
@@ -67,9 +173,7 @@ fun SpeedoTextField(
                 Text(
                     text = placeholderText,
                     style = BodyRegular14,
-                    color = G70,
-//                    modifier = modifier
-//                        .height(21.dp)
+                    color = G70
                 )
             },
             trailingIcon = {
@@ -79,23 +183,34 @@ fun SpeedoTextField(
                         contentDescription = null,
                         modifier = modifier
                             .size(24.dp)
-                            .clickable(onClick = onTrailingIconClick),
-                        tint = if (isError) D300 else if (isPasswordVisible) G700 else G70
+                            .clickable(enabled = isEnabled) {
+                                onTrailingIconClick()
+                            },
+                        tint = when {
+                            isError -> D300
+                            isPasswordVisible -> G700
+                            !isEnabled -> G70
+                            else -> G70
+                        }
                     )
                 } else {
                     Icon(
                         painter = painterResource(id = icon),
                         contentDescription = null,
                         modifier = modifier.size(24.dp),
-                        tint = if (isError) D300 else G70
+                        tint = when {
+                            isError -> D300
+                            !isEnabled -> G70
+                            else -> G70
+                        }
                     )
                 }
             },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = G700,
-                focusedBorderColor = if (isError) D300 else G700,
-                focusedTrailingIconColor = if (isError) D300 else G700,
-                cursorColor = G700,
+                focusedTextColor = if (isEnabled) G700 else G70,
+                focusedBorderColor = if (isError) D300 else if (isEnabled) G700 else G70,
+                unfocusedBorderColor = if (isError) D300 else G70,
+                cursorColor = if (isEnabled) G700 else G70,
                 disabledPlaceholderColor = G70,
                 disabledTrailingIconColor = G70,
                 disabledBorderColor = G70,
@@ -107,12 +222,14 @@ fun SpeedoTextField(
             visualTransformation = visualTransformation,
             modifier = modifier
                 .padding(vertical = 8.dp)
-                .fillMaxWidth().background(G0),
-            isError = isError
+                .fillMaxWidth()
+                .background(G0),
+            isError = isError,
+            enabled = isEnabled
         )
-//        if (isError && !errorMessage.isNullOrEmpty()) {
-            if (isError) {
-                Text(
+
+        if (isError && !errorMessage.isNullOrEmpty()) {
+            Text(
                 text = errorMessage!!,
                 style = BodyRegular14,
                 color = D300,
@@ -120,35 +237,8 @@ fun SpeedoTextField(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
                     .height(21.dp)
-
             )
         }
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-private fun SpeedoTextFieldPreview() {
-    var text by remember {
-        mutableStateOf("123456789")
-    }
-    var isPasswordVisible by remember {
-        mutableStateOf(false)
-    }
-
-    SpeedoTextField(
-        labelText = "Password",
-        value = text,
-        onValueChange = { text = it },
-        placeholderText = "Enter your password",
-        icon = if (isPasswordVisible) R.drawable.eye_comp2 else R.drawable.eye_comp,
-        isError = true,
-        errorMessage = "This is an error message.",
-        isPasswordVisible = isPasswordVisible,
-        onTrailingIconClick = {
-            isPasswordVisible = !isPasswordVisible
-        },
-        keyboardOptions = KeyboardOptions.Default,
-        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
-    )
-}

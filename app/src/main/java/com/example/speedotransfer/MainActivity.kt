@@ -15,6 +15,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.speedotransfer.ui.screens.authentication.CompleteSignUpScreen
+import com.example.speedotransfer.ui.screens.authentication.SignInScreen
+import com.example.speedotransfer.ui.screens.authentication.SignUpScreen
+import com.example.speedotransfer.ui.screens.error.ErrorScreen
+import com.example.speedotransfer.ui.screens.onboarding.OnboardingScreen
+import com.example.speedotransfer.ui.screens.profile.ChangePasswordScreen
+import com.example.speedotransfer.ui.screens.profile.EditProfileScreen
+import com.example.speedotransfer.ui.screens.profile.ProfileInfoScreen
+import com.example.speedotransfer.ui.screens.profile.ProfileScreen
+import com.example.speedotransfer.ui.screens.profile.SettingsScreen
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
 
 class MainActivity : ComponentActivity() {
@@ -31,8 +41,7 @@ class MainActivity : ComponentActivity() {
             SpeedoTransferTheme(darkTheme = false) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    Login(modifier = Modifier.padding(innerPadding))
-                }
+                    SignInScreen()                }
 
             }
         }

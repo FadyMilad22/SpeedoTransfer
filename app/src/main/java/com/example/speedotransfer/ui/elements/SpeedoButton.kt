@@ -25,14 +25,16 @@ fun SpeedoButton(text:String,enabled :Boolean,isTransparent:Boolean ,modifier: M
     Button(
         onClick = { /*TODO*/ },
         modifier = modifier.fillMaxWidth().height(52.dp),
-//        border = BorderStroke(1.5.dp, color = P300),
+        border = BorderStroke(
+            1.5.dp,
+            color = if (enabled)P300 else G100),
         shape = RoundedCornerShape(6.dp),
         enabled = enabled,
         colors = ButtonColors(
             disabledContentColor = G0,
-            contentColor = G0,
+            contentColor = if (isTransparent) P300 else G0,
             disabledContainerColor = G100,
-            containerColor = P300
+            containerColor = if (isTransparent) G0 else P300
         )
     ) {
         Text(
