@@ -39,6 +39,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.AppRoutes.AppNavHost
 import com.example.speedotransfer.AppRoutes.getTopLevelRoute
+import com.example.speedotransfer.model.Client
+import com.example.speedotransfer.ui.screens.SplashScreen
+import com.example.speedotransfer.ui.screens.more.FavouriteScreen
+import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.theme.G0
 import com.example.speedotransfer.ui.theme.G200
 import com.example.speedotransfer.ui.theme.G700
@@ -62,14 +66,20 @@ class MainActivity : ComponentActivity() {
             SpeedoTransferTheme(darkTheme = false) {
 
                 val navController = rememberNavController()
-
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination?.route
                 Scaffold(modifier = Modifier.fillMaxSize(),
-                    bottomBar = { BottomNavBar(navController) },
-                    topBar = { TopAppBar(title = { Text("Speedo Transfer", textAlign = TextAlign.Center, style = TitleMedium , fontSize = 20.sp, color = G700 , modifier =Modifier.padding(top= 8.dp)) }, backgroundColor = Color.Transparent)})
+                    bottomBar = { if (currentDestination != "splash") { // Replace "splash" with your actual splash route
+                        BottomNavBar(navController)
+                    } },
+//                    topBar = { TopAppBar(title = { Text("Speedo Transfer", textAlign = TextAlign.Center, style = TitleMedium , fontSize = 20.sp, color = G700 , modifier =Modifier.padding(top= 8.dp)) }, backgroundColor = Color.Transparent)}
+                 )
                 { innerPadding ->
 
-                    AppNavHost(navController=navController,modifier = Modifier.padding(innerPadding))
-
+//                    AppNavHost(navController=navController,modifier = Modifier.padding(innerPadding))
+                    val client = Client("Asmaa Dosuky", "7890")
+                    val list = listOf(client, client, client, client, client, client, client)
+                    FavouriteScreen(list)
                 }
 
             }

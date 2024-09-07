@@ -1,6 +1,5 @@
 package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens
 
-import android.graphics.Paint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,34 +7,33 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
 import com.example.speedotransfer.model.Transaction
-import com.example.speedotransfer.ui.screens.tansfer.TransactionItem
+import com.example.speedotransfer.ui.elements.CustomAppBarIcon
+import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyRegular14
 import com.example.speedotransfer.ui.theme.G100
@@ -44,12 +42,44 @@ import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
 import com.example.speedotransfer.ui.theme.P75
+import com.example.speedotransfer.ui.uiConstants
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotificationScreenDesign(transactionsList: List<Transaction> ,modifier: Modifier = Modifier) {
 
-    Column(modifier=modifier.padding(vertical = 24.dp , horizontal =16.dp )) {
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    CutomAppBarTitle(
+                        text = "Notifications",
+
+                        )
+                },
+                Modifier.background(
+                    brush = uiConstants.BRUSH
+                ),
+
+                navigationIcon = {
+                    IconButton(onClick = {}) {
+                        CustomAppBarIcon(
+                            icon = R.drawable.drop_down
+                        )
+                    }
+                },
+            )
+        },
+        bottomBar = {
+
+        },
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier.padding(paddingValues)
+                    .padding(horizontal = 16.dp)
+
+    ) {
 
 
         LazyColumn {
@@ -69,7 +99,7 @@ fun NotificationScreenDesign(transactionsList: List<Transaction> ,modifier: Modi
     }
 
 }
-
+    )}
 
 
 @Composable

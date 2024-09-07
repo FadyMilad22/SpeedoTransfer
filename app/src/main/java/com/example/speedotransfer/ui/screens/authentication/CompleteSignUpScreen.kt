@@ -4,13 +4,11 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,7 +18,6 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -38,24 +35,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.CountryRow
+import com.example.speedotransfer.ui.elements.CustomAppBarIcon
+import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.SignTrailingText
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
-import com.example.speedotransfer.ui.theme.BodyMedium16
 import com.example.speedotransfer.ui.theme.BodyRegular16
-import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.Heading3
-import com.example.speedotransfer.ui.theme.TitleMedium
 import com.example.speedotransfer.ui.theme.TitleSemiBold
+import com.example.speedotransfer.ui.uiConstants
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -108,30 +103,14 @@ fun CompleteSignUpScreen(modifier: Modifier = Modifier) {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        text = "",
-                        style = TitleMedium,
-                        color = G900,
-                        modifier = modifier.height(30.dp)
-
-                    )
+                    CutomAppBarTitle(text = "Sign Up")
                 },
                 Modifier.background(
-                    brush = Brush.verticalGradient(
-                        listOf(
-                            Color(
-                                0xFFFFF8E7
-                            ), Color(0xFFFFEAEE)
-                        )
-                    )
+                    brush = uiConstants.BRUSH2
                 ),
                 navigationIcon = {
                     IconButton(onClick = {}) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.drop_down),
-                            contentDescription = "Back",
-                            modifier = modifier.size(24.dp)
-                        )
+                        CustomAppBarIcon(icon = R.drawable.drop_down)
                     }
                 },
             )

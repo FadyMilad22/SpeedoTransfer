@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.more
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,18 +11,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
-
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
 import com.example.speedotransfer.model.Client
+import com.example.speedotransfer.ui.elements.CustomAppBarIcon
+import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.FavListWithButtonsBeneficiaryCard
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
@@ -44,6 +47,7 @@ import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
+import com.example.speedotransfer.ui.uiConstants
 
 
 /*
@@ -70,10 +74,35 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
 
     var accountNumberEdit by remember { mutableStateOf("") }
     var accountNameEdit by remember { mutableStateOf("") }
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(start = 16.dp, end = 16.dp, top = 32.dp),
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    CutomAppBarTitle(
+                        text = "Favourite",
+
+                        )
+                },
+                Modifier.background(
+                    brush = uiConstants.BRUSH
+                ),
+
+                navigationIcon = {
+                    IconButton(onClick = {}) {
+                        CustomAppBarIcon(
+                            icon = R.drawable.drop_down
+                        )
+                    }
+                },
+            )
+        },
+        bottomBar = {
+
+        },
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier.padding(paddingValues)
+                    .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
@@ -186,7 +215,7 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
         }
 
     }
-}
+})}
 
 
 @Preview(showSystemUi = true)
