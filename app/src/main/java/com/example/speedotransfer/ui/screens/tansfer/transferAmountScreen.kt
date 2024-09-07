@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.tansfer
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,12 +16,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -39,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
 import com.example.speedotransfer.model.Client
+import com.example.speedotransfer.ui.elements.CustomAppBarIcon
+import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.FavListBeneficiaryCard
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
@@ -50,7 +55,7 @@ import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import kotlinx.coroutines.launch
+import com.example.speedotransfer.ui.uiConstants
 
 
 /*
@@ -61,25 +66,52 @@ import kotlinx.coroutines.launch
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferAmountDesign(favouritesList: List<Client>, modifier: Modifier = Modifier) {
 
     val scrollState = rememberScrollState()
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    CutomAppBarTitle(
+                        text = "Transfer",
 
-    Column(
-        modifier = modifier
-            .padding(start = 16.dp, end = 16.dp, top = 24.dp)
-            .verticalScroll(scrollState)
-    ) {
+                        )
+                },
+                Modifier.background(
+                    brush = uiConstants.BRUSH
+                    ),
+
+                navigationIcon = {
+                    IconButton(onClick = {}) {
+                        CustomAppBarIcon(
+                            icon = R.drawable.drop_down
+                        )
+                    }
+                },
+            )
+        },
+        bottomBar = {
+
+        },
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier.padding(paddingValues)
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(scrollState)
+            ) {
 
 
-        StepsRow(currentStep = 1)
-        AmountArea()
-        RecipientInformationArea(favouritesList = favouritesList)
+                StepsRow(currentStep = 1)
+                AmountArea()
+                RecipientInformationArea(favouritesList = favouritesList)
 
 
-    }
+            }
 
+        })
 }
 
 
@@ -178,7 +210,7 @@ fun RecipientInformationArea(favouritesList: List<Client>, modifier: Modifier = 
                         style = BodyRegular16,
                         fontSize = 20.sp,
                         color = P300,
-                        modifier= modifier.padding(start = 8.dp)
+                        modifier = modifier.padding(start = 8.dp)
                     )
                 }
 
@@ -274,13 +306,12 @@ fun AmountArea(modifier: Modifier = Modifier) {
 //            })
 
 
-
 @Preview(showSystemUi = true, device = "spec:parent=pixel_5")
 @Composable
 private fun TransferAmountDesignPreview() {
 
     // StepsRow(2)
     val client = Client("Asmaa Dosuky", "7890")
-    val list = listOf(client, client, client, client, client,client,client)
+    val list = listOf(client, client, client, client, client, client, client)
     TransferAmountDesign(list)
 }

@@ -1,7 +1,7 @@
 package com.example.speedotransfer.ui.screens.tansfer
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,13 +26,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.BeneficiaryCard
+import com.example.speedotransfer.ui.elements.CustomAppBarIcon
+import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.StepsRow
 import com.example.speedotransfer.ui.theme.BodyMedium16
 import com.example.speedotransfer.ui.theme.BodyRegular16
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.TitleSemiBold
+import com.example.speedotransfer.ui.uiConstants
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferConfirmationDesign(
     transferAmount: Double,
@@ -40,32 +48,58 @@ fun TransferConfirmationDesign(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    CutomAppBarTitle(
+                        text = "Transfer",
 
-    Column(
-        modifier = modifier
-            .padding(start = 16.dp, end = 16.dp, top = 24.dp)
-            .verticalScroll(scrollState)
-    ) {
+                        )
+                },
+                Modifier.background(
+                    brush = uiConstants.BRUSH
+                ),
+
+                navigationIcon = {
+                    IconButton(onClick = {}) {
+                        CustomAppBarIcon(
+                            icon = R.drawable.drop_down
+                        )
+                    }
+                },
+            )
+        },
+        bottomBar = {
+
+        },
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier.padding(paddingValues)
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(scrollState)
+            ) {
 
 
-        StepsRow(currentStep = 2)
-        TransferAmountArea(transferAmount = transferAmount, currency = currency)
+                StepsRow(currentStep = 2)
+                TransferAmountArea(transferAmount = transferAmount, currency = currency)
 
-        AccountsDetailsArea(
-            senderName = senderName,
-            receiverName = receiverName,
-            senderAccountNumberSuffix = senderAccountNumberSuffix,
-            receiverAccountNumberSuffix =receiverAccountNumberSuffix
-        )
+                AccountsDetailsArea(
+                    senderName = senderName,
+                    receiverName = receiverName,
+                    senderAccountNumberSuffix = senderAccountNumberSuffix,
+                    receiverAccountNumberSuffix = receiverAccountNumberSuffix
+                )
 
-        SpeedoButton(text = "Confirm", enabled = true, isTransparent = false)
+                SpeedoButton(text = "Confirm", enabled = true, isTransparent = false)
 
-        Spacer(modifier = Modifier.padding(bottom = 16.dp))
-        SpeedoButton(text = "Previous", enabled = false, isTransparent = true)
-        Spacer(modifier = Modifier.padding(bottom = 16.dp))
-    }
+                Spacer(modifier = Modifier.padding(bottom = 16.dp))
+                SpeedoButton(text = "Previous", enabled = false, isTransparent = true)
+                Spacer(modifier = Modifier.padding(bottom = 16.dp))
+            }
 
 
+        })
 }
 
 

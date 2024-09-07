@@ -9,9 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -19,17 +16,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.speedotransfer.R
+import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.NotificationBanner
 import com.example.speedotransfer.ui.elements.SignTrailingText
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
 import com.example.speedotransfer.ui.theme.BodyRegular14
 import com.example.speedotransfer.ui.theme.D300
-import com.example.speedotransfer.ui.theme.G0
-import com.example.speedotransfer.ui.theme.G900
-import com.example.speedotransfer.ui.theme.P50
-import com.example.speedotransfer.ui.theme.TitleMedium
 import com.example.speedotransfer.ui.theme.TitleSemiBold
+import com.example.speedotransfer.ui.uiConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,22 +34,10 @@ fun SignInScreen(modifier: Modifier = Modifier) {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        text = "Sign In",
-                        style = TitleMedium,
-                        color = G900,
-                        modifier = modifier.height(30.dp)
-
-                    )
+                    CutomAppBarTitle(text = "Sign In")
                 },
                 Modifier.background(
-                    brush = Brush.verticalGradient(
-                        listOf(
-                            Color(
-                                0xFFFFF8E7
-                            ), Color(0xFFFFEAEE)
-                        )
-                    )
+                    brush = uiConstants.BRUSH2
                 ),
 //                navigationIcon = {
 //                    IconButton(onClick = {}) {
