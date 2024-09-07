@@ -44,7 +44,7 @@ fun TransferConfirmedDesign(
             .verticalScroll(scrollState)
     ) {
 
-        StepsRow(currentStep = 2)
+        StepsRow(currentStep = 3)
         TransferDoneSuccesfullyArea()
         AccountsDetailsArea(
             senderName = senderName,

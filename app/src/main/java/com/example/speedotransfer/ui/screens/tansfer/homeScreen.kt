@@ -34,6 +34,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.model.Transaction
 import com.example.speedotransfer.ui.theme.BodyMedium14
@@ -52,23 +54,50 @@ import com.example.speedotransfer.ui.theme.P50
 import com.example.speedotransfer.ui.theme.TitleSemiBold
 
 /**
-**
-**   ToDO Column Spacing to match the Design
-**
+ **
+ **   ToDO Column Spacing to match the Design
+ **
  * */
 
 
-
-
 @Composable
-fun HomeScreen(name: String, amount: Double, currency: String,transactionList: List<Transaction>, modifier: Modifier = Modifier) {
+fun HomeScreen(navController: NavController,
+//    name: String,
+//    amount: Double,
+//    currency: String,
+//    transactionList: List<Transaction>,
+    modifier: Modifier = Modifier
+) {
+
+// Test Code Till we Implement FLows and APIS
+    // test code
+    val transaction = Transaction(
+        name = "Ahmed Mohamed",
+        cardType = "Visa . MasterCard",
+        cardNumber = "1234",
+        amount = "500",
+        date = "Today 11:00",
+        status = "Received",
+        currency = "EGP"
+    )
+    val list = listOf(transaction, transaction, transaction, transaction, transaction)
+
+
+val    name=  "Fady Milad"
+val    amount= 4423.toDouble()
+val    currency = "$"
+val    transactionList = list
+
+
+// Till we Implement FLows and APIS
+
+
     Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp)) {
 
 
         NameBar(name = name)
-        Spacer(modifier = modifier.padding(top = 8.dp))
         AmountCard(amount = amount, currency = currency)
-        Spacer(modifier = modifier.padding(top = 16.dp))
+        Spacer(modifier = Modifier.padding(top = 16.dp))
         RecentTransactionsArea(transactionList = transactionList)
 
     }
@@ -115,72 +144,72 @@ fun TransactionItem(transaction: Transaction, modifier: Modifier = Modifier) {
             modifier
                 .padding(top = 16.dp, bottom = 8.dp, start = 8.dp, end = 8.dp)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.Top
-            , horizontalArrangement = Arrangement.SpaceBetween
-            ,
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
 
 
-Row(modifier.fillMaxHeight()){
+            Row(modifier.fillMaxHeight()) {
 
-            Box(
-                modifier = modifier
-                    .align(Alignment.CenterVertically)
-                    .background(color = P50, shape = RoundedCornerShape(8.dp))
-                    .width(64.dp)
-                    .height(61.dp)
-
-            ) {
-
-
-                Image(
-                    painter = painterResource(R.drawable.master_card_background),
-                    contentDescription = "",
-                    modifier = modifier.align(Alignment.Center)
-                )
-                Image(
-                    painter = painterResource(R.drawable.master_card_logo),
-                    contentDescription = "",
+                Box(
                     modifier = modifier
-                        .align(Alignment.Center)
-                        .width(30.dp)
-                        .height(18.dp)
-                        .offset(0.dp, (-4).dp)
+                        .align(Alignment.CenterVertically)
+                        .background(color = P50, shape = RoundedCornerShape(8.dp))
+                        .width(64.dp)
+                        .height(61.dp)
 
-                    // .padding(horizontal = 16.dp, vertical = 18.dp)
-                )
-            }
-
-            Column(verticalArrangement = Arrangement.SpaceEvenly,
-                modifier = modifier
-                    .fillMaxHeight()
-                    .padding(start = 8.dp)
-            ) {
-
-                Text(
-                    text = transaction.name, style = BodyMedium14, color = G900
-                )
+                ) {
 
 
+                    Image(
+                        painter = painterResource(R.drawable.master_card_background),
+                        contentDescription = "",
+                        modifier = modifier.align(Alignment.Center)
+                    )
+                    Image(
+                        painter = painterResource(R.drawable.master_card_logo),
+                        contentDescription = "",
+                        modifier = modifier
+                            .align(Alignment.Center)
+                            .width(30.dp)
+                            .height(18.dp)
+                            .offset(0.dp, (-4).dp)
 
-                Text(
-                    text = "${transaction.cardType} . ${transaction.cardNumber}",
-                    style = BodyRegular14,
-                    fontSize = 12.sp,
-                    color = G700
-                )
+                        // .padding(horizontal = 16.dp, vertical = 18.dp)
+                    )
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    modifier = modifier
+                        .fillMaxHeight()
+                        .padding(start = 8.dp)
+                ) {
+
+                    Text(
+                        text = transaction.name, style = BodyMedium14, color = G900
+                    )
+
+
+
+                    Text(
+                        text = "${transaction.cardType} . ${transaction.cardNumber}",
+                        style = BodyRegular14,
+                        fontSize = 12.sp,
+                        color = G700
+                    )
 //                    Text(text = transaction.cardNumber ,style = BodyRegular14, fontSize = 12.sp,
 //                        color = G700)
 
 
-                Text(
-                    text = "${transaction.date} - ${transaction.status}",
-                    style = BodyRegular14,
-                    fontSize = 12.sp,
-                    color = G100
-                )
-                // Text(text = transaction.status)
-            }
+                    Text(
+                        text = "${transaction.date} - ${transaction.status}",
+                        style = BodyRegular14,
+                        fontSize = 12.sp,
+                        color = G100
+                    )
+                    // Text(text = transaction.status)
+                }
 
             }
 
@@ -194,7 +223,7 @@ Row(modifier.fillMaxHeight()){
         }
 
 
-HorizontalDivider(thickness = 1.dp , color = G40)
+        HorizontalDivider(thickness = 1.dp, color = G40)
     }
 
 }
@@ -202,15 +231,14 @@ HorizontalDivider(thickness = 1.dp , color = G40)
 
 @Composable
 fun AmountCard(amount: Double, currency: String, modifier: Modifier = Modifier) {
-    Box(
+    Column(
         modifier
-            .fillMaxWidth()
-            .background(P300, RoundedCornerShape(8.dp))
+            .fillMaxWidth().padding(top= 16.dp)
+            .background(P300, RoundedCornerShape(8.dp)), verticalArrangement = Arrangement.Center
     ) {
 
         Card(
             modifier = modifier
-                .padding(top = 16.dp, start = 16.dp)
                 .fillMaxWidth()
                 .padding(vertical = 24.dp, horizontal = 12.dp),
             colors = CardDefaults.cardColors(containerColor = P300),
@@ -287,20 +315,20 @@ fun getInitials(name: String): String {
 private fun HomeScreenPreview() {
 
     // test code
-val transaction = Transaction(
-    name = "Ahmed Mohamed",
-    cardType = "Visa . MasterCard",
-    cardNumber = "1234",
-    amount = "500",
-    date = "Today 11:00",
-    status = "Received",
-    currency = "EGP"
-)
-val list = listOf(transaction, transaction, transaction, transaction, transaction)
+    val transaction = Transaction(
+        name = "Ahmed Mohamed",
+        cardType = "Visa . MasterCard",
+        cardNumber = "1234",
+        amount = "500",
+        date = "Today 11:00",
+        status = "Received",
+        currency = "EGP"
+    )
+    val list = listOf(transaction, transaction, transaction, transaction, transaction)
 
 
-
-    HomeScreen("Fady Milad", 4423.toDouble(), "$" ,list)
+HomeScreen(navController = rememberNavController())
+  //  HomeScreen("Fady Milad", 4423.toDouble(), "$", list)
 
 
 }

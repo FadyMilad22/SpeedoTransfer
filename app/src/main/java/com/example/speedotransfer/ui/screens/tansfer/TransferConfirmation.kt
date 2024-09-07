@@ -148,7 +148,7 @@ fun TransferAmountArea(
     }
 }
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 private fun TransferConfirmationPreview() {
     TransferConfirmationDesign(

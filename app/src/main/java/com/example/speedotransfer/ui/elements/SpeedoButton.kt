@@ -47,6 +47,6 @@ fun SpeedoButton(text:String,enabled :Boolean,isTransparent:Boolean ,modifier: M
 @Preview(showSystemUi = true)
 @Composable
 private fun SpeedoButtonPreview() {
-SpeedoButton(text = "Login", enabled = true , isTransparent = false)
+SpeedoButton(text = "Login", enabled = true , isTransparent = true)
 
 }

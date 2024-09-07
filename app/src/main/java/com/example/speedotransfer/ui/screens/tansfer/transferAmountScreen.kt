@@ -163,6 +163,7 @@ fun RecipientInformationArea(favouritesList: List<Client>, modifier: Modifier = 
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = modifier.padding(bottom = 16.dp)
                 ) {
                     Icon(
