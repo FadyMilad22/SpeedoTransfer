@@ -8,17 +8,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 object APIHelper {
 
 
-
     val gson: Gson = GsonBuilder().serializeNulls().create()
-           private val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("/*ToDO add the Base URL*/")
-            .addConverterFactory(GsonConverterFactory.create(gson)).build()
 
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(Constants.BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create(gson)).build()
 
-     val callable: APIService by lazy {
+    val callable: APIService by lazy {
         retrofit.create(APIService::class.java)
 
 
     }
 
-    }
+}

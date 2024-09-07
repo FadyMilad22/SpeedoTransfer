@@ -16,27 +16,24 @@ import retrofit2.http.Path
 interface APIService {
 
 
-    // APIHelper function to register a new customer
-    @POST("/api/v1/auth/register")
-    suspend fun registerCustomer(@Body registerRequest: RegisterCustomerRequest): RegisterCustomerResponse
+        // APIHelper function to register a new customer
+        @POST(Constants.REGISTER_CUSTOMER_ENDPOINT)
+        suspend fun registerCustomer(@Body registerRequest: RegisterCustomerRequest): RegisterCustomerResponse
 
-    // APIHelper function to log in and generate JWT token
-    @POST("/api/v1/auth/login")
-    suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
+        // APIHelper function to log in and generate JWT token
+        @POST(Constants.LOGIN_ENDPOINT)
+        suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
 
+        // APIHelper function to get customer details by ID
+        @GET(Constants.GET_CUSTOMER_BY_ID_ENDPOINT)
+        suspend fun getCustomerById(@Path(Constants.CUSTOMER_ID_QUERY) customerId: Long): CustomerDetailsResponse
 
-    // APIHelper function to get customer details by ID
-    @GET("/api/v1/customer/{customerId}")
-    suspend fun getCustomerById(@Path("customerId") customerId: Long): CustomerDetailsResponse
+        // APIHelper function to create a new account
+        @POST(Constants.CREATE_ACCOUNT_ENDPOINT)
+        suspend fun createAccount(@Body newAccountData: CreateAccountRequest): CreateAccountResponse
 
-    // APIHelper function to create a new account
-    @POST("/api/v1/account")
-    suspend fun createAccount(@Body newAccountData: CreateAccountRequest): CreateAccountResponse
-
-
-    // APIHelper function to get account details by ID
-    @GET("/api/v1/account/{accountId}")
-    suspend fun getAccountById(@Path("accountId") accountId: Long): AccountDetailsResponse
-
+        // APIHelper function to get account details by ID
+        @GET(Constants.GET_ACCOUNT_BY_ID_ENDPOINT)
+        suspend fun getAccountById(@Path(Constants.ACCOUNT_ID_QUERY) accountId: Long): AccountDetailsResponse
 
 }

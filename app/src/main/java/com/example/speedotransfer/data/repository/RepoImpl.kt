@@ -1,8 +1,6 @@
 package com.example.e_commerceapp.HomeActivity.Settiings.Repo
 
 
-
-
 import AccountDetails
 import AccountDetailsResponse
 import CreateAccountRequest
@@ -15,15 +13,9 @@ import RegisterCustomerResponse
 import com.example.speedotransfer.data.network.RemoteDataSource
 import com.example.speedotransfer.data.repository.Repo
 
-class RepoImpl(val remoteDataSource: RemoteDataSource,
-                ): Repo {
-
-                    // Just An Example
-
-//        override suspend fun getUserData(token: String): Response<UserDataResponse> {
-//        return remoteDataSource.getUserData("customer",token)
-//        }
-
+class RepoImpl(
+    val remoteDataSource: RemoteDataSource,
+) : Repo {
 
 
     // Repo function to register a new customer using repository pattern
@@ -36,6 +28,7 @@ class RepoImpl(val remoteDataSource: RemoteDataSource,
             createdAt = "2024-09-04T02:47:40.62069",
             updatedAt = "2024-09-04T02:47:40.62069"
         )
+
         // Uncomment this when the API is live
         // return remoteDataSource.registerCustomer(registerRequest)
 
@@ -89,7 +82,6 @@ class RepoImpl(val remoteDataSource: RemoteDataSource,
     }
 
 
-
     // Repo function to create a new account using repository pattern
     override suspend fun createAccount(newAccountData: CreateAccountRequest): CreateAccountResponse {
         // Mocked object for testing purposes
@@ -131,9 +123,6 @@ class RepoImpl(val remoteDataSource: RemoteDataSource,
 
         return mockResponse // Using mock object until the API is live
     }
-
-
-
 
 
 }

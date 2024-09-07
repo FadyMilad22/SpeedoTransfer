@@ -12,8 +12,6 @@ import RegisterCustomerResponse
 
 interface Repo {
 
-//    suspend fun getUserData(token: String): Response<UserDataResponse>
-
 
     suspend fun registerCustomer(registerRequest: RegisterCustomerRequest): RegisterCustomerResponse
     suspend fun login(loginRequest: LoginRequest): LoginResponse
