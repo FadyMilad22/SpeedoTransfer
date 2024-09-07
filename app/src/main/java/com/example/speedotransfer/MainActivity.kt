@@ -74,12 +74,12 @@ class MainActivity : ComponentActivity() {
                     } },
 //                    topBar = { TopAppBar(title = { Text("Speedo Transfer", textAlign = TextAlign.Center, style = TitleMedium , fontSize = 20.sp, color = G700 , modifier =Modifier.padding(top= 8.dp)) }, backgroundColor = Color.Transparent)}
                  )
-                { innerPadding ->
+                { _ ->
 
-//                    AppNavHost(navController=navController,modifier = Modifier.padding(innerPadding))
-                    val client = Client("Asmaa Dosuky", "7890")
-                    val list = listOf(client, client, client, client, client, client, client)
-                    FavouriteScreen(list)
+                    AppNavHost(navController=navController)
+//                    val client = Client("Asmaa Dosuky", "7890")
+//                    val list = listOf(client, client, client, client, client, client, client)
+//                    FavouriteScreen(list)
                 }
 
             }
