@@ -8,29 +8,28 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,10 +37,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.model.Transaction
+import com.example.speedotransfer.ui.elements.CustomAppBarIcon
+import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyMedium16
 import com.example.speedotransfer.ui.theme.BodyRegular14
-import com.example.speedotransfer.ui.theme.BodyRegular16
 import com.example.speedotransfer.ui.theme.G0
 import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.G200
@@ -52,6 +52,7 @@ import com.example.speedotransfer.ui.theme.Heading2
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
 import com.example.speedotransfer.ui.theme.TitleSemiBold
+import com.example.speedotransfer.ui.uiConstants
 
 /**
  **
@@ -60,8 +61,10 @@ import com.example.speedotransfer.ui.theme.TitleSemiBold
  * */
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController,
+fun HomeScreen(
+    navController: NavController,
 //    name: String,
 //    amount: Double,
 //    currency: String,
@@ -83,25 +86,48 @@ fun HomeScreen(navController: NavController,
     val list = listOf(transaction, transaction, transaction, transaction, transaction)
 
 
-val    name=  "Fady Milad"
-val    amount= 4423.toDouble()
-val    currency = "$"
-val    transactionList = list
+    val name = "Fady Milad"
+    val amount = 4423.toDouble()
+    val currency = "$"
+    val transactionList = list
 
 
 // Till we Implement FLows and APIS
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    CutomAppBarTitle(
+                        text = "",
+
+                        )
+                },
+                Modifier.background(
+                    brush = uiConstants.BRUSH
+                ),
+
+            )
+        },
+        bottomBar = {
+
+        },
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(horizontal = 16.dp)
+            ) {
 
 
-    Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp)) {
+                NameBar(name = name)
+                AmountCard(amount = amount, currency = currency)
+                Spacer(modifier = Modifier.padding(top = 16.dp))
+                RecentTransactionsArea(transactionList = transactionList)
 
+            }
 
-        NameBar(name = name)
-        AmountCard(amount = amount, currency = currency)
-        Spacer(modifier = Modifier.padding(top = 16.dp))
-        RecentTransactionsArea(transactionList = transactionList)
-
-    }
-
+        }
+    )
 }
 
 @Composable
@@ -233,7 +259,8 @@ fun TransactionItem(transaction: Transaction, modifier: Modifier = Modifier) {
 fun AmountCard(amount: Double, currency: String, modifier: Modifier = Modifier) {
     Column(
         modifier
-            .fillMaxWidth().padding(top= 16.dp)
+            .fillMaxWidth()
+            .padding(top = 16.dp)
             .background(P300, RoundedCornerShape(8.dp)), verticalArrangement = Arrangement.Center
     ) {
 
@@ -327,8 +354,8 @@ private fun HomeScreenPreview() {
     val list = listOf(transaction, transaction, transaction, transaction, transaction)
 
 
-HomeScreen(navController = rememberNavController())
-  //  HomeScreen("Fady Milad", 4423.toDouble(), "$", list)
+    HomeScreen(navController = rememberNavController())
+    //  HomeScreen("Fady Milad", 4423.toDouble(), "$", list)
 
 
 }
