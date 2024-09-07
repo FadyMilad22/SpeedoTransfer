@@ -5,19 +5,18 @@ import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object apiHelper {
+object APIHelper {
 
 
 
-
-        val gson: Gson = GsonBuilder().serializeNulls().create()
-         private   val retrofit: Retrofit = Retrofit.Builder()
+    val gson: Gson = GsonBuilder().serializeNulls().create()
+           private val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("/*ToDO add the Base URL*/")
             .addConverterFactory(GsonConverterFactory.create(gson)).build()
 
 
-     val callable: apiHelper by lazy {
-        retrofit.create(apiHelper::class.java)
+     val callable: APIService by lazy {
+        retrofit.create(APIService::class.java)
 
 
     }

@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.repository
+package com.example.speedotransfer.data.network
 
 import AccountDetailsResponse
 import CreateAccountRequest
@@ -9,10 +9,8 @@ import LoginResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
 
+interface RemoteDataSource {
 
-interface Repo {
-
-//    suspend fun getUserData(token: String): Response<UserDataResponse>
 
 
     suspend fun registerCustomer(registerRequest: RegisterCustomerRequest): RegisterCustomerResponse
@@ -20,5 +18,4 @@ interface Repo {
     suspend fun getCustomerById(customerId: Long): CustomerDetailsResponse
     suspend fun createAccount(newAccountData: CreateAccountRequest): CreateAccountResponse
     suspend fun getAccountById(accountId: Long): AccountDetailsResponse
-
 }
