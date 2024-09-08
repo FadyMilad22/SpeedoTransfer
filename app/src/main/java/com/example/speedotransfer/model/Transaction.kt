@@ -11,3 +11,4 @@ data class Transaction(
     val isReceived :Boolean = true,
     val isSucessful :Boolean = false
 )
+

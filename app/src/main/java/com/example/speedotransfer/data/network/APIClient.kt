@@ -8,6 +8,8 @@ import LoginRequest
 import LoginResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
+import com.example.speedotransfer.model.TransactionResponse
+import com.example.speedotransfer.model.Transfer
 
 
 object APIClient : RemoteDataSource {
@@ -28,7 +30,6 @@ object APIClient : RemoteDataSource {
     }
 
 
-
     // APIClient function to create a new account
     override suspend fun createAccount(newAccountData: CreateAccountRequest): CreateAccountResponse {
         return APIHelper.callable.createAccount(newAccountData)
@@ -37,6 +38,23 @@ object APIClient : RemoteDataSource {
     override suspend fun getAccountById(accountId: Long): AccountDetailsResponse {
         return APIHelper.callable.getAccountById(accountId)
     }
+
+    // APIClient function to transfer money between accounts
+    override suspend fun transferMoney(transferRequest: Transfer): Transfer {
+        return APIHelper.callable.transferMoney(transferRequest)
+    }
+
+    // APIClient function to get transaction history by account ID, start date, and end date
+    override suspend fun getTransactionHistory(accountId: Long, startDate: String, endDate: String): List<TransactionResponse> {
+        return APIHelper.callable.getTransactionHistory(accountId, startDate, endDate)
+    }
+
+
+    // APIClient function to get transaction details by ID
+    override suspend fun getTransactionById(transactionId: Long): TransactionResponse {
+        return APIHelper.callable.getTransactionById(transactionId)
+    }
+
 
 
 

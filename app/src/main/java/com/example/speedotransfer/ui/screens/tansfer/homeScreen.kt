@@ -24,7 +24,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,7 +37,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.model.Transaction
-import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyMedium16
@@ -53,7 +51,7 @@ import com.example.speedotransfer.ui.theme.Heading2
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.uiConstants
+import com.example.speedotransfer.ui.UIConstants
 
 /**
  **
@@ -104,7 +102,7 @@ fun HomeScreen(
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = UIConstants.BRUSH
                 ),
 
             )
@@ -152,7 +150,7 @@ fun RecentTransactionsArea(transactionList: List<Transaction>, modifier: Modifie
 
 
         }
-        LazyColumn {
+        LazyColumn() {
             items(transactionList) {
                 TransactionItem(transaction = it)
             }

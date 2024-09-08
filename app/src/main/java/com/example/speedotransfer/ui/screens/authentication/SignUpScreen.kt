@@ -33,7 +33,7 @@ import com.example.speedotransfer.ui.elements.SignTrailingText
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.uiConstants
+import com.example.speedotransfer.ui.UIConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +59,7 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
                     CutomAppBarTitle(text = "Sign Up")
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH2
+                    brush = UIConstants.BRUSH2
                     
                 ),
             )
