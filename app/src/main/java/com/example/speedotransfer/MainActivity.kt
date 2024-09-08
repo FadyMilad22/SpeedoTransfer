@@ -76,10 +76,10 @@ class MainActivity : ComponentActivity() {
                  )
                 { innerPadding ->
 
-//                    AppNavHost(navController=navController,modifier = Modifier.padding(innerPadding))
-                    val client = Client("Asmaa Dosuky", "7890")
-                    val list = listOf(client, client, client, client, client, client, client)
-                    FavouriteScreen(list)
+                    AppNavHost(navController=navController,modifier = Modifier.padding(innerPadding))
+                   // val client = Client("Asmaa Dosuky", "7890")
+                   // val list = listOf(client, client, client, client, client, client, client)
+                   // FavouriteScreen(list)
                 }
 
             }

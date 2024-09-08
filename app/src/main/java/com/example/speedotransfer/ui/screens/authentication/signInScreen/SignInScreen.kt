@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens.authentication
+package com.example.speedotransfer.ui.screens.authentication.signInScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -24,7 +24,7 @@ import com.example.speedotransfer.ui.elements.SpeedoTextField
 import com.example.speedotransfer.ui.theme.BodyRegular14
 import com.example.speedotransfer.ui.theme.D300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.uiConstants
+import com.example.speedotransfer.ui.UIConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,7 +37,7 @@ fun SignInScreen(modifier: Modifier = Modifier) {
                     CutomAppBarTitle(text = "Sign In")
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH2
+                    brush = UIConstants.BRUSH2
                 ),
 //                navigationIcon = {
 //                    IconButton(onClick = {}) {

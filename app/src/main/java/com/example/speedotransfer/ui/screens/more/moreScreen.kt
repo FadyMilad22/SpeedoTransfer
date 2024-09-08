@@ -40,7 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.speedotransfer.R
-import com.example.speedotransfer.ui.uiConstants
+import com.example.speedotransfer.ui.UIConstants
 import com.example.speedotransfer.ui.elements.ArrowedSmallMenuItem
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
@@ -70,7 +70,7 @@ fun MoreScreenDesign(modifier: Modifier = Modifier) {
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = UIConstants.BRUSH
                 ),
 
                 navigationIcon = {

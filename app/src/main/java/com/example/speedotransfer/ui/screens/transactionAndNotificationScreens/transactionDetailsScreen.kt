@@ -46,7 +46,7 @@ import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.Heading3
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
-import com.example.speedotransfer.ui.uiConstants
+import com.example.speedotransfer.ui.UIConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,7 +71,7 @@ fun TransactionDetailsScreen(
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = UIConstants.BRUSH
                 ),
 
                 navigationIcon = {

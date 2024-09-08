@@ -34,7 +34,7 @@ import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
 import com.example.speedotransfer.ui.theme.BodyRegular14
 import com.example.speedotransfer.ui.theme.D300
-import com.example.speedotransfer.ui.uiConstants
+import com.example.speedotransfer.ui.UIConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +49,7 @@ fun ChangePasswordScreen(modifier: Modifier = Modifier) {
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = UIConstants.BRUSH
                 ),
 
                 navigationIcon = {

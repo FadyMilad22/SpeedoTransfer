@@ -3,7 +3,7 @@ package com.example.speedotransfer.ui
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-object uiConstants {
+object UIConstants {
 
     val BRUSH = Brush.verticalGradient(
         listOf(

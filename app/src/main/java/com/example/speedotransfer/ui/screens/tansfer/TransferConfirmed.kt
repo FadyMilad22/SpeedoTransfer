@@ -28,7 +28,7 @@ import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.StepsRow
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.uiConstants
+import com.example.speedotransfer.ui.UIConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +50,7 @@ fun TransferConfirmedDesign(
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = UIConstants.BRUSH
                 ),
 
                 navigationIcon = {

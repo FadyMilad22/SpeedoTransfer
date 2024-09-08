@@ -41,7 +41,7 @@ import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
 import com.example.speedotransfer.ui.theme.BodyMedium16
-import com.example.speedotransfer.ui.uiConstants
+import com.example.speedotransfer.ui.UIConstants
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +57,7 @@ fun EditProfileScreen(modifier: Modifier = Modifier) {
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = UIConstants.BRUSH
                 ),
 
                 navigationIcon = {
