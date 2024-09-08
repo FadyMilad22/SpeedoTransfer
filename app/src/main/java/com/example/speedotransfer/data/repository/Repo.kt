@@ -4,8 +4,8 @@ import AccountDetailsResponse
 import CreateAccountRequest
 import CreateAccountResponse
 import CustomerDetailsResponse
-import LoginRequest
-import LoginResponse
+import SignInRequest
+import SignInResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.model.TransactionResponse
@@ -16,7 +16,7 @@ interface Repo {
 
 
     suspend fun registerCustomer(registerRequest: RegisterCustomerRequest): RegisterCustomerResponse
-    suspend fun login(loginRequest: LoginRequest): LoginResponse
+    suspend fun login(loginRequest: SignInRequest): SignInResponse
 
     suspend fun getCustomerById(customerId: Long): CustomerDetailsResponse
 

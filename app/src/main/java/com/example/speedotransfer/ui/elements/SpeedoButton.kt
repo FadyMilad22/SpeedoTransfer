@@ -3,11 +3,9 @@ package com.example.speedotransfer.ui.elements
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,36 +17,41 @@ import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.P300
 
 @Composable
-fun SpeedoButton(text:String,enabled :Boolean,isTransparent:Boolean ,modifier: Modifier = Modifier) {
-
-
+fun SpeedoButton(
+    text: String,
+    enabled: Boolean,
+    isTransparent: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}  // Added onClick parameter for button functionality
+) {
     Button(
-        onClick = { /*TODO*/ },
-        modifier = modifier.fillMaxWidth().height(52.dp),
+        onClick = onClick,  // Hook up onClick handler here
+        modifier = modifier
+            .fillMaxWidth()
+            .height(52.dp),
         border = BorderStroke(
             1.5.dp,
-            color = if (enabled)P300 else G100),
+            color = if (enabled) P300 else G100
+        ),
         shape = RoundedCornerShape(6.dp),
         enabled = enabled,
-        colors = ButtonColors(
-            disabledContentColor = G0,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isTransparent) G0 else P300,
             contentColor = if (isTransparent) P300 else G0,
             disabledContainerColor = G100,
-            containerColor = if (isTransparent) G0 else P300
+            disabledContentColor = G0
         )
     ) {
         Text(
             text = text,
-            style = ButtonTextStyle , modifier = modifier.height(21.dp)
+            style = ButtonTextStyle,
+            modifier = Modifier.height(21.dp)
         )
     }
-
 }
 
-//
 @Preview(showSystemUi = true)
 @Composable
 private fun SpeedoButtonPreview() {
-SpeedoButton(text = "Login", enabled = true , isTransparent = true)
-
+    SpeedoButton(text = "Login", enabled = true, isTransparent = true)
 }

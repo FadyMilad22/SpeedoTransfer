@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -51,7 +50,7 @@ import com.example.speedotransfer.ui.theme.Heading2
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.UIConstants
+import com.example.speedotransfer.ui.uiConstants
 
 /**
  **
@@ -102,7 +101,7 @@ fun HomeScreen(
                         )
                 },
                 Modifier.background(
-                    brush = UIConstants.BRUSH
+                    brush = uiConstants.BRUSH
                 ),
 
             )

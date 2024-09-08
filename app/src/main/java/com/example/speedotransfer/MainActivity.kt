@@ -69,7 +69,9 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination?.route
                 Scaffold(modifier = Modifier.fillMaxSize(),
-                    bottomBar = { if (currentDestination != "splash") { // Replace "splash" with your actual splash route
+                    bottomBar = { if (currentDestination != "splash" &&
+                        currentDestination != "signin" &&
+                        currentDestination != "signup") { // Replace "splash" with your actual splash route
                         BottomNavBar(navController)
                     } },
 //                    topBar = { TopAppBar(title = { Text("Speedo Transfer", textAlign = TextAlign.Center, style = TitleMedium , fontSize = 20.sp, color = G700 , modifier =Modifier.padding(top= 8.dp)) }, backgroundColor = Color.Transparent)}

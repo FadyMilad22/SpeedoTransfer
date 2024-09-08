@@ -55,7 +55,7 @@ import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.UIConstants
+import com.example.speedotransfer.ui.uiConstants
 
 
 /*
@@ -81,7 +81,7 @@ fun TransferAmountDesign(favouritesList: List<Client>, modifier: Modifier = Modi
                         )
                 },
                 Modifier.background(
-                    brush = UIConstants.BRUSH
+                    brush = uiConstants.BRUSH
                     ),
 
                 navigationIcon = {

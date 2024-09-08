@@ -50,7 +50,7 @@ import com.example.speedotransfer.ui.elements.SpeedoTextField
 import com.example.speedotransfer.ui.theme.BodyRegular16
 import com.example.speedotransfer.ui.theme.Heading3
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.UIConstants
+import com.example.speedotransfer.ui.uiConstants
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -106,7 +106,7 @@ fun CompleteSignUpScreen(modifier: Modifier = Modifier) {
                     CutomAppBarTitle(text = "Sign Up")
                 },
                 Modifier.background(
-                    brush = UIConstants.BRUSH2
+                    brush = uiConstants.BRUSH2
                 ),
                 navigationIcon = {
                     IconButton(onClick = {}) {
