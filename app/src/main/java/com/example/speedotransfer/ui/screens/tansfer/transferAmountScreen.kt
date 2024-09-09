@@ -189,14 +189,11 @@ fun RecipientInformationArea(navController: NavController,senderName: String,sen
     )
 
     Spacer(modifier = modifier.padding(bottom = 32.dp))
-    SpeedoButton(text = "Continue", enabled = true, isTransparent = false , modifier.clickable {
-
-
+    SpeedoButton(text = "Continue", enabled = true, isTransparent = false ,){
         navController.navigate(
             route = "${Route.CONFIRM_TRANSACTION}/${amount}/${currency}/$senderName/${recipientName}/$senderAccountNumberSuffix/$recipientAccountNumber"
         )
-
-    })
+    }
     Spacer(modifier = Modifier.padding(bottom = 16.dp))
 
 
@@ -302,7 +299,7 @@ fun AmountArea(  amount: String,
             SpeedoTextField(
                 labelText = "Amount",
                 value = amount,
-                onValueChange = { amount = it },
+                onValueChange = onAmountChange ,
                 placeholderText = "Enter amount",
                 icon = R.drawable.transparent_image,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)

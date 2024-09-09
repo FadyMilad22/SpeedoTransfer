@@ -1,6 +1,7 @@
 package com.example.speedotransfer.AppRoutes
 
 
+import TransferConfirmedDesign
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,8 +17,6 @@ import com.example.speedotransfer.AppRoutes.Route.SIGNIN
 import com.example.speedotransfer.AppRoutes.Route.SIGNUP
 import com.example.speedotransfer.AppRoutes.Route.SPLASH
 import com.example.speedotransfer.ui.screens.SplashScreen
-import com.example.speedotransfer.ui.screens.authentication.SignUpScreen
-import com.example.speedotransfer.ui.screens.tansfer.homeScreen.HomeScreen
 import com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen.TransferConfirmationDesign
 import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInScreen

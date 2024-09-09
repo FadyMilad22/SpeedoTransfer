@@ -135,8 +135,7 @@ fun TransferConfirmationDesign(navController: NavController,
                 )
 
                 SpeedoButton(text = "Confirm", enabled = true,
-                    isTransparent = false,
-                    Modifier.clickable {
+                    isTransparent = false, ){
                         transferViewModel.transferMoney(
                             TransferRequest(
                                senderAccNumber =  senderAccountNumberSuffix,
@@ -160,20 +159,20 @@ fun TransferConfirmationDesign(navController: NavController,
 
 
 
-                    })
+                    }
 
 
 
 
                 Spacer(modifier = Modifier.padding(bottom = 16.dp))
-                SpeedoButton(text = "Previous", enabled = true, isTransparent = true , modifier.clickable {
+                SpeedoButton(text = "Previous", enabled = true, isTransparent = true ){
 
 
                     navController.popBackStack(route = "${Route.BEGIN_TRANSACTION}/{senderName}/{senderAccountNumberSuffix}/{currency}",
                         false
                     )
 
-                })
+                }
                 Spacer(modifier = Modifier.padding(bottom = 16.dp))
             }
 

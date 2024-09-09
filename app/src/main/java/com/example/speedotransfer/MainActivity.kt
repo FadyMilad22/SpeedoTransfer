@@ -41,7 +41,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.AppRoutes.AppNavHost
 import com.example.speedotransfer.AppRoutes.Route
-import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.getTopLevelRoute
 import com.example.speedotransfer.model.Client
 import com.example.speedotransfer.ui.screens.SplashScreen

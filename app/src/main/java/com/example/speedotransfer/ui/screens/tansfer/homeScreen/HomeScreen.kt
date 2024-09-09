@@ -46,9 +46,11 @@ import com.example.speedotransfer.model.Transaction
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
+import com.example.speedotransfer.ui.screens.tansfer.homeScreen.HomeViewModelFactory
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyMedium16
 import com.example.speedotransfer.ui.theme.BodyRegular14
+import com.example.speedotransfer.ui.theme.D300
 import com.example.speedotransfer.ui.theme.G0
 import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.G200
@@ -102,7 +104,7 @@ fun HomeScreen(
                         )
                 },
                 Modifier.background(
-                    brush = UIConstants.BRUSH
+                    brush = uiConstants.BRUSH
                 ),
 
                 )
@@ -225,7 +227,7 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
                 ) {
 
                     Text(
-                        text = transaction.name, style = BodyMedium14, color = G900
+                        text = transaction.senderAccountId.toString(), style = BodyMedium14, color = G900
                     )
 
 
