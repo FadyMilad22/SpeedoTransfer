@@ -2,7 +2,6 @@ package com.example.speedotransfer.AppRoutes
 
 
 import TransferConfirmedDesign
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -13,6 +12,7 @@ import androidx.navigation.navArgument
 import com.example.speedotransfer.AppRoutes.Route.CONFIRMED_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.CONFIRM_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.HOME
+import com.example.speedotransfer.AppRoutes.Route.ON_BOARDING
 import com.example.speedotransfer.AppRoutes.Route.SIGNIN
 import com.example.speedotransfer.AppRoutes.Route.SIGNUP
 import com.example.speedotransfer.AppRoutes.Route.SPLASH
@@ -21,15 +21,20 @@ import com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen.
 import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInScreen
 import com.example.speedotransfer.ui.screens.authentication.signUpScreen.SignUpScreen
+import com.example.speedotransfer.ui.screens.onboarding.OnboardingScreen
 import com.example.speedotransfer.ui.screens.tansfer.HomeScreen
+import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionDetailsScreen
+import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionsScreen
 
 object Route {
     const val SPLASH ="splash"
+    const val ON_BOARDING ="onBoarding"
     const val HOME ="home"
     const val BEGIN_TRANSACTION = "beginTransaction"
     const val CONFIRM_TRANSACTION ="confirmTransaction"
     const val CONFIRMED_TRANSACTION ="confirmedTransaction"
-
+    const val TRANSACTIONS_LIST = "transactions"
+    const val TRANSACTION_DETAILS = "transactionDetails"
 
     const val SIGNIN ="signin"
     const val SIGNUP ="signup"
@@ -44,7 +49,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
     NavHost( navController, startDestination = SPLASH, modifier = modifier) {
         // Add the routes
         composable(route = SPLASH) { SplashScreen(navController ,modifier=modifier) }
-
+        composable(route = ON_BOARDING) { OnboardingScreen(navController) }
        // composable(route = HOME) { HomeScreen(navController = navController ,modifier=modifier) }
         // You can add other routes here in the future
         // Define the route as a string constant
@@ -185,6 +190,26 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             )
         }
 
+        composable(
+            route = "${Route.TRANSACTIONS_LIST}/{accountId}/{startDate}/{endDate}",
+            arguments = listOf(
+                navArgument("accountId") { type = NavType.LongType },
+                navArgument("startDate") { type = NavType.StringType },
+                navArgument("endDate") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val accountId = backStackEntry.arguments?.getLong("accountId")!!
+            val startDate = backStackEntry.arguments?.getString("startDate")!!
+            val endDate = backStackEntry.arguments?.getString("endDate")!!
+
+            TransactionsScreen(
+                navController = navController,
+                accountId = accountId,
+                startDate = startDate,
+                endDate = endDate
+            )
+        }
+
 
         composable(route = SIGNIN) {
             SignInScreen(navController = navController)  // Pass the navController to SignInScreen for navigation
@@ -192,5 +217,18 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         composable(route = SIGNUP) {
             SignUpScreen(navController = navController)  // Pass the navController to SignInScreen for navigation
         }
+
+        composable(
+            route = "${Route.TRANSACTION_DETAILS}/{transactionId}",
+            arguments = listOf(navArgument("transactionId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val transactionId = backStackEntry.arguments?.getLong("transactionId") ?: 0L
+            TransactionDetailsScreen(
+                navController = navController,
+                transactionId = transactionId // Pass the ID to fetch transaction details
+            )
+        }
+
+
     }
 }

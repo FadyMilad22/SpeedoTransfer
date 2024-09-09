@@ -8,6 +8,8 @@ import SignInRequest
 import SignInResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
+import com.example.speedotransfer.model.CustomerResponse
+import com.example.speedotransfer.model.LogoutResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.model.UpdateCustomerRequest
@@ -29,4 +31,7 @@ interface Repo {
 
     suspend fun updateCustomerByEmail(email: String, updateRequest: UpdateCustomerRequest): UpdateCustomerResponse
 
+
+    suspend fun logout(token: String): LogoutResponse
+    suspend fun getCustomerByEmail(email: String): CustomerResponse
 }

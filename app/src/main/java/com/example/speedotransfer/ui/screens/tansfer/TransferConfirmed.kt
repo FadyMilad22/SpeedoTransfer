@@ -127,7 +127,7 @@ fun TransferConfirmedDesign(
 
 
 
-                SpeedoButton(text = "Back to Home", enabled = true, isTransparent = false ){
+                SpeedoButton(text = "Back to Home", enabled = true, isTransparent = false ,Modifier.clickable {
                     val currentEntry = navController.currentBackStackEntry
                     val previousEntry = navController.previousBackStackEntry
 
@@ -138,7 +138,7 @@ fun TransferConfirmedDesign(
                         Log.d("NavBackStack", "No previous destination")
                     }
                     navController.popBackStack("$HOME/{accountId}/{startDate}/{endDate}/{balance}/{name}/{currency}", inclusive = false)
-                }
+                })
                 Spacer(modifier = Modifier.padding(bottom = 16.dp))
                 SpeedoButton(text = "Add to Favourite", enabled = true, isTransparent = true)
                 Spacer(modifier = Modifier.padding(bottom = 16.dp))
@@ -148,7 +148,6 @@ fun TransferConfirmedDesign(
         }
     )
 }
-
 @Composable
 fun AccountsDetailsArea(
     senderName: String,

@@ -1,12 +1,12 @@
+package com.example.speedotransfer.ui.screens.authentication.signUpScreen
+
+import RegisterCustomerRequest
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.repository.SignUpRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class SignUpViewModel(private val signUpRepo: SignUpRepo) : ViewModel() {

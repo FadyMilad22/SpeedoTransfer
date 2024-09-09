@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens
 
+import android.content.Context
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -62,31 +63,44 @@ fun SplashScreen(navController: NavController, modifier: Modifier = Modifier) {
             )
         )
 
+        // Navigate based on whether onboarding is complete or not
+        val sharedPreferences = navController.context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val isOnboardingComplete = sharedPreferences.getBoolean("onboarding_complete", false)
 
-
-
-         val   currency = "EGP"
-         val  transferAmount = 1000
-         val  senderName = "Asmaa Dosuky"
-         val receiverName = "Jonathon Smith"
-         val senderAccountNumberSuffix = "7890"
-         val receiverAccountNumberSuffix = "7890"
-
-
-        val name = "Fady Milad"
-        val accountId = "123"
-        val balance = 100000.0
-        val startDate = "2023-08-01"
-        val endDate = "2023-08-31"
-
-
-        navController.navigate(
-            "${Route.HOME}/$accountId/$startDate/$endDate/${balance.toFloat()}/$name/$currency"
-       //     route = "${Route.CONFIRM_TRANSACTION}/${transferAmount}/${currency}/${senderName}/${receiverName}/${senderAccountNumberSuffix}/${receiverAccountNumberSuffix}"
-
-        ){
-            popUpTo(Route.SPLASH) { inclusive = true  }
+        if (isOnboardingComplete) {
+            // Navigate to Login if onboarding is completed
+            navController.navigate(Route.SIGNIN) {
+                popUpTo(Route.SPLASH) { inclusive = true }
+            }
+        } else {
+            // Navigate to Onboarding if onboarding is not complete
+            navController.navigate(Route.ON_BOARDING) {
+                popUpTo(Route.SPLASH) { inclusive = true }
+            }
         }
+
+//         val   currency = "EGP"
+//         val  transferAmount = 1000
+//         val  senderName = "Asmaa Dosuky"
+//         val receiverName = "Jonathon Smith"
+//         val senderAccountNumberSuffix = "7890"
+//         val receiverAccountNumberSuffix = "7890"
+//
+//
+//        val name = "Fady Milad"
+//        val accountId = "123"
+//        val balance = 100000.0
+//        val startDate = "2023-08-01"
+//        val endDate = "2023-08-31"
+//
+//
+//        navController.navigate(
+//            "${Route.HOME}/$accountId/$startDate/$endDate/${balance.toFloat()}/$name/$currency"
+//       //     route = "${Route.CONFIRM_TRANSACTION}/${transferAmount}/${currency}/${senderName}/${receiverName}/${senderAccountNumberSuffix}/${receiverAccountNumberSuffix}"
+//
+//        ){
+//            popUpTo(Route.SPLASH) { inclusive = true  }
+//        }
 
 //        navController.navigate(Route.HOME) {
 //            popUpTo(Route.SPLASH) { inclusive = true }

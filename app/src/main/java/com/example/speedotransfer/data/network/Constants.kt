@@ -16,6 +16,8 @@ object Constants {
     const val TRANSFER_MONEY_ENDPOINT = "/api/transfer"
     const val GET_TRANSACTION_BY_ID_ENDPOINT = "/api/{id}"
     const val UPDATE_CUSTOMER_BY_EMAIL_ENDPOINT = "/api/customer/update"
+    const val LOGOUT_ENDPOINT = "/api/auth/logout"
+    const val GET_CUSTOMER_BY_EMAIL_ENDPOINT = "/api/customer/{email}"
 
 
     // Query Parameters

@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.onboarding
 
+import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.theme.BodyMedium16
 import com.example.speedotransfer.ui.theme.BodyRegular16
@@ -29,9 +32,10 @@ import com.google.accompanist.pager.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun OnboardingScreen(modifier: Modifier=Modifier) {
+fun OnboardingScreen(navController: NavController,modifier: Modifier=Modifier) {
     val pages = listOf(
         OnboardingPage(
             title = "Amount",
@@ -67,7 +71,10 @@ fun OnboardingScreen(modifier: Modifier=Modifier) {
             TopAppBar(
                 title = {  },
                 actions = {
-                    TextButton(onClick = {}) {
+                    TextButton(onClick = {
+                        navController.navigate(Route.SIGNIN) {
+                            popUpTo(Route.ON_BOARDING) { inclusive = true }}
+                    }) {
                         Text(text = "Skip", style = BodyMedium16, color = G900)
                     }
                 }
@@ -91,8 +98,19 @@ fun OnboardingScreen(modifier: Modifier=Modifier) {
 
                 Button(
                     onClick = {
+
+
+
                         if (pagerState.currentPage == pages.size - 1) {
                             // Handle finish action
+
+                            val sharedPreferences = navController.context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                            sharedPreferences.edit().putBoolean("onboarding_complete", true).apply()
+
+                            // Navigate to login screen
+                            navController.navigate(Route.SIGNIN) {
+                                popUpTo(Route.ON_BOARDING) { inclusive = true }
+                            }
                         } else {
                             coroutineScope.launch {
                                 pagerState.animateScrollToPage(pagerState.currentPage + 1)

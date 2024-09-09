@@ -8,6 +8,8 @@ import SignInRequest
 import SignInResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
+import com.example.speedotransfer.model.CustomerResponse
+import com.example.speedotransfer.model.LogoutResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.model.UpdateCustomerRequest
@@ -63,5 +65,14 @@ object APIClient : RemoteDataSource {
     }
 
 
+    // API Client function for logging out the user
+    override suspend fun logout(token: String): LogoutResponse {
+        return APIHelper.callable.logout(token)
+    }
 
+
+    // API Client function to get customer details by email
+    override suspend fun getCustomerByEmail(email: String): CustomerResponse {
+        return APIHelper.callable.getCustomerByEmail(email)
+    }
 }

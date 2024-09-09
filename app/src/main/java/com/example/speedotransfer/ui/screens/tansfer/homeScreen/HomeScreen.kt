@@ -3,6 +3,7 @@ package com.example.speedotransfer.ui.screens.tansfer
 import HomeViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,13 +39,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
 import com.example.speedotransfer.data.repository.TransferRepoImpl
-import com.example.speedotransfer.model.Transaction
 import com.example.speedotransfer.model.TransactionResponse
-import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.screens.tansfer.homeScreen.HomeViewModelFactory
 import com.example.speedotransfer.ui.theme.BodyMedium14
@@ -122,7 +121,8 @@ fun HomeScreen(
                 NameBar(name = name)
                 AmountCard(amount = balance, currency = currency)
                 Spacer(modifier = Modifier.padding(top = 16.dp))
-                RecentTransactionsArea(transactionList = transactionHistory)
+                RecentTransactionsArea(navController=navController,accountId=accountId,startDate=startDate,endDate=endDate
+                    ,    transactionList = transactionHistory)
                 if (isLoading) {
 
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -145,7 +145,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun RecentTransactionsArea(transactionList: List<TransactionResponse>, modifier: Modifier = Modifier) {
+fun RecentTransactionsArea(navController: NavController,accountId: Long,startDate: String,endDate: String,transactionList: List<TransactionResponse>, modifier: Modifier = Modifier) {
     Column {
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier.fillMaxWidth().padding(bottom = 8.dp)) {
 
@@ -159,13 +159,22 @@ fun RecentTransactionsArea(transactionList: List<TransactionResponse>, modifier:
                 text = "View all",
                 style = BodyMedium16,
                 color = G200,
+                modifier = modifier.clickable {
+                    navController.navigate(
+                        route = "${Route.TRANSACTIONS_LIST}/$accountId/$startDate/$endDate"
+                    )
+                }
             )
 
 
         }
         LazyColumn() {
             items(transactionList) {
-                TransactionItem(transaction = it)
+                TransactionItem(transaction = it , onClick = {
+                    // Navigate to the details screen by transaction ID
+                    navController.navigate("${Route.TRANSACTION_DETAILS}/${it.id}")
+                })
+
             }
         }
     }
@@ -173,12 +182,13 @@ fun RecentTransactionsArea(transactionList: List<TransactionResponse>, modifier:
 }
 
 @Composable
-fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modifier) {
+fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modifier ,onClick: () -> Unit, ) {
 
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().clickable { onClick() },
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = G0)
+        colors = CardDefaults.cardColors(containerColor = G0)  ,
+
     ) {
         Row(
             modifier

@@ -1,6 +1,10 @@
+package com.example.speedotransfer.ui.screens.authentication.signInScreen
+
+import SignInRequest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.repository.SignInRepo
+import com.example.speedotransfer.model.CustomerResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,6 +15,11 @@ class SignInViewModel(private val signInRepo: SignInRepo) : ViewModel() {
     // StateFlow for handling the current state of the screen
     private val _signInState = MutableStateFlow<SignInState>(SignInState.Idle)
     val signInState: StateFlow<SignInState> = _signInState
+
+    // StateFlow for holding customer data
+    private val _customerState = MutableStateFlow<CustomerResponse?>(null)
+    val customerState: StateFlow<CustomerResponse?> = _customerState
+
 
     // MutableStateFlow for email and password
     var email = MutableStateFlow("")
@@ -37,21 +46,51 @@ class SignInViewModel(private val signInRepo: SignInRepo) : ViewModel() {
     }
 
     // Function to log in the user
+//    fun logIn() {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                _signInState.value = SignInState.Loading
+//                val request = SignInRequest(email.value, password.value)
+//                val response = signInRepo.signIn(request)
+//                _signInState.value = SignInState.Success("Login successful: ${response.message}")
+//            } catch (e: Exception) {
+//                _signInState.value = SignInState.Error("Login failed: ${e.message}")
+//            }
+//        }
+//    }
+    // Function to log in the user
     fun logIn() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _signInState.value = SignInState.Loading
                 val request = SignInRequest(email.value, password.value)
                 val response = signInRepo.signIn(request)
+
+                // If login is successful, fetch customer details by email
+                fetchCustomerByEmail(email.value)
                 _signInState.value = SignInState.Success("Login successful: ${response.message}")
             } catch (e: Exception) {
                 _signInState.value = SignInState.Error("Login failed: ${e.message}")
             }
         }
     }
+
+
+
+
+    private fun fetchCustomerByEmail(email: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val customer = signInRepo.getCustomerByEmail(email)
+                _customerState.value = customer // Store customer details
+            } catch (e: Exception) {
+                _signInState.value = SignInState.Error("Failed to fetch customer details: ${e.message}")
+            }
+        }
+    }
 }
 
-// SignInState to manage different states
+// com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInState to manage different states
 sealed class SignInState {
     object Idle : SignInState()
     object Loading : SignInState()

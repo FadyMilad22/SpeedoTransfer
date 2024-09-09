@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens
+package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,6 +24,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +36,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.network.APIClient
+import com.example.speedotransfer.data.repository.TransactionRepoImpl
 import com.example.speedotransfer.ui.elements.BeneficiaryCard
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
@@ -51,14 +59,30 @@ import com.example.speedotransfer.ui.uiConstants
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionDetailsScreen(
-    senderName: String,
-    receiverName: String,
-    senderAccountNumberSuffix: String,
-    receiverAccountNumberSuffix: String,
-    amount: String, currency: String, reference: String, date: String,
+    navController: NavController,
+    transactionId : Long ,
+
+//    senderName: String,
+//    receiverName: String,
+//    senderAccountNumberSuffix: String,
+//    receiverAccountNumberSuffix: String,
+//    amount: String, currency: String, reference: String, date: String,
 
     modifier: Modifier = Modifier
 ) {
+    val transactionViewModel: TransactionViewModel = viewModel(factory = TransactionViewModelFactory(
+        TransactionRepoImpl(
+            APIClient
+        )
+    )
+    )
+
+    val transactionDetails by transactionViewModel.transactionDetails.collectAsState()
+
+    LaunchedEffect(transactionId) {
+        transactionViewModel.getTransactionById(transactionId)
+    }
+
     val scrollState = rememberScrollState()
 
     Scaffold(
@@ -75,7 +99,7 @@ fun TransactionDetailsScreen(
                 ),
 
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {navController.popBackStack()}) {
                         CustomAppBarIcon(
                             icon = R.drawable.drop_down
                         )
@@ -87,28 +111,32 @@ fun TransactionDetailsScreen(
 
         },
         content = { paddingValues ->
+            transactionDetails?.let { transaction ->
             Column(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier
+                    .padding(paddingValues)
                     .padding(horizontal = 16.dp)
-            .verticalScroll(scrollState)
+                    .verticalScroll(scrollState)
     ) {
+                TransferDoneSuccesfullyArea(
+                    amount = transaction.amount.toString(),
+                    currency = transaction.currency
+                )
 
-        TransferDoneSuccesfullyArea(amount = amount, currency = currency)
-        AccountsDetailsArea(
-            senderName = senderName,
-            receiverName = receiverName,
-            senderAccountNumberSuffix = senderAccountNumberSuffix,
-            receiverAccountNumberSuffix = receiverAccountNumberSuffix
-        )
+                AccountsDetailsArea(
+                    senderName = transaction.senderAccountId.toString(),
+                    receiverName = transaction.recipientAccountId.toString(),
+                    senderAccountNumberSuffix = transaction.senderAccountId.toString(),
+                    receiverAccountNumberSuffix = transaction.recipientAccountId.toString()
+                )
+                TransactionInfoFields(
+                    amount = transaction.amount.toString(),
+                    currency = transaction.currency,
+                    reference = transaction.id.toString(),
+                    date = transaction.transactionDate
+                )
 
-        TransactionInfoFields(
-            amount = amount,
-            currency = currency,
-            reference = reference,
-            date = date
-        )
-
-
+}
     }
 
 
@@ -272,14 +300,6 @@ fun AccountsDetailsArea(
 private fun TransactionDetailsScreenPreview() {
 
     TransactionDetailsScreen(
-        senderName = "Asmaa Dosuky",
-        receiverName = "Jonathon Smith",
-        senderAccountNumberSuffix = "7890",
-        receiverAccountNumberSuffix = "7890",
-        amount = "1000",
-        currency = "USD",
-        reference = "123456789876",
-        date = "20 Jul 2024 7:50 PM"
-    )
+    rememberNavController(),12L)
 
 }

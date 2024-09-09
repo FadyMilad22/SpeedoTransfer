@@ -1,6 +1,5 @@
 package com.example.speedotransfer.ui.screens.authentication.signInScreen
 
-import SignInViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.speedotransfer.data.repository.SignInRepo

@@ -12,7 +12,9 @@ import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.data.network.RemoteDataSource
 import com.example.speedotransfer.data.repository.Repo
+import com.example.speedotransfer.model.CustomerResponse
 import com.example.speedotransfer.model.HttpStatusCode
+import com.example.speedotransfer.model.LogoutResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.model.UpdateCustomerRequest
@@ -176,4 +178,39 @@ class RepoImpl(
     }
 
 
+
+    // Repo function to log out the user
+    override suspend fun logout(token: String): LogoutResponse {
+        // Mocked response for testing purposes
+        val mockResponse = LogoutResponse(
+            timestamp = "2024-09-08T19:13:48.927Z",
+            message = "Logout successful",
+            details = "User session ended",
+            httpStatus = "OK"
+        )
+
+        // Uncomment this when the API is live
+        // return apiClient.logout(token)
+
+        return mockResponse // Using mock response until the API is live
+    }
+
+    // Repo function to get customer details by email
+    override suspend fun getCustomerByEmail(email: String): CustomerResponse {
+        // Mocked response for testing purposes
+        val mockResponse = CustomerResponse(
+            id = 1,
+            name = "John Doe",
+            email = email,
+            phoneNumber = "123-456-7890",
+            createdAt = "2024-01-01T12:00:00Z",
+            updatedAt = "2024-09-08T19:13:48.927Z"
+        )
+
+        // Uncomment this when the API is live
+        // return apiClient.getCustomerByEmail(email)
+
+        return mockResponse // Using mock response until the API is live
+    }
 }
+

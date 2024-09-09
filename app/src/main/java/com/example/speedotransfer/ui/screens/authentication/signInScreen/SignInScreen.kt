@@ -1,8 +1,6 @@
 package com.example.speedotransfer.ui.screens.authentication.signInScreen
 
-import SignInViewModel
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -44,7 +42,8 @@ fun SignInScreen(
     val signInState by signInViewModel.signInState.collectAsState()
     val email by signInViewModel.email.collectAsState()
     val password by signInViewModel.password.collectAsState()
-    val isPasswordValid by signInViewModel.isPasswordValid.collectAsState()  // Observing password validation
+    val isPasswordValid by signInViewModel.isPasswordValid.collectAsState()
+    val customerState by signInViewModel.customerState.collectAsState() // Observing customer details
     var showPassword by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -77,9 +76,17 @@ fun SignInScreen(
                             message = (signInState as SignInState.Success).message,
                             onCloseClick = { }
                         )
-                        LaunchedEffect(Unit) {
-                            navController.navigate("home")
+                        customerState?.let { customer ->
+                            // Navigate to home when customer details are available
+                            LaunchedEffect(Unit) {
+                                navController.navigate(
+                                    "${Route.HOME}/${customer.id}/${customer.createdAt}/2024-09-30/${customer.phoneNumber}/${customer.name}/EGP"
+                                )
+                            }
                         }
+
+
+
                     }
                     else -> Unit
                 }

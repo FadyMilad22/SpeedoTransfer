@@ -1,7 +1,8 @@
-package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens
+package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,10 +33,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.network.APIClient
+import com.example.speedotransfer.data.repository.TransactionRepoImpl
+import com.example.speedotransfer.data.repository.TransferRepoImpl
 import com.example.speedotransfer.model.Transaction
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
+import com.example.speedotransfer.ui.screens.tansfer.homeScreen.HomeViewModelFactory
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyMedium16
 import com.example.speedotransfer.ui.theme.BodyRegular14
@@ -50,7 +61,26 @@ import com.example.speedotransfer.ui.uiConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransactionsScreen(transactionsList: List<Transaction>, modifier: Modifier = Modifier) {
+fun TransactionsScreen(navController: NavController,
+                       accountId: Long,    // Passed from the previous screen
+                       startDate: String,  // Passed from the previous screen
+                       endDate: String,    // Passed from the previous screen
+                       modifier: Modifier = Modifier) {
+
+                       val transactionViewModel: TransactionViewModel = viewModel(factory = TransactionViewModelFactory(
+        TransactionRepoImpl(
+            APIClient
+        )
+    )
+    )
+    transactionViewModel.fetchTransactionHistory(accountId, startDate, endDate)
+
+
+    val transactionHistory by transactionViewModel.transactionHistory.collectAsState()
+    val isLoading by transactionViewModel.isLoading.collectAsState()
+    val errorMessage by transactionViewModel.errorMessage.collectAsState()
+
+
 
     Scaffold(
         topBar = {
@@ -66,7 +96,7 @@ fun TransactionsScreen(transactionsList: List<Transaction>, modifier: Modifier =
                 ),
 
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {navController.popBackStack()}) {
                         CustomAppBarIcon(
                             icon = R.drawable.drop_down
                         )
@@ -92,16 +122,20 @@ fun TransactionsScreen(transactionsList: List<Transaction>, modifier: Modifier =
         )
 
         LazyColumn {
-            items(transactionsList) {
+            items(transactionHistory) {
                 TransactionsMenuItem(
-                    it.isReceived,
-                    it.isSucessful,
-                    it.amount,
+                    accountId == it.recipientAccountId,
+                    true,
+                    it.amount.toString(),
                     it.currency,
-                    it.name,
-                    it.cardNumber,
-                    it.date,
-                    it.cardType
+                    it.id.toString(),
+                    if(accountId == it.senderAccountId) it.recipientAccountId.toString()  else it.senderAccountId.toString() ,
+                    it.transactionDate,
+                    it.description?: "N/A",
+                    onClick = {
+                        // Navigate to the details screen by transaction ID
+                        navController.navigate("${Route.TRANSACTION_DETAILS}/${it.id}")
+                    }
                 )
                 Spacer(modifier = modifier.padding(bottom = 16.dp))
             }
@@ -127,6 +161,7 @@ fun TransactionsMenuItem(
     name: String,
     accountNumber: String, date: String,
     paymentMethod: String,
+    onClick: () -> Unit, // New onClick parameter for handling clicks
     modifier: Modifier = Modifier
 ) {
 
@@ -138,7 +173,8 @@ fun TransactionsMenuItem(
 
     Card(
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = G0)
+        colors = CardDefaults.cardColors(containerColor = G0) ,
+        modifier = modifier.clickable { onClick() }
     ) {
 
 
@@ -245,38 +281,12 @@ fun TransactionsMenuItem(
 @Preview(showSystemUi = true)
 @Composable
 private fun TransactionsScreenPreview() {
-//    TransactionsMenuItem(
-//        true,
-//        false,
-//        "1000",
-//        "USD",
-//        "Fady Milad",
-//        "4342",
-//        "12 Jul 2024 09:00 PM",
-//        paymentMethod = "Visa . MasterCard"
-//    )
-//
-    val transaction1 = Transaction(
-        name = "Ahmed Mohamed",
-        cardType = "Visa . MasterCard",
-        cardNumber = "1234",
-        amount = "1000",
-        date = "Today 11:00",
-        status = "Received",
-        currency = "EGP"
-    )
-    val transaction2 = Transaction(
-        name = "Ahmed Mohamed",
-        cardType = "Visa . MasterCard",
-        cardNumber = "1234",
-        amount = "1000",
-        date = "Today 11:00",
-        status = "Received",
-        currency = "EGP"
-        , isSucessful = true
-    )
-    val list = listOf(transaction1, transaction2, transaction1, transaction2, transaction1)
 
 
-    TransactionsScreen(list)
+    TransactionsScreen(
+        navController = rememberNavController(),
+        accountId = 1,
+        startDate = "2023-01-01",
+        endDate = "2023-12-31"
+    )
 }

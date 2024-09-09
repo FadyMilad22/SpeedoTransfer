@@ -29,7 +29,13 @@ fun getTopLevelRoute(): List<TopLevelRoute> {
             R.drawable.transfer1
         )
     )
-    bottomNavigationRoutes.add(TopLevelRoute("Transactions", Route.HOME, R.drawable.history1))
+    bottomNavigationRoutes.add(
+        TopLevelRoute(
+            "Transactions",
+            "${Route.TRANSACTIONS_LIST}/{accountId}/{startDate}/{endDate}",
+            R.drawable.history1
+        )
+    )
     bottomNavigationRoutes.add(TopLevelRoute("My cards", Route.HOME, R.drawable.cards1))
     bottomNavigationRoutes.add(TopLevelRoute("More", Route.HOME, R.drawable.more))
 

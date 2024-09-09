@@ -8,12 +8,15 @@ import SignInRequest
 import SignInResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
+import com.example.speedotransfer.model.CustomerResponse
+import com.example.speedotransfer.model.LogoutResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.model.UpdateCustomerRequest
 import com.example.speedotransfer.model.UpdateCustomerResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -67,4 +70,15 @@ interface APIService {
         @Body updateCustomerRequest: UpdateCustomerRequest // Request body
     ): UpdateCustomerResponse // Response object
 
+
+    @POST(Constants.LOGOUT_ENDPOINT)
+    suspend fun logout(
+        @Header("Authorization") token: String
+    ): LogoutResponse
+
+
+    @GET(Constants.GET_CUSTOMER_BY_EMAIL_ENDPOINT)
+    suspend fun getCustomerByEmail(
+        @Path("email") email: String
+    ): CustomerResponse
 }
