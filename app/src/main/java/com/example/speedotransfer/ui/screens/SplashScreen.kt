@@ -73,15 +73,22 @@ fun SplashScreen(navController: NavController, modifier: Modifier = Modifier) {
          val receiverAccountNumberSuffix = "7890"
 
 
-        val name = "Fady Milad"
-        val accountId = "123"
-        val balance = 100000.0
-        val startDate = "2023-08-01"
-        val endDate = "2023-08-31"
+//        val name = "Fady Milad"
+//        val accountId = "123"
+//        val balance = 100000.0
+//        val startDate = "2023-08-01"
+//        val endDate = "2023-08-31"
+
+
+        val name = "Ahmed Gamal"
+        val accountId = 7
+        val email = "ahmedg7@gmail.com"
+        val birthDate = "2002-09-12"
+        val country = "EG"
 
 
         navController.navigate(
-            "${Route.HOME}/$accountId/$startDate/$endDate/${balance.toFloat()}/$name/$currency"
+            "${Route.MORE}/$accountId/$name/$email/$birthDate/$country"
        //     route = "${Route.CONFIRM_TRANSACTION}/${transferAmount}/${currency}/${senderName}/${receiverName}/${senderAccountNumberSuffix}/${receiverAccountNumberSuffix}"
 
         ){

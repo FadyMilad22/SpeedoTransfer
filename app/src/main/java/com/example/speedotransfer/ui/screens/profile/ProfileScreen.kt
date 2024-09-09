@@ -1,6 +1,7 @@
 package com.example.speedotransfer.ui.screens.profile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.speedotransfer.AppRoutes.Route
+import com.example.speedotransfer.AppRoutes.Route.MORE
+import com.example.speedotransfer.AppRoutes.Route.SETTINGS
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.ArrowedLargeMenuItem
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
@@ -35,7 +40,14 @@ import com.example.speedotransfer.ui.uiConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier) {
+fun ProfileScreen(navController: NavController,
+                  accountId: Long,    // Passed from the previous screen
+                  name: String,  // Passed from the previous screen
+                  email: String,    // Passed from the previous screen
+                  birthDate: String,    // Passed from the previous screen
+                  country: String,       // Passed from the previous screen
+
+                  modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -50,7 +62,9 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                 ),
 
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        navController.popBackStack("$MORE/{accountId}/{name}/{email}/{birthDate}/{country}", inclusive = false)
+                    }) {
                         CustomAppBarIcon(
                             icon = R.drawable.drop_down
                         )
@@ -104,25 +118,37 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                     name = "Personal information",
                     descritipn = "Your information",
                     icon = R.drawable.user,
-                    enableStroke = true
+                    enableStroke = true,
+                    modifier = modifier.clickable {
+                        navController.navigate(Route.PERSONAL_INFO)
+                    }
                 )
                 ArrowedLargeMenuItem(
                     name = "Setting",
                     descritipn = "Change your settings",
                     icon = R.drawable.setting,
-                    enableStroke = true
+                    enableStroke = true,
+                    modifier = modifier.clickable {
+                        navController.navigate("$SETTINGS/${accountId}/${name}/${email}/${birthDate}/${country}")
+                    }
                 )
                 ArrowedLargeMenuItem(
                     name = "Payment history",
                     descritipn = "View your transactions",
                     icon = R.drawable.history1,
-                    enableStroke = true
+                    enableStroke = true,
+                    modifier = modifier.clickable {
+//                        navController.navigate()
+                    }
                 )
                 ArrowedLargeMenuItem(
                     name = "My Favourite list",
                     descritipn = "View your favourites",
                     icon = R.drawable.favorite,
-                    enableStroke = false
+                    enableStroke = false,
+                    modifier = modifier.clickable {
+                        navController.navigate(Route.FAVOURITES)
+                    }
                 )
             }
         }

@@ -38,13 +38,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
 import com.example.speedotransfer.data.repository.TransferRepoImpl
-import com.example.speedotransfer.model.Transaction
 import com.example.speedotransfer.model.TransactionResponse
-import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.screens.tansfer.homeScreen.HomeViewModelFactory
 import com.example.speedotransfer.ui.theme.BodyMedium14

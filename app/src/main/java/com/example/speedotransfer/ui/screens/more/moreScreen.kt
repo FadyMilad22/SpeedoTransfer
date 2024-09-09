@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.more
 
+import android.content.Intent
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,9 +37,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import androidx.navigation.NavController
+import com.example.speedotransfer.AppRoutes.Route
+import com.example.speedotransfer.AppRoutes.Route.PROFILE
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.uiConstants
 import com.example.speedotransfer.ui.elements.ArrowedSmallMenuItem
@@ -53,9 +59,18 @@ import com.example.speedotransfer.ui.theme.P50
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoreScreenDesign(modifier: Modifier = Modifier) {
+fun MoreScreenDesign(
+    navController: NavController,
+    accountId: Long,    // Passed from the previous screen
+    name: String,  // Passed from the previous screen
+    email: String,    // Passed from the previous screen
+    birthDate: String,    // Passed from the previous screen
+    country: String,       // Passed from the previous screen
+    modifier: Modifier = Modifier
+) {
     val scrollState = rememberScrollState()
-
+    val context = LocalContext.current
+    val website = "https://www.banquemisr.com/en/Home/Pages/BM-Online"
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -87,60 +102,88 @@ fun MoreScreenDesign(modifier: Modifier = Modifier) {
         },
         content = { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier
+                    .padding(paddingValues)
                     .padding(horizontal = 16.dp)
-        .verticalScroll(scrollState)) {
+                    .verticalScroll(scrollState)
+            ) {
 
 
+                ArrowedSmallMenuItem(name = "Transfer From Website",
+                    icon = R.drawable.website,
+                    modifier = modifier.clickable {
+                        val i = Intent(Intent.ACTION_VIEW, website.toUri())
+                        context.startActivity(i)
+                    }
+                )
+                ArrowedSmallMenuItem(name = "Favourites",
+                    icon = R.drawable.favorite,
+                    modifier = modifier.clickable {
+                        navController.navigate(Route.FAVOURITES)
+                    }
+                    )
+                ArrowedSmallMenuItem(name = "Profile", icon = R.drawable.user, modifier = modifier.clickable {
+                    navController.navigate(
+                        route = "${Route.PROFILE}/${accountId}/${name}/$email/$birthDate/${country}")
+
+                })
+                ArrowedSmallMenuItem(
+                    name = "Help",
+                    icon = R.drawable.compliance,
+                    modifier = modifier.clickable { showBottomSheet = true })
+                ArrowedSmallMenuItem(name = "logout", icon = R.drawable.logout, modifier = modifier.clickable {
+                    navController.navigate(Route.SIGN_IN)
+                })
+            }
+
+            if (showBottomSheet) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        showBottomSheet = false
+                    },
+                    sheetState = sheetState,
+                    scrimColor = Color.Black.copy(alpha = 0.8f), dragHandle = {}
+                ) {
+                    // Sheet content
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically, modifier = modifier
+                            .padding(54.dp)
+                            .fillMaxWidth()
+                            .height(140.dp)
+                    ) {
+
+                        HelpBtmSheetCardEmail(icon = R.drawable.email, title = "Send Email")
+                        Spacer(modifier = modifier.width(32.dp))
+                        HelpBtmSheetCardCall(icon = R.drawable.call, title = "Call us", "000000")
 
 
-        ArrowedSmallMenuItem(name = "Transfer From Website", icon = R.drawable.website )
-        ArrowedSmallMenuItem(name = "Favourites", icon = R.drawable.favorite )
-        ArrowedSmallMenuItem(name = "Profile", icon = R.drawable.user)
-        ArrowedSmallMenuItem(name = "Help", icon = R.drawable.compliance,modifier=modifier.clickable { showBottomSheet =true } )
-        ArrowedSmallMenuItem(name = "logout", icon = R.drawable.logout )
-    }
+                    }
 
-    if (showBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = {
-                showBottomSheet = false
-            },
-            sheetState = sheetState,
-            scrimColor = Color.Black.copy(alpha = 0.8f), dragHandle = {}
+
+                }
+            }
+
+
+        })
+}
+
+
+@Composable
+fun HelpBtmSheetCardEmail(@DrawableRes icon: Int, title: String, modifier: Modifier = Modifier) {
+
+    Card(
+        elevation = CardDefaults.cardElevation(4.dp),
+        modifier = modifier.width(120.dp),
+        colors = CardDefaults.cardColors(containerColor = G0),
+        shape = RoundedCornerShape(size = 8.dp)
+    ) {
+
+        Column(
+            modifier = modifier
+                .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 12.dp)
+                .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Sheet content
-
-Row(verticalAlignment = Alignment.CenterVertically , modifier = modifier
-    .padding(54.dp)
-    .fillMaxWidth().height(140.dp)) {
-    
-    HelpBtmSheetCardEmail(icon = R.drawable.email, title = "Send Email")
-Spacer(modifier = modifier.width(32.dp))
-    HelpBtmSheetCardCall(icon = R.drawable.call, title = "Call us" , "000000")
-
-
-}
-
-
-
-        }}
-
-
-})}
-
-
-@Composable
-fun HelpBtmSheetCardEmail(@DrawableRes icon :Int, title :String, modifier: Modifier = Modifier) {
-
-    Card(
-        elevation = CardDefaults.cardElevation(4.dp),
-        modifier = modifier.width(120.dp),
-        colors = CardDefaults.cardColors(containerColor = G0),
-        shape = RoundedCornerShape(size = 8.dp)
-    ) {
-
-        Column(modifier = modifier.padding( start =  20.dp ,end=20.dp, top =16.dp , bottom = 12.dp).fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
 
 
             Box(
@@ -153,13 +196,21 @@ fun HelpBtmSheetCardEmail(@DrawableRes icon :Int, title :String, modifier: Modif
             ) {
                 Image(
                     painter = painterResource(icon),
-                    contentDescription = "$title Icon", colorFilter = ColorFilter.tint(P300),modifier=
+                    contentDescription = "$title Icon",
+                    colorFilter = ColorFilter.tint(P300),
+                    modifier =
                     modifier
                         .size(24.dp)
                         .align(Alignment.Center)
-                ) }
+                )
+            }
 
-            Text(text= title , style = BodyMedium14  , color= G900 , modifier = modifier.padding(top = 16.dp))
+            Text(
+                text = title,
+                style = BodyMedium14,
+                color = G900,
+                modifier = modifier.padding(top = 16.dp)
+            )
 
         }
 
@@ -168,17 +219,25 @@ fun HelpBtmSheetCardEmail(@DrawableRes icon :Int, title :String, modifier: Modif
 }
 
 @Composable
-fun HelpBtmSheetCardCall(@DrawableRes icon :Int, title :String,number: String, modifier: Modifier = Modifier) {
+fun HelpBtmSheetCardCall(
+    @DrawableRes icon: Int,
+    title: String,
+    number: String,
+    modifier: Modifier = Modifier
+) {
 
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
         modifier = modifier.width(120.dp),
         colors = CardDefaults.cardColors(containerColor = G0),
-        shape = RoundedCornerShape(size = 8.dp)
-        ,
+        shape = RoundedCornerShape(size = 8.dp),
     ) {
 
-        Column(modifier = modifier.padding( start =  20.dp ,end=20.dp, top =16.dp , bottom = 12.dp).fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = modifier
+                .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 12.dp)
+                .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
 
             Box(
@@ -191,25 +250,32 @@ fun HelpBtmSheetCardCall(@DrawableRes icon :Int, title :String,number: String, m
             ) {
                 Image(
                     painter = painterResource(icon),
-                    contentDescription = "$title Icon", colorFilter = ColorFilter.tint(P300),modifier=
+                    contentDescription = "$title Icon",
+                    colorFilter = ColorFilter.tint(P300),
+                    modifier =
                     modifier
                         .size(24.dp)
                         .align(Alignment.Center)
-                ) }
+                )
+            }
 
-            Text(text= title , style = BodyMedium14  , color= G900 , modifier = modifier.padding(top = 16.dp))
-            Text(text= number , style = BodyRegular14  , color= P300 )
+            Text(
+                text = title,
+                style = BodyMedium14,
+                color = G900,
+                modifier = modifier.padding(top = 16.dp)
+            )
+            Text(text = number, style = BodyRegular14, color = P300)
         }
 
     }
 
 }
-
 
 
 @Preview(device = "spec:parent=pixel_5", showSystemUi = true)
 @Composable
 private fun MoreScreenPreview() {
-    MoreScreenDesign()
+//    MoreScreenDesign()
 //HelpBtmSheetCardCall(icon = R.drawable.call, title = "Call Us" , "000000")
 }

@@ -2,7 +2,6 @@ package com.example.speedotransfer.AppRoutes
 
 
 import TransferConfirmedDesign
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -10,17 +9,29 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.speedotransfer.AppRoutes.Route.CHANGE_PASSWORD
 import com.example.speedotransfer.AppRoutes.Route.CONFIRMED_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.CONFIRM_TRANSACTION
+import com.example.speedotransfer.AppRoutes.Route.EDIT_PROFILE
 import com.example.speedotransfer.AppRoutes.Route.HOME
-import com.example.speedotransfer.AppRoutes.Route.SIGNIN
-import com.example.speedotransfer.AppRoutes.Route.SIGNUP
+import com.example.speedotransfer.AppRoutes.Route.MORE
+import com.example.speedotransfer.AppRoutes.Route.PERSONAL_INFO
+import com.example.speedotransfer.AppRoutes.Route.PROFILE
+import com.example.speedotransfer.AppRoutes.Route.SETTINGS
+import com.example.speedotransfer.AppRoutes.Route.SIGN_IN
+import com.example.speedotransfer.AppRoutes.Route.SIGN_UP
 import com.example.speedotransfer.AppRoutes.Route.SPLASH
 import com.example.speedotransfer.ui.screens.SplashScreen
 import com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen.TransferConfirmationDesign
 import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInScreen
 import com.example.speedotransfer.ui.screens.authentication.signUpScreen.SignUpScreen
+import com.example.speedotransfer.ui.screens.more.MoreScreenDesign
+import com.example.speedotransfer.ui.screens.profile.ChangePasswordScreen
+import com.example.speedotransfer.ui.screens.profile.EditProfileScreen.EditProfileScreen
+import com.example.speedotransfer.ui.screens.profile.ProfileInfoScreen
+import com.example.speedotransfer.ui.screens.profile.ProfileScreen
+import com.example.speedotransfer.ui.screens.profile.SettingsScreen
 import com.example.speedotransfer.ui.screens.tansfer.HomeScreen
 
 object Route {
@@ -31,8 +42,16 @@ object Route {
     const val CONFIRMED_TRANSACTION ="confirmedTransaction"
 
 
-    const val SIGNIN ="signin"
-    const val SIGNUP ="signup"
+    const val SIGN_IN ="signIn"
+    const val SIGN_UP ="signUp"
+    const val MORE ="more"
+    const val FAVOURITES ="favourites"
+
+    const val PROFILE ="profile"
+    const val PERSONAL_INFO ="personalInfo"
+    const val EDIT_PROFILE ="editProfile"
+    const val CHANGE_PASSWORD ="changePassword"
+    const val SETTINGS ="settings"
 
 
 }
@@ -186,11 +205,110 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         }
 
 
-        composable(route = SIGNIN) {
+        composable(route = SIGN_IN) {
             SignInScreen(navController = navController)  // Pass the navController to SignInScreen for navigation
         }
-        composable(route = SIGNUP) {
+        composable(route = SIGN_UP) {
             SignUpScreen(navController = navController)  // Pass the navController to SignInScreen for navigation
         }
+
+        composable(route = "$MORE/{accountId}/{name}/{email}/{birthDate}/{country}",
+            arguments = listOf(
+                navArgument("accountId") { type = NavType.LongType },
+                navArgument("name") { type = NavType.StringType },
+                navArgument("email") { type = NavType.StringType },
+                navArgument("birthDate") { type = NavType.StringType },
+                navArgument("country") { type = NavType.StringType },
+               ) )
+
+            {
+                val accountId = it.arguments?.getLong("accountId")!!
+                val name = it.arguments?.getString("name")!!
+                val email = it.arguments?.getString("email")!!
+                val birthDate = it.arguments?.getString("birthDate")!!
+                val country = it.arguments?.getString("country")!!
+            MoreScreenDesign(navController = navController,
+                accountId = accountId,
+                name = name,
+                email = email,
+                birthDate = birthDate,
+                country = country)
+        }
+
+
+        composable(route = "$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}",
+            arguments = listOf(
+                navArgument("accountId") { type = NavType.LongType },
+                navArgument("name") { type = NavType.StringType },
+                navArgument("email") { type = NavType.StringType },
+                navArgument("birthDate") { type = NavType.StringType },
+                navArgument("country") { type = NavType.StringType },
+            ) )
+
+        {
+            val accountId = it.arguments?.getLong("accountId")!!
+            val name = it.arguments?.getString("name")!!
+            val email = it.arguments?.getString("email")!!
+            val birthDate = it.arguments?.getString("birthDate")!!
+            val country = it.arguments?.getString("country")!!
+            ProfileScreen(navController = navController,
+                accountId = accountId,
+                name = name,
+                email = email,
+                birthDate = birthDate,
+                country = country)
+        }
+        composable(route = "$SETTINGS/{accountId}/{name}/{email}/{birthDate}/{country}",
+            arguments = listOf(
+                navArgument("accountId") { type = NavType.LongType },
+                navArgument("name") { type = NavType.StringType },
+                navArgument("email") { type = NavType.StringType },
+                navArgument("birthDate") { type = NavType.StringType },
+                navArgument("country") { type = NavType.StringType },
+            ) )
+
+        {
+            val accountId = it.arguments?.getLong("accountId")!!
+            val name = it.arguments?.getString("name")!!
+            val email = it.arguments?.getString("email")!!
+            val birthDate = it.arguments?.getString("birthDate")!!
+            val country = it.arguments?.getString("country")!!
+            SettingsScreen(navController = navController,
+                accountId = accountId,
+                name = name,
+                email = email,
+                birthDate = birthDate,
+                country = country)
+        }
+
+        composable(route = "$EDIT_PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}",
+            arguments = listOf(
+                navArgument("accountId") { type = NavType.LongType },
+                navArgument("name") { type = NavType.StringType },
+                navArgument("email") { type = NavType.StringType },
+                navArgument("birthDate") { type = NavType.StringType },
+                navArgument("country") { type = NavType.StringType },
+            ) )
+
+        {
+            val accountId = it.arguments?.getLong("accountId")!!
+            val name = it.arguments?.getString("name")!!
+            val email = it.arguments?.getString("email")!!
+            val birthDate = it.arguments?.getString("birthDate")!!
+            val country = it.arguments?.getString("country")!!
+            EditProfileScreen(navController = navController,
+                accountId = accountId,
+                name = name,
+                email = email,
+                birthDate = birthDate,
+                country = country)
+        }
+        composable(route = CHANGE_PASSWORD) {
+            ChangePasswordScreen(navController = navController)
+        }
+        composable(route = PERSONAL_INFO) {
+            ProfileInfoScreen(navController = navController)
+        }
+
     }
 }

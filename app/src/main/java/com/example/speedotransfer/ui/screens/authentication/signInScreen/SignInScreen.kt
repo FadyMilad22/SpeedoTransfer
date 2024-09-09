@@ -2,7 +2,6 @@ package com.example.speedotransfer.ui.screens.authentication.signInScreen
 
 import SignInViewModel
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -148,7 +147,7 @@ fun SignInScreen(
                     question = R.string.already_have_an_account_q,
                     answer = R.string.sign_up,
                     navController = navController,
-                    distination = Route.SIGNUP)
+                    distination = Route.SIGN_UP)
 
             }
         }
