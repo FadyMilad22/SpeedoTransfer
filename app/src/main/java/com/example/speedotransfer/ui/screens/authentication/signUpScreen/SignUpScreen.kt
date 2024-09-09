@@ -1,6 +1,8 @@
-package com.example.speedotransfer.ui.screens.authentication
+package com.example.speedotransfer.ui.screens.authentication.signUpScreen
 
+import SignUpViewModel
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +17,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,45 +31,56 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.network.APIClient
+import com.example.speedotransfer.data.repository.SignUpRepoImpl
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.SignTrailingText
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
+import com.example.speedotransfer.ui.theme.BodyRegular14
+import com.example.speedotransfer.ui.theme.D300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.UIConstants
+import com.example.speedotransfer.ui.uiConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen(modifier: Modifier = Modifier) {
-    var fullName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var showPassword by remember { mutableStateOf(false) }
-    var showConfirmPassword by remember { mutableStateOf(false) }
-    var isPasswordValid by remember { mutableStateOf(true) }
-    var isConfirmPasswordValid by remember { mutableStateOf(true) }
-    val  isValid = fullName.isNotBlank() && email.isNotBlank() && password.isNotBlank() &&
-            confirmPassword.isNotBlank() && isPasswordValid && isConfirmPasswordValid
-    val isFormValid by remember {
-        mutableStateOf(isValid)
+fun SignUpScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    signUpViewModel: SignUpViewModel = viewModel(factory = SignUpViewModelFactory(SignUpRepoImpl(
+        APIClient
+    )))
+) {
 
-    }
+    // Observing StateFlow from ViewModel
+    val fullName by signUpViewModel.fullName.collectAsState()
+    val email by signUpViewModel.email.collectAsState()
+    val password by signUpViewModel.password.collectAsState()
+    val confirmPassword by signUpViewModel.confirmPassword.collectAsState()
+    val isPasswordValid by signUpViewModel.isPasswordValid.collectAsState()
+    val isConfirmPasswordValid by signUpViewModel.isConfirmPasswordValid.collectAsState()
+
+    // Local state for toggling visibility of the password fields
+    var showPassword by remember { mutableStateOf(false) }
+    var showConfirmPassword by remember { mutableStateOf(false) }  // Added showConfirmPassword
+//    val signUpState by signUpViewModel.signUpState.collectAsState()
+//
+//    if (signUpState is SignUpState.Success) {
+//        // Navigate to SignInScreen after successful sign-up
+//        LaunchedEffect(Unit) {
+//            navController.navigate(Routes.SIGN_IN)
+//        }
+//    }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = {
-                    CutomAppBarTitle(text = "Sign Up")
-                },
-                Modifier.background(
-                    brush = UIConstants.BRUSH2
-                    
-                ),
+                title = { CutomAppBarTitle(text = "Sign Up") },
+                Modifier.background(brush = uiConstants.BRUSH2)
             )
-        },
-        bottomBar = {
-
         },
         content = { paddingValues ->
             Column(
@@ -76,123 +91,109 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                Spacer(modifier = modifier.height(56.dp))
+                Spacer(modifier = Modifier.height(56.dp))
 
                 Text(
                     text = "Speedo Transfer",
                     style = TitleSemiBold,
                     textAlign = TextAlign.Center,
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .height(29.dp)
                 )
                 Spacer(modifier = Modifier.height(64.dp))
 
+                // Full Name TextField
                 SpeedoTextField(
-//isError = true,
                     labelText = "Full Name",
                     value = fullName,
-                    onValueChange = { fullName = it },
+                    onValueChange = { signUpViewModel.onFullNameChange(it) },
                     placeholderText = "Enter your Full Name",
                     icon = R.drawable.user,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     visualTransformation = VisualTransformation.None
                 )
 
+                // Email TextField
                 SpeedoTextField(
-
                     labelText = "Email",
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = { signUpViewModel.onEmailChange(it) },
                     placeholderText = "Enter your email address",
                     icon = R.drawable.email,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     visualTransformation = VisualTransformation.None
                 )
 
+                // Password TextField
                 SpeedoTextField(
-errorMessage = "aaa",
                     labelText = "Password",
                     value = password,
-                    onValueChange = {
-                        password = it
-                        isPasswordValid = password.length >= 8
-                    },
+                    onValueChange = { signUpViewModel.onPasswordChange(it) },
                     placeholderText = "Enter your password",
                     icon = if (showPassword) R.drawable.eye_comp2 else R.drawable.eye_comp,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     isPasswordVisible = showPassword,
-
                     visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                    onTrailingIconClick = {
-                        showPassword = !showPassword
-                    },
+                    onTrailingIconClick = { showPassword = !showPassword }
                 )
 
-//                if (!isPasswordValid) {
-//                    Text(
-//                        text = "This is an error message.",
-//                        color = D300,
-//                        style = BodyRegular14,
-//                        textAlign = TextAlign.Start,
-//                        modifier = modifier
-//                            .fillMaxWidth()
-//                            .padding(vertical = 8.dp)
-//                    )
-//
-//
-//                }
+                // Error message if password is invalid
+                if (!isPasswordValid) {
+                    Text(
+                        text = "Password must be at least 6 characters, include one uppercase letter, one lowercase letter, and one special character.",
+                        color = D300,
+                        style = BodyRegular14,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+                    )
+                }
 
+                // Confirm Password TextField
                 SpeedoTextField(
                     labelText = "Confirm password",
                     value = confirmPassword,
-                    onValueChange = {
-                        confirmPassword = it
-                        isConfirmPasswordValid = confirmPassword == password
-                    },
-                    placeholderText = "Enter your password",
+                    onValueChange = { signUpViewModel.onConfirmPasswordChange(it) },
+                    placeholderText = "Confirm your password",
                     icon = if (showConfirmPassword) R.drawable.eye_comp2 else R.drawable.eye_comp,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     isPasswordVisible = showConfirmPassword,
-
-                    onTrailingIconClick = {
-                        showConfirmPassword = !showConfirmPassword
-                    },
-                    visualTransformation = if (showConfirmPassword) VisualTransformation.None else PasswordVisualTransformation()
+                    visualTransformation = if (showConfirmPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                    onTrailingIconClick = { showConfirmPassword = !showConfirmPassword }
                 )
 
-//                if (!isConfirmPasswordValid) {
-//                    Text(
-//                        text = "This is an error message.",
-//                        color = D300,
-//                        style = BodyRegular14,
-//                        textAlign = TextAlign.Start,
-//                        modifier = modifier
-//                            .fillMaxWidth()
-//                            .padding(vertical = 8.dp)
-//                    )
-//                }
+                // Error message if confirm password doesn't match
+                if (!isConfirmPasswordValid) {
+                    Text(
+                        text = "Passwords do not match.",
+                        color = D300,
+                        style = BodyRegular14,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
+                // Sign Up Button
                 SpeedoButton(
-                    text = "Sign up",
-                    enabled = isFormValid,
-                    isTransparent = false
+                    text = "Sign Up",
+                    enabled = signUpViewModel.isFormValid(),
+                    isTransparent = false,
+                    onClick = { signUpViewModel.registerCustomer()
+                        navController.navigate(Route.HOME)}  // Calling registerCustomer on click
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 SignTrailingText(
                     question = R.string.already_have_an_account_q,
-                    answer = R.string.sign_in_a
+                    answer = R.string.sign_in_a,
+                    distination = Route.SIGNIN,
+                    navController = navController
+//
                 )
-            }})
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SignUpScreenPreview() {
-    SignUpScreen()
+            }
+        }
+    )
 }

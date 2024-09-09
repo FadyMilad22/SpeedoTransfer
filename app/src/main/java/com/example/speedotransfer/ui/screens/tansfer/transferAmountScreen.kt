@@ -59,13 +59,13 @@ import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.UIConstants
+import com.example.speedotransfer.ui.uiConstants
 import kotlinx.coroutines.launch
 
 
 /*
 * 
- Stepper modification to match the Design
+* Todo TextFields edits , Stepper modification to match the Design
 *
 * */
 
@@ -94,7 +94,7 @@ fun TransferAmountDesign(navController: NavController, senderName: String,
                         )
                 },
                 Modifier.background(
-                    brush = UIConstants.BRUSH
+                    brush = uiConstants.BRUSH
                     ),
 
                 navigationIcon = {
@@ -302,7 +302,7 @@ fun AmountArea(  amount: String,
             SpeedoTextField(
                 labelText = "Amount",
                 value = amount,
-                onValueChange = onAmountChange,
+                onValueChange = { amount = it },
                 placeholderText = "Enter amount",
                 icon = R.drawable.transparent_image,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)

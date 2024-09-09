@@ -4,8 +4,8 @@ import AccountDetailsResponse
 import CreateAccountRequest
 import CreateAccountResponse
 import CustomerDetailsResponse
-import LoginRequest
-import LoginResponse
+import SignInRequest
+import SignInResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.model.TransactionResponse
@@ -23,7 +23,7 @@ object APIClient : RemoteDataSource {
         return APIHelper.callable.registerCustomer(registerRequest)
     }
     // APIClient function to log in and generate JWT token
-    override suspend fun login(loginRequest: LoginRequest): LoginResponse {
+    override suspend fun login(loginRequest: SignInRequest): SignInResponse {
         return APIHelper.callable.login(loginRequest)
     }
     // APIClient function to get customer details by ID

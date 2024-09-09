@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.authentication.signInScreen
 
+import SignInViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.speedotransfer.data.repository.SignInRepo
@@ -10,7 +11,7 @@ class SignInViewModelFactory(private val signInRepo: SignInRepo): ViewModelProvi
         return if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
             SignInViewModel(signInRepo) as T
         }else{
-            throw IllegalArgumentException("settingsViewModel class not found")
+            throw IllegalArgumentException("Sign in ViewModel class not found")
         }
     }
 }

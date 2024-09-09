@@ -1,14 +1,15 @@
 package com.example.speedotransfer.data.repository
 
-import LoginRequest
-import LoginResponse
+import SignInRequest
+import SignInResponse
+import com.example.speedotransfer.data.network.RemoteDataSource
 
-class SignInRepoImpl:SignInRepo {
+class SignInRepoImpl(remoteDataSource: RemoteDataSource):SignInRepo {
 
     // Repo function to log in using repository pattern
-    override suspend fun login(loginRequest: LoginRequest): LoginResponse {
+    override suspend fun signIn(signInRequest: SignInRequest): SignInResponse {
         // Mocked object for testing purposes
-        val mockResponse = LoginResponse(
+        val mockResponse = SignInResponse(
             message = "Login Successful",
             token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2RhQGdtYWlsLmNvbSIsImlhdCI6MTcyNTQwNzQ2OSwiZXhwIjoxNzI1NDkzODY5fQ.i1qi6vdOjMElgd4mNc2MAnkbhX9sLihmUZLbVTRaLyk",
             tokenType = "Bearer",

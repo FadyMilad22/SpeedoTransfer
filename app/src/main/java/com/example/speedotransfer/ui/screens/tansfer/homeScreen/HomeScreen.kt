@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens.tansfer.homeScreen
+package com.example.speedotransfer.ui.screens.tansfer
 
 import HomeViewModel
 import androidx.compose.foundation.Image
@@ -59,8 +59,7 @@ import com.example.speedotransfer.ui.theme.Heading2
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.UIConstants
-import com.example.speedotransfer.ui.theme.D300
+import com.example.speedotransfer.ui.uiConstants
 
 /**
  **
@@ -226,7 +225,7 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
                 ) {
 
                     Text(
-                        text = transaction.senderAccountId.toString(), style = BodyMedium14, color = G900
+                        text = transaction.name, style = BodyMedium14, color = G900
                     )
 
 

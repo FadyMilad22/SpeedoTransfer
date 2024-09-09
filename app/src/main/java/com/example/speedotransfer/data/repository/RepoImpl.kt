@@ -6,8 +6,8 @@ import AccountDetailsResponse
 import CreateAccountRequest
 import CreateAccountResponse
 import CustomerDetailsResponse
-import LoginRequest
-import LoginResponse
+import SignInRequest
+import SignInResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.data.network.RemoteDataSource
@@ -41,9 +41,9 @@ class RepoImpl(
     }
 
     // Repo function to log in using repository pattern
-    override suspend fun login(loginRequest: LoginRequest): LoginResponse {
+    override suspend fun login(loginRequest: SignInRequest): SignInResponse {
         // Mocked object for testing purposes
-        val mockResponse = LoginResponse(
+        val mockResponse = SignInResponse(
             message = "Login Successful",
             token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2RhQGdtYWlsLmNvbSIsImlhdCI6MTcyNTQwNzQ2OSwiZXhwIjoxNzI1NDkzODY5fQ.i1qi6vdOjMElgd4mNc2MAnkbhX9sLihmUZLbVTRaLyk",
             tokenType = "Bearer",

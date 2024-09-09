@@ -31,7 +31,7 @@ import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.G40
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.UIConstants
+import com.example.speedotransfer.ui.uiConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +46,7 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                         )
                 },
                 Modifier.background(
-                    brush = UIConstants.BRUSH
+                    brush = uiConstants.BRUSH
                 ),
 
                 navigationIcon = {

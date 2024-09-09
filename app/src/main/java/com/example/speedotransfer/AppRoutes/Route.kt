@@ -1,7 +1,7 @@
 package com.example.speedotransfer.AppRoutes
 
 
-import TransferConfirmedDesign
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -12,11 +12,17 @@ import androidx.navigation.navArgument
 import com.example.speedotransfer.AppRoutes.Route.CONFIRMED_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.CONFIRM_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.HOME
+import com.example.speedotransfer.AppRoutes.Route.SIGNIN
+import com.example.speedotransfer.AppRoutes.Route.SIGNUP
 import com.example.speedotransfer.AppRoutes.Route.SPLASH
 import com.example.speedotransfer.ui.screens.SplashScreen
+import com.example.speedotransfer.ui.screens.authentication.SignUpScreen
 import com.example.speedotransfer.ui.screens.tansfer.homeScreen.HomeScreen
 import com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen.TransferConfirmationDesign
 import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
+import com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInScreen
+import com.example.speedotransfer.ui.screens.authentication.signUpScreen.SignUpScreen
+import com.example.speedotransfer.ui.screens.tansfer.HomeScreen
 
 object Route {
     const val SPLASH ="splash"
@@ -24,6 +30,10 @@ object Route {
     const val BEGIN_TRANSACTION = "beginTransaction"
     const val CONFIRM_TRANSACTION ="confirmTransaction"
     const val CONFIRMED_TRANSACTION ="confirmedTransaction"
+
+
+    const val SIGNIN ="signin"
+    const val SIGNUP ="signup"
 
 
 }
@@ -177,5 +187,11 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         }
 
 
+        composable(route = SIGNIN) {
+            SignInScreen(navController = navController)  // Pass the navController to SignInScreen for navigation
+        }
+        composable(route = SIGNUP) {
+            SignUpScreen(navController = navController)  // Pass the navController to SignInScreen for navigation
+        }
     }
 }

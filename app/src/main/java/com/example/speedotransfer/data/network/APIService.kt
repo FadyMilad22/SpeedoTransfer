@@ -4,8 +4,8 @@ import AccountDetailsResponse
 import CreateAccountRequest
 import CreateAccountResponse
 import CustomerDetailsResponse
-import LoginRequest
-import LoginResponse
+import SignInRequest
+import SignInResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.model.TransactionResponse
@@ -28,7 +28,7 @@ interface APIService {
 
     // APIHelper function to log in and generate JWT token
     @POST(Constants.LOGIN_ENDPOINT)
-    suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
+    suspend fun login(@Body loginRequest: SignInRequest): SignInResponse
 
     // APIHelper function to get customer details by ID
     @GET(Constants.GET_CUSTOMER_BY_ID_ENDPOINT)

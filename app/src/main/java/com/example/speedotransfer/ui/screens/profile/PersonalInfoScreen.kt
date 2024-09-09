@@ -18,7 +18,7 @@ import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.ProfileInfoItem
-import com.example.speedotransfer.ui.UIConstants
+import com.example.speedotransfer.ui.uiConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +33,7 @@ fun ProfileInfoScreen(modifier: Modifier = Modifier) {
                         )
                 },
                 Modifier.background(
-                    brush = UIConstants.BRUSH
+                    brush = uiConstants.BRUSH
                 ),
 
                 navigationIcon = {

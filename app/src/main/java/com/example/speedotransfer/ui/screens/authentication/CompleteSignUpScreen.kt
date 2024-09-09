@@ -40,6 +40,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.CountryRow
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
@@ -50,14 +52,15 @@ import com.example.speedotransfer.ui.elements.SpeedoTextField
 import com.example.speedotransfer.ui.theme.BodyRegular16
 import com.example.speedotransfer.ui.theme.Heading3
 import com.example.speedotransfer.ui.theme.TitleSemiBold
-import com.example.speedotransfer.ui.UIConstants
+import com.example.speedotransfer.ui.uiConstants
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CompleteSignUpScreen(modifier: Modifier = Modifier) {
+fun CompleteSignUpScreen(navController: NavController,
+    modifier: Modifier = Modifier) {
     var country by remember { mutableStateOf("") }
     var edit by remember { mutableStateOf<Boolean>(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -106,7 +109,7 @@ fun CompleteSignUpScreen(modifier: Modifier = Modifier) {
                     CutomAppBarTitle(text = "Sign Up")
                 },
                 Modifier.background(
-                    brush = UIConstants.BRUSH2
+                    brush = uiConstants.BRUSH2
                 ),
                 navigationIcon = {
                     IconButton(onClick = {}) {
@@ -221,7 +224,9 @@ fun CompleteSignUpScreen(modifier: Modifier = Modifier) {
 
                 SignTrailingText(
                     question = R.string.already_have_an_account_q,
-                    answer = R.string.sign_in_a
+                    answer = R.string.sign_in_a,
+                    distination = Route.SIGNIN,
+                    navController = navController
                 )
             }
         })

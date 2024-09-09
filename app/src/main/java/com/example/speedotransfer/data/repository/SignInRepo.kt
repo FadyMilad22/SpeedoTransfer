@@ -1,10 +1,10 @@
 package com.example.speedotransfer.data.repository
 
-import LoginRequest
-import LoginResponse
+import SignInRequest
+import SignInResponse
 
 interface SignInRepo {
 
-    suspend fun login(loginRequest: LoginRequest): LoginResponse
+    suspend fun signIn(signInRequest: SignInRequest): SignInResponse
 
 }
