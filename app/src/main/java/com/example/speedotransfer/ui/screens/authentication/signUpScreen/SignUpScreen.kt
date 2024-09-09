@@ -189,9 +189,9 @@ fun SignUpScreen(
                 SignTrailingText(
                     question = R.string.already_have_an_account_q,
                     answer = R.string.sign_in_a,
-//                    modifier = Modifier.clickable {
-//                        navController.navigate(Route.SIGNIN)
-//                    }
+                    distination = Route.SIGNIN,
+                    navController = navController
+//
                 )
             }
         }

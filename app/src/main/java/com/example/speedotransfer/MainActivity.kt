@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.TopAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -40,8 +41,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.AppRoutes.AppNavHost
 import com.example.speedotransfer.AppRoutes.getTopLevelRoute
 import com.example.speedotransfer.model.Client
+import com.example.speedotransfer.model.Transaction
 import com.example.speedotransfer.ui.screens.SplashScreen
 import com.example.speedotransfer.ui.screens.more.FavouriteScreen
+import com.example.speedotransfer.ui.screens.tansfer.HomeScreen
 import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.theme.G0
 import com.example.speedotransfer.ui.theme.G200
@@ -93,7 +96,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier) {
+fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier.padding(0.dp)) {
 
 
     Card(
@@ -137,8 +140,8 @@ fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier) {
                                 fontSize = 11.sp,
                                 color = if (currentDestination?.hierarchy?.any { it.route == screen.route } == true) P300 else G200,
                                 maxLines = 1,  // Ensure the text stays on one line
-                                softWrap = false  // Disable text wrapping
-                                ,
+                                softWrap = false,  // Disable text wrapping
+//                                    modifier = Modifier.fillMaxWidth()
 
                             )
                         },
@@ -167,6 +170,17 @@ fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     SpeedoTransferTheme {
-        AppNavHost(rememberNavController())
-    }
+        val transaction = Transaction(
+            name = "Ahmed Mohamed",
+            cardType = "Visa . MasterCard",
+            cardNumber = "1234",
+            amount = "500",
+            date = "Today 11:00",
+            status = "Received",
+            currency = "EGP"
+        )
+        val list = listOf(transaction, transaction, transaction, transaction, transaction)
+
+
+        HomeScreen(navController = rememberNavController())    }
 }

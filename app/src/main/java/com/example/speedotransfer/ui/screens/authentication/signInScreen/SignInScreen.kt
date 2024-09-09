@@ -2,6 +2,7 @@ package com.example.speedotransfer.ui.screens.authentication.signInScreen
 
 import SignInViewModel
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,6 +28,7 @@ import com.example.speedotransfer.ui.theme.D300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.data.network.APIClient
 import com.example.speedotransfer.data.repository.SignInRepoImpl
 import com.example.speedotransfer.ui.uiConstants
@@ -144,8 +146,10 @@ fun SignInScreen(
 
                 SignTrailingText(
                     question = R.string.already_have_an_account_q,
-                    answer = R.string.sign_up
-                )
+                    answer = R.string.sign_up,
+                    navController = navController,
+                    distination = Route.SIGNUP)
+
             }
         }
     )

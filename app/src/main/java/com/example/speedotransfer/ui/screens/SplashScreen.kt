@@ -66,7 +66,7 @@ fun SplashScreen(navController: NavController, modifier: Modifier = Modifier) {
 
 //        kotlinx.coroutines.delay(300)
 
-        navController.navigate(Route.SIGNUP) {
+        navController.navigate(Route.HOME) {
             popUpTo(Route.SPLASH) { inclusive = true }
         }
     }
