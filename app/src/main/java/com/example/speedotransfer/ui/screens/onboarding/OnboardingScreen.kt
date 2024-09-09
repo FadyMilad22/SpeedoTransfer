@@ -72,7 +72,7 @@ fun OnboardingScreen(navController: NavController,modifier: Modifier=Modifier) {
                 title = {  },
                 actions = {
                     TextButton(onClick = {
-                        navController.navigate(Route.SIGNIN) {
+                        navController.navigate(Route.SIGN_IN) {
                             popUpTo(Route.ON_BOARDING) { inclusive = true }}
                     }) {
                         Text(text = "Skip", style = BodyMedium16, color = G900)
@@ -108,7 +108,7 @@ fun OnboardingScreen(navController: NavController,modifier: Modifier=Modifier) {
                             sharedPreferences.edit().putBoolean("onboarding_complete", true).apply()
 
                             // Navigate to login screen
-                            navController.navigate(Route.SIGNIN) {
+                            navController.navigate(Route.SIGN_IN) {
                                 popUpTo(Route.ON_BOARDING) { inclusive = true }
                             }
                         } else {

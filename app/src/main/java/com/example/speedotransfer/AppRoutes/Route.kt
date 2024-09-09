@@ -34,7 +34,7 @@ import com.example.speedotransfer.ui.screens.profile.ProfileInfoScreen
 import com.example.speedotransfer.ui.screens.profile.ProfileScreen
 import com.example.speedotransfer.ui.screens.profile.SettingsScreen
 import com.example.speedotransfer.ui.screens.onboarding.OnboardingScreen
-import com.example.speedotransfer.ui.screens.profile.EditProfileScreen
+import com.example.speedotransfer.ui.screens.profile.EditProfileScreen.EditProfileScreen
 import com.example.speedotransfer.ui.screens.tansfer.HomeScreen
 import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionDetailsScreen
 import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionsScreen

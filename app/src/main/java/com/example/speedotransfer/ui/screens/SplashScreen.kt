@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens
 
+import android.content.Context
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -68,7 +69,7 @@ fun SplashScreen(navController: NavController, modifier: Modifier = Modifier) {
 
         if (isOnboardingComplete) {
             // Navigate to Login if onboarding is completed
-            navController.navigate(Route.SIGNIN) {
+            navController.navigate(Route.SIGN_IN) {
                 popUpTo(Route.SPLASH) { inclusive = true }
             }
         } else {
