@@ -8,4 +8,12 @@ class SignInViewModel(private val loginRepo: SignInRepo):ViewModel() {
 
 
 
+
+   fun login(){
+
+
+
+   }
+
+
 }

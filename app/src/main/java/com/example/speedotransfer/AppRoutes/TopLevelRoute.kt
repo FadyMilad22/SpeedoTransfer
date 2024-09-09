@@ -5,21 +5,33 @@ import com.example.speedotransfer.R
 
 data class TopLevelRoute(
 
-    val name:String,
+    val name: String,
     val route: String,
-    @DrawableRes val icon:Int
+    @DrawableRes val icon: Int
 )
 
 
-fun getTopLevelRoute(): List<TopLevelRoute>{
+fun getTopLevelRoute(): List<TopLevelRoute> {
 
     val bottomNavigationRoutes = mutableListOf<TopLevelRoute>()
 
-    bottomNavigationRoutes.add(TopLevelRoute("Home" ,Route.HOME, R.drawable.home) )
-    bottomNavigationRoutes.add(TopLevelRoute("Transfer" ,Route.HOME, R.drawable.transfer1) )
-    bottomNavigationRoutes.add(TopLevelRoute("Transactions" ,Route.HOME, R.drawable.history1) )
-    bottomNavigationRoutes.add(TopLevelRoute("My cards" ,Route.HOME, R.drawable.cards1) )
-    bottomNavigationRoutes.add(TopLevelRoute("More" ,Route.HOME, R.drawable.more) )
+    bottomNavigationRoutes.add(
+        TopLevelRoute(
+            "Home",
+            "${Route.HOME}/{accountId}/{startDate}/{endDate}/{balance}/{name}/{currency}",
+            R.drawable.home
+        )
+    )
+    bottomNavigationRoutes.add(
+        TopLevelRoute(
+            "Transfer",
+            "${Route.BEGIN_TRANSACTION}/{senderName}/{senderAccountNumberSuffix}/{currency}",
+            R.drawable.transfer1
+        )
+    )
+    bottomNavigationRoutes.add(TopLevelRoute("Transactions", Route.HOME, R.drawable.history1))
+    bottomNavigationRoutes.add(TopLevelRoute("My cards", Route.HOME, R.drawable.cards1))
+    bottomNavigationRoutes.add(TopLevelRoute("More", Route.HOME, R.drawable.more))
 
     return bottomNavigationRoutes
 }

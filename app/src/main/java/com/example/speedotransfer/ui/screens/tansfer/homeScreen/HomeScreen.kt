@@ -1,5 +1,6 @@
-package com.example.speedotransfer.ui.screens.tansfer
+package com.example.speedotransfer.ui.screens.tansfer.homeScreen
 
+import HomeViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -22,21 +22,29 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.network.APIClient
+import com.example.speedotransfer.data.repository.TransferRepoImpl
 import com.example.speedotransfer.model.Transaction
+import com.example.speedotransfer.model.TransactionResponse
+import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyMedium16
@@ -52,6 +60,7 @@ import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
 import com.example.speedotransfer.ui.theme.TitleSemiBold
 import com.example.speedotransfer.ui.UIConstants
+import com.example.speedotransfer.ui.theme.D300
 
 /**
  **
@@ -64,34 +73,26 @@ import com.example.speedotransfer.ui.UIConstants
 @Composable
 fun HomeScreen(
     navController: NavController,
-//    name: String,
-//    amount: Double,
-//    currency: String,
-//    transactionList: List<Transaction>,
+    accountId: Long,    // Passed from the previous screen
+    startDate: String,  // Passed from the previous screen
+    endDate: String,    // Passed from the previous screen
+    balance :Double,    // Passed from the previous screen
+    name: String,       // Passed from the previous screen
+    currency: String,       // Passed from the previous screen
     modifier: Modifier = Modifier
 ) {
+    val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModelFactory(TransferRepoImpl(APIClient)))
 
-// Test Code Till we Implement FLows and APIS
-    // test code
-    val transaction = Transaction(
-        name = "Ahmed Mohamed",
-        cardType = "Visa . MasterCard",
-        cardNumber = "1234",
-        amount = "500",
-        date = "Today 11:00",
-        status = "Received",
-        currency = "EGP"
-    )
-    val list = listOf(transaction, transaction, transaction, transaction, transaction)
+    homeViewModel.fetchTransactionHistory(accountId, startDate, endDate)
+
+    val transactionHistory by homeViewModel.transactionHistory.collectAsState()
+    val isLoading by homeViewModel.isLoading.collectAsState()
+    val errorMessage by homeViewModel.errorMessage.collectAsState()
 
 
-    val name = "Fady Milad"
-    val amount = 4423.toDouble()
-    val currency = "$"
-    val transactionList = list
 
 
-// Till we Implement FLows and APIS
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -105,10 +106,7 @@ fun HomeScreen(
                     brush = UIConstants.BRUSH
                 ),
 
-            )
-        },
-        bottomBar = {
-
+                )
         },
         content = { paddingValues ->
             Column(
@@ -121,9 +119,23 @@ fun HomeScreen(
 
 
                 NameBar(name = name)
-                AmountCard(amount = amount, currency = currency)
+                AmountCard(amount = balance, currency = currency)
                 Spacer(modifier = Modifier.padding(top = 16.dp))
-                RecentTransactionsArea(transactionList = transactionList)
+                RecentTransactionsArea(transactionList = transactionHistory)
+                if (isLoading) {
+
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+
+                }
+
+                // Show error message if any
+                if (errorMessage != null) {
+                    Text(
+                        text = errorMessage!!,
+                        color = D300,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
 
             }
 
@@ -132,9 +144,9 @@ fun HomeScreen(
 }
 
 @Composable
-fun RecentTransactionsArea(transactionList: List<Transaction>, modifier: Modifier = Modifier) {
+fun RecentTransactionsArea(transactionList: List<TransactionResponse>, modifier: Modifier = Modifier) {
     Column {
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier.fillMaxWidth()) {
+        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier.fillMaxWidth().padding(bottom = 8.dp)) {
 
             Text(
                 text = "Recent transactions",
@@ -160,7 +172,7 @@ fun RecentTransactionsArea(transactionList: List<Transaction>, modifier: Modifie
 }
 
 @Composable
-fun TransactionItem(transaction: Transaction, modifier: Modifier = Modifier) {
+fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modifier) {
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -214,13 +226,13 @@ fun TransactionItem(transaction: Transaction, modifier: Modifier = Modifier) {
                 ) {
 
                     Text(
-                        text = transaction.name, style = BodyMedium14, color = G900
+                        text = transaction.senderAccountId.toString(), style = BodyMedium14, color = G900
                     )
 
 
 
                     Text(
-                        text = "${transaction.cardType} . ${transaction.cardNumber}",
+                        text = "${transaction.description}",//"${transaction.cardType} . ${transaction.cardNumber}",
                         style = BodyRegular14,
                         fontSize = 12.sp,
                         color = G700
@@ -230,7 +242,7 @@ fun TransactionItem(transaction: Transaction, modifier: Modifier = Modifier) {
 
 
                     Text(
-                        text = "${transaction.date} - ${transaction.status}",
+                        text = "${transaction.transactionDate} - ${transaction.status}",
                         style = BodyRegular14,
                         fontSize = 12.sp,
                         color = G100
@@ -342,21 +354,6 @@ fun getInitials(name: String): String {
 @Composable
 private fun HomeScreenPreview() {
 
-    // test code
-    val transaction = Transaction(
-        name = "Ahmed Mohamed",
-        cardType = "Visa . MasterCard",
-        cardNumber = "1234",
-        amount = "500",
-        date = "Today 11:00",
-        status = "Received",
-        currency = "EGP"
-    )
-    val list = listOf(transaction, transaction, transaction, transaction, transaction)
-
-
-    HomeScreen(navController = rememberNavController())
-    //  HomeScreen("Fady Milad", 4423.toDouble(), "$", list)
 
 
 }

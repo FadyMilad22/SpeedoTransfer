@@ -1,6 +1,7 @@
 package com.example.speedotransfer
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,7 +17,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.TopAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -25,10 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,18 +35,13 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.AppRoutes.AppNavHost
+import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.getTopLevelRoute
-import com.example.speedotransfer.model.Client
-import com.example.speedotransfer.ui.screens.SplashScreen
-import com.example.speedotransfer.ui.screens.more.FavouriteScreen
-import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.theme.G0
 import com.example.speedotransfer.ui.theme.G200
-import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.SmallFontTextStyle
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
-import com.example.speedotransfer.ui.theme.TitleMedium
 
 
 class MainActivity : ComponentActivity() {
@@ -69,17 +61,26 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination?.route
                 Scaffold(modifier = Modifier.fillMaxSize(),
-                    bottomBar = { if (currentDestination != "splash") { // Replace "splash" with your actual splash route
+                    bottomBar = { if (currentDestination != "splash") {
                         BottomNavBar(navController)
                     } },
-//                    topBar = { TopAppBar(title = { Text("Speedo Transfer", textAlign = TextAlign.Center, style = TitleMedium , fontSize = 20.sp, color = G700 , modifier =Modifier.padding(top= 8.dp)) }, backgroundColor = Color.Transparent)}
+
                  )
                 { _ ->
 
                     AppNavHost(navController=navController)
-//                    val client = Client("Asmaa Dosuky", "7890")
-//                    val list = listOf(client, client, client, client, client, client, client)
-//                    FavouriteScreen(list)
+//                    TransferConfirmationDesign(
+//                        navController,
+//                        currency = "EGP",
+//                        transferAmount = 1000.0,
+//                        senderName = "Asmaa Dosuky",
+//                        receiverName = "Jonathon Smith",
+//                        senderAccountNumberSuffix = 7890,
+//                        receiverAccountNumberSuffix = 7890
+//                    )
+
+
+
                 }
 
             }
@@ -120,13 +121,13 @@ fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier) {
 
                     BottomNavigationItem(
                         icon = {
-                           Box(modifier =modifier.padding(start = 4.dp , end = 4.dp , bottom = 4.dp) ){ Icon(
+                            Box(modifier =modifier.padding(start = 4.dp , end = 4.dp , bottom = 4.dp) ){ Icon(
                                 painterResource(id = screen.icon),
                                 contentDescription = "${screen.name} Icon",
                                 modifier = modifier.size(24.dp),
-                               tint = if (currentDestination?.hierarchy?.any { it.route == screen.route } == true) P300 else G200  // Tint selected item with P300 and unselected with G200
+                                tint = if (currentDestination?.hierarchy?.any { it.route == screen.route } == true) P300 else G200  // Tint selected item with P300 and unselected with G200
 
-                           )}
+                            )}
                         },
                         label = {
                             Text(
@@ -138,17 +139,36 @@ fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier) {
                                 softWrap = false  // Disable text wrapping
                                 ,
 
-                            )
+                                )
                         },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
-                            navController.navigate(screen.route) {
+                            // this is just a temp code , till we implement it
+                            val accountId: Long = 12345L // Replace with actual accountId
+                            val startDate: String = "2023-09-01" // Replace with actual startDate
+                            val endDate: String = "2023-09-30" // Replace with actual endDate
+                            val balance: Double = 1500.0 // Replace with actual balance
+                            val name: String = "John Doe" // Replace with actual name
+                         //   val currency: String = "USD" // Replace with actual currency
+
+                            val senderName = "Asmaa Dosuky"
+                            val senderAccountNumberSuffix = 7890
+                            val currency = "EGP"
+
+                            navController.navigate(
+                            "${Route.BEGIN_TRANSACTION}/$senderName/$senderAccountNumberSuffix/$currency"){
+//                                "${Route.HOME}/$accountId/$startDate/$endDate/${balance.toFloat()}/$name/$currency"){
+
+
+                                    // navController.navigate(screen.route) {
+
+
                                 // Pop up to the start destination of the graph to
                                 // avoid building up a large stack of destinations
                                 // on the back stack as users select items
-//                                popUpTo(navController.graph.findStartDestination()) {    // This line causes an Error
-//                                    saveState = true
-//                                }
+                                popUpTo(navController.graph.findStartDestination().id) {    // This line causes an Error
+                                    saveState = true
+                                }
                                 launchSingleTop = true
                                 restoreState = true
                             }
@@ -159,7 +179,6 @@ fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier) {
         }
     }
 }
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

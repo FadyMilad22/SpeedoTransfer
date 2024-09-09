@@ -7,7 +7,8 @@ data class Transfer(
     val amount: Double,               // Amount transferred
     val currency: String,             // Currency of the transaction
     val transactionDate: String = "Not Determined",      // Date of the transaction
-    val status: String,               // Status after transfer (e.g., COMPLETED, FAILED)
-    val description: String?          // Optional description
+    val status: String = "",  // Status after transfer (e.g., COMPLETED, FAILED)
+    val description: String? =""        // Optional description
+
 
 )

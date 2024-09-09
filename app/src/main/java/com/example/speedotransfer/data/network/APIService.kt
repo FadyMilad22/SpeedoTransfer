@@ -10,9 +10,12 @@ import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
+import com.example.speedotransfer.model.UpdateCustomerRequest
+import com.example.speedotransfer.model.UpdateCustomerResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -57,5 +60,11 @@ interface APIService {
     @GET(Constants.GET_TRANSACTION_BY_ID_ENDPOINT)
     suspend fun getTransactionById(@Path(Constants.TRANSACTION_ID_PATH) transactionId: Long): TransactionResponse
 
+
+    @PUT(Constants.UPDATE_CUSTOMER_BY_EMAIL_ENDPOINT)
+    suspend fun updateCustomerByEmail(
+        @Query(Constants.EMAIL_QUERY) email: String, // Query parameter for email
+        @Body updateCustomerRequest: UpdateCustomerRequest // Request body
+    ): UpdateCustomerResponse // Response object
 
 }

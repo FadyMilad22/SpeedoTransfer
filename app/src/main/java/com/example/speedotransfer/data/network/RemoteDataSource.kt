@@ -10,6 +10,8 @@ import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
+import com.example.speedotransfer.model.UpdateCustomerRequest
+import com.example.speedotransfer.model.UpdateCustomerResponse
 
 interface RemoteDataSource {
 
@@ -23,4 +25,5 @@ interface RemoteDataSource {
     suspend fun transferMoney(transferRequest: Transfer): Transfer
     suspend fun getTransactionHistory(accountId: Long, startDate: String, endDate: String): List<TransactionResponse>
     suspend fun getTransactionById(transactionId: Long): TransactionResponse
+    suspend fun updateCustomerByEmail(email: String, updateRequest: UpdateCustomerRequest): UpdateCustomerResponse
 }

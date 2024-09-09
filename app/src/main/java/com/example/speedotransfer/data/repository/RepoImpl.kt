@@ -12,8 +12,11 @@ import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.data.network.RemoteDataSource
 import com.example.speedotransfer.data.repository.Repo
+import com.example.speedotransfer.model.HttpStatusCode
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
+import com.example.speedotransfer.model.UpdateCustomerRequest
+import com.example.speedotransfer.model.UpdateCustomerResponse
 
 class RepoImpl(
     val remoteDataSource: RemoteDataSource,
@@ -127,58 +130,6 @@ class RepoImpl(
     }
 
 
-    // Repo function to get transaction history by account ID, start date, and end date
-    override suspend fun getTransactionHistory(accountId: Long, startDate: String, endDate: String): List<TransactionResponse> {
-        // Mocked object for testing purposes
-        val mockResponse = listOf(
-            TransactionResponse(
-                id = 1,
-                senderAccountId = accountId,
-                recipientAccountId = 2,
-                amount = 500.0,
-                currency = "USD",
-                transactionDate = "2024-09-07T12:00:00",
-                status = "COMPLETED",
-                description = "Mock transaction 1"
-            ),
-            TransactionResponse(
-                id = 2,
-                senderAccountId = accountId,
-                recipientAccountId = 3,
-                amount = 250.0,
-                currency = "USD",
-                transactionDate = "2024-09-08T12:00:00",
-                status = "PENDING",
-                description = "Mock transaction 2"
-            )
-        )
-
-        // Uncomment this when the API is live
-        // return remoteDataSource.getTransactionHistory(accountId, startDate, endDate)
-
-        return mockResponse // Using mock object until the API is live
-    }
-
-    // Repo function to transfer money between accounts
-    override suspend fun transferMoney(transferRequest: Transfer): Transfer {
-        // Mocked object for testing purposes
-        val mockResponse = Transfer(
-            id = 1,
-            senderAccountId = transferRequest.senderAccountId,
-            recipientAccountId = transferRequest.recipientAccountId,
-            amount = transferRequest.amount,
-            currency = transferRequest.currency,
-            transactionDate = "2024-09-07T14:00:00",
-            status = "COMPLETED",
-            description = transferRequest.description ?: "Mock transfer"
-        )
-
-        // Uncomment this when the API is live
-        // return remoteDataSource.transferMoney(transferRequest)
-
-        return mockResponse // Using mock object until the API is live
-    }
-
 
     // Repo function to get transaction details by ID
     override suspend fun getTransactionById(transactionId: Long): TransactionResponse {
@@ -200,6 +151,29 @@ class RepoImpl(
         return mockResponse // Using mock object until the API is live
     }
 
+    // Repo function to update customer by email
+
+    override suspend fun updateCustomerByEmail(email: String, updateRequest: UpdateCustomerRequest): UpdateCustomerResponse {
+        // Mocked object for testing purposes
+        val mockResponse = UpdateCustomerResponse(
+            updatedAt = "2024-09-08T19:13:48.905Z",
+            message = "Customer updated successfully",
+            details = "Details about the update",
+            httpStatusCode = HttpStatusCode(
+                error = false,
+                is5xxServerError = false,
+                is4xxClientError = false,
+                is2xxSuccessful = true,
+                is1xxInformational = false,
+                is3xxRedirection = false
+            )
+        )
+
+        // Uncomment this when the API is live
+        // return remoteDataSource.updateCustomerByEmail(email, updateRequest)
+
+        return mockResponse // Using mock object until the API is live
+    }
 
 
 }

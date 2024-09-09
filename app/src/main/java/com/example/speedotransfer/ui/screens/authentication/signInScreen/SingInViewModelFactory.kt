@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.speedotransfer.data.repository.SignInRepo
 
 
-class SignInViewModelFactory(private val loginRepo: SignInRepo): ViewModelProvider.Factory {
+class SignInViewModelFactory(private val signInRepo: SignInRepo): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
-            SignInViewModel(loginRepo) as T
+            SignInViewModel(signInRepo) as T
         }else{
             throw IllegalArgumentException("settingsViewModel class not found")
         }

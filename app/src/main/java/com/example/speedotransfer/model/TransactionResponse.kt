@@ -10,4 +10,3 @@ data class TransactionResponse(
     val status: String,               // Transaction status (e.g., COMPLETED, PENDING)
     val description: String?
 )
-

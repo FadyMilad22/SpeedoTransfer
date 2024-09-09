@@ -31,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +41,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.R
 import com.example.speedotransfer.model.Client
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
@@ -56,11 +60,12 @@ import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
 import com.example.speedotransfer.ui.UIConstants
+import kotlinx.coroutines.launch
 
 
 /*
 * 
-* Todo TextFields edits , Stepper modification to match the Design
+ Stepper modification to match the Design
 *
 * */
 
@@ -68,9 +73,17 @@ import com.example.speedotransfer.ui.UIConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransferAmountDesign(favouritesList: List<Client>, modifier: Modifier = Modifier) {
+fun TransferAmountDesign(navController: NavController, senderName: String,
+                         senderAccountNumberSuffix: String,currency: String, modifier: Modifier = Modifier) {
+
+    val client = Client("Asmaa Dosuky", "7890")
+    val list = listOf(client, client, client, client, client, client, client)
+
+    val favouritesList: List<Client> = list
 
     val scrollState = rememberScrollState()
+    var amount by rememberSaveable { mutableStateOf("") }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -98,15 +111,18 @@ fun TransferAmountDesign(favouritesList: List<Client>, modifier: Modifier = Modi
         },
         content = { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier
+                    .padding(paddingValues)
                     .padding(horizontal = 16.dp)
                     .verticalScroll(scrollState)
             ) {
 
 
                 StepsRow(currentStep = 1)
-                AmountArea()
-                RecipientInformationArea(favouritesList = favouritesList)
+                AmountArea(amount = amount, onAmountChange = { amount = it })
+                RecipientInformationArea(navController,
+                    senderName,senderAccountNumberSuffix,amount,
+                    currency,favouritesList, modifier)
 
 
             }
@@ -117,10 +133,9 @@ fun TransferAmountDesign(favouritesList: List<Client>, modifier: Modifier = Modi
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipientInformationArea(favouritesList: List<Client>, modifier: Modifier = Modifier) {
-
-    var recipientName by remember { mutableStateOf("") }
-    var recipientAccountNumber by remember { mutableStateOf("") }
+fun RecipientInformationArea(navController: NavController,senderName: String,senderAccountNumberSuffix: String,amount: String,currency: String,favouritesList: List<Client>, modifier: Modifier = Modifier) {
+    var recipientName by rememberSaveable { mutableStateOf("") }
+    var recipientAccountNumber by rememberSaveable { mutableStateOf("") }
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -174,8 +189,16 @@ fun RecipientInformationArea(favouritesList: List<Client>, modifier: Modifier = 
     )
 
     Spacer(modifier = modifier.padding(bottom = 32.dp))
-    SpeedoButton(text = "Continue", enabled = true, isTransparent = true)
+    SpeedoButton(text = "Continue", enabled = true, isTransparent = false , modifier.clickable {
+
+
+        navController.navigate(
+            route = "${Route.CONFIRM_TRANSACTION}/${amount}/${currency}/$senderName/${recipientName}/$senderAccountNumberSuffix/$recipientAccountNumber"
+        )
+
+    })
     Spacer(modifier = Modifier.padding(bottom = 16.dp))
+
 
 
 
@@ -218,7 +241,18 @@ fun RecipientInformationArea(favouritesList: List<Client>, modifier: Modifier = 
                     items(favouritesList) {
                         FavListBeneficiaryCard(
                             clientName = it.Name,
-                            accountNumberSuffix = it.accountNumber
+                            accountNumberSuffix = it.accountNumber,
+                            modifier = Modifier.clickable {
+                                // Set the recipient name and account number when a client is selected
+                                recipientName = it.Name
+                                recipientAccountNumber = it.accountNumber
+
+                                // Dismiss the bottom sheet
+                                scope.launch {
+                                    sheetState.hide()
+                                    showBottomSheet = false
+                                }
+                            }
                         )
                         Spacer(modifier = modifier.height(16.dp))
 
@@ -246,8 +280,8 @@ fun RecipientInformationArea(favouritesList: List<Client>, modifier: Modifier = 
 
 
 @Composable
-fun AmountArea(modifier: Modifier = Modifier) {
-    var amount by remember { mutableStateOf("") }
+fun AmountArea(  amount: String,
+                 onAmountChange: (String) -> Unit,modifier: Modifier = Modifier) {
 
     Text(
         text = "How much are you sending?",
@@ -268,7 +302,7 @@ fun AmountArea(modifier: Modifier = Modifier) {
             SpeedoTextField(
                 labelText = "Amount",
                 value = amount,
-                onValueChange = { amount = it },
+                onValueChange = onAmountChange,
                 placeholderText = "Enter amount",
                 icon = R.drawable.transparent_image,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
@@ -313,5 +347,5 @@ private fun TransferAmountDesignPreview() {
     // StepsRow(2)
     val client = Client("Asmaa Dosuky", "7890")
     val list = listOf(client, client, client, client, client, client, client)
-    TransferAmountDesign(list)
+    TransferAmountDesign(navController= rememberNavController(),"Fady" , "4893","EGP")
 }

@@ -10,6 +10,8 @@ import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
+import com.example.speedotransfer.model.UpdateCustomerRequest
+import com.example.speedotransfer.model.UpdateCustomerResponse
 
 
 object APIClient : RemoteDataSource {
@@ -55,6 +57,10 @@ object APIClient : RemoteDataSource {
         return APIHelper.callable.getTransactionById(transactionId)
     }
 
+
+    override suspend fun updateCustomerByEmail(email: String, updateRequest: UpdateCustomerRequest): UpdateCustomerResponse {
+        return APIHelper.callable.updateCustomerByEmail(email, updateRequest)
+    }
 
 
 

@@ -63,7 +63,6 @@ import com.example.speedotransfer.ui.UIConstants
 fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) {
 
 
-
     val sheetState = rememberModalBottomSheetState()
     var clickedListIndex by remember { mutableStateOf<Int?>(null) }
 
@@ -123,13 +122,16 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
                     onEditClick = {
                         edit = true
                         showBottomSheet = true
-                       // clickedListIndex = index
+//                       clickedListIndex = index
+                        accountNameEdit = item.Name
+                        accountNumberEdit = item.accountNumber
 
 
                     },
                     onDeleteClick = {name: String, accountNumber: String ->
                         edit = false
                         showBottomSheet = true
+
                     }
                 )
                 Spacer(modifier = modifier.padding(bottom = 16.dp))
@@ -140,7 +142,7 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
     if (showBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = {
-            //    showBottomSheet = false
+                showBottomSheet = false
 
             },
             sheetState = sheetState,
