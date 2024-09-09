@@ -1,5 +1,8 @@
-package com.example.speedotransfer.ui.screens.profile
+package com.example.speedotransfer.ui.screens.profile.EditProfileScreen
 
+import EditProfileScreenViewModel
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -23,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,11 +35,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.speedotransfer.AppRoutes.Route.CONFIRMED_TRANSACTION
+import com.example.speedotransfer.AppRoutes.Route.PROFILE
+import com.example.speedotransfer.AppRoutes.Route.SETTINGS
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.network.APIClient
+import com.example.speedotransfer.data.repository.EditProfileRepoImpl
+import com.example.speedotransfer.model.UpdateCustomerResponse
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.SpeedoButton
@@ -46,7 +59,45 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfileScreen(modifier: Modifier = Modifier) {
+
+fun EditProfileScreen(
+    navController: NavController,
+    accountId: Long,    // Passed from the previous screen
+    name: String,  // Passed from the previous screen
+    email: String,    // Passed from the previous screen
+    birthDate: String,    // Passed from the previous screen
+    country: String,       // Passed from the previous screen
+    editProfileViewModel: EditProfileScreenViewModel = viewModel(
+        factory = EditProfileScreenViewModelFactory(
+            EditProfileRepoImpl(APIClient)
+        )
+
+    ),
+
+
+    modifier: Modifier = Modifier
+) {
+
+    val updateState by editProfileViewModel.editProfileState.collectAsState()
+
+    val fullName by editProfileViewModel.fullName.collectAsState()
+    val emailValue by editProfileViewModel.email.collectAsState()
+    val countryValue by editProfileViewModel.country.collectAsState()
+    val dateOfBirth by editProfileViewModel.dateOfBirth.collectAsState()
+    var country by remember {
+        mutableStateOf("EGY")
+    }
+    val context = LocalContext.current  // To show the toast
+
+    if (updateState?.httpStatusCode?.is2xxSuccessful == true) {
+        // Show the success toast and navigate back to the profile screen
+        Toast.makeText(context, "Successfully", Toast.LENGTH_SHORT).show()
+        navController.popBackStack("$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}", inclusive = false) // Navigate back to the profile screen
+    }
+//    var birthDate by remember {
+//        mutableStateOf("")
+//    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -61,7 +112,13 @@ fun EditProfileScreen(modifier: Modifier = Modifier) {
                 ),
 
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        navController.popBackStack(
+                            "$SETTINGS/{accountId}/{name}/{email}/{birthDate}/{country}",
+                            inclusive = false
+                        )
+
+                    }) {
                         CustomAppBarIcon(
                             icon = R.drawable.drop_down
                         )
@@ -83,10 +140,6 @@ fun EditProfileScreen(modifier: Modifier = Modifier) {
             ) {
 
 
-                var fullName by remember { mutableStateOf("") }
-                var email by remember { mutableStateOf("") }
-                var country by remember { mutableStateOf("") }
-                var dateOfBirth by remember { mutableStateOf("") }
                 val sheetState = rememberModalBottomSheetState()
                 val scope = rememberCoroutineScope()
                 var showBottomSheet by remember { mutableStateOf(false) }
@@ -115,7 +168,7 @@ fun EditProfileScreen(modifier: Modifier = Modifier) {
                                         .height(56.dp)
                                         .padding(vertical = 16.dp)
                                         .clickable {
-                                            country = "United States"
+//                                            country = "United States"
                                             scope.launch {
                                                 showBottomSheet = false
                                                 sheetState.hide()
@@ -151,8 +204,8 @@ fun EditProfileScreen(modifier: Modifier = Modifier) {
 
                     labelText = "Full Name",
                     value = fullName,
-                    onValueChange = { fullName = it },
-                    placeholderText = "Enter Cardholder Name",
+                    onValueChange = { editProfileViewModel.fullName.value = it },
+                    placeholderText = name,
                     icon = R.drawable.user,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     visualTransformation = VisualTransformation.None
@@ -160,9 +213,9 @@ fun EditProfileScreen(modifier: Modifier = Modifier) {
                 SpeedoTextField(
 
                     labelText = "Email",
-                    value = email,
-                    onValueChange = { email = it },
-                    placeholderText = "Enter Cardholder Email",
+                    value = emailValue,
+                    onValueChange = { editProfileViewModel.email.value = it },
+                    placeholderText = email,
                     icon = R.drawable.email,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     visualTransformation = VisualTransformation.None
@@ -172,7 +225,7 @@ fun EditProfileScreen(modifier: Modifier = Modifier) {
                     labelText = "Country",
                     value = country,
                     onValueChange = { country = it },
-                    placeholderText = "Select your country",
+                    placeholderText = country,
                     icon = R.drawable.chevron_down,
                     keyboardOptions = KeyboardOptions.Default,
                     visualTransformation = VisualTransformation.None,
@@ -187,19 +240,33 @@ fun EditProfileScreen(modifier: Modifier = Modifier) {
                 SpeedoTextField(
                     labelText = "Date Of Birth",
                     value = dateOfBirth,
-                    onValueChange = { dateOfBirth = it },
-                    placeholderText = "DD/MM/YYYY",
+                    onValueChange = { editProfileViewModel.dateOfBirth.value = it },
+                    placeholderText = birthDate,
                     icon = R.drawable.date,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = VisualTransformation.None
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
-
+val context = LocalContext.current
                 SpeedoButton(
                     text = "Save",
                     enabled = true,
-                    isTransparent = false
+                    isTransparent = false,
+                    onClick = { try {
+                        editProfileViewModel.updateProfile()
+//
+//                            }
+//
+
+//                            }
+//                        Toast.makeText(context, "$", Toast.LENGTH_SHORT).show()
+                    }catch (e : Exception){
+                        Log.d("trace","Error : ${e.localizedMessage}")
+                    }
+
+                    }
+
                 )
             }
         }

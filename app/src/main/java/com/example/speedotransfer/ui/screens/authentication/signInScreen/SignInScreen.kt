@@ -155,7 +155,7 @@ fun SignInScreen(
                     question = R.string.already_have_an_account_q,
                     answer = R.string.sign_up,
                     navController = navController,
-                    distination = Route.SIGNUP)
+                    distination = Route.SIGN_UP)
 
             }
         }
