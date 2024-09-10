@@ -20,28 +20,38 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.Route.HOME
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.network.APIClient
+import com.example.speedotransfer.data.repository.favourite.FavRepoImpl
+import com.example.speedotransfer.model.FavouriteRequest
 import com.example.speedotransfer.ui.elements.BeneficiaryCard
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.StepsRow
+import com.example.speedotransfer.ui.screens.more.favourite.FavViewModelFactory
 import com.example.speedotransfer.ui.theme.BodyRegular16
 import com.example.speedotransfer.ui.theme.G40
 import com.example.speedotransfer.ui.theme.G500
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.TitleSemiBold
 import com.example.speedotransfer.ui.uiConstants
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,9 +63,27 @@ fun TransferConfirmedDesign(
     receiverAccountNumberSuffix: String,
     transferAmount : Int,
     currency :String,
+    favViewModel: FavViewModel = viewModel(
+        factory = FavViewModelFactory(
+            FavRepoImpl(APIClient)
+        )
+    ),  // ViewModel is passed here
+    token: String,  // Authentication token is passed here
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()  // Define the coroutine scope here
+
+    // Collect the addFavResponse from the ViewModel's state
+    val addFavResponse by favViewModel.addFavResponse.collectAsState()
+    LaunchedEffect(addFavResponse) {
+        if (addFavResponse != null) {
+            Log.d("Favourite Added", "Added at: ${addFavResponse?.addedAt}")
+        } else {
+            Log.d("Favourite Response", "addFavResponse is null")
+        }
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -140,7 +168,35 @@ fun TransferConfirmedDesign(
                     navController.popBackStack("$HOME/{accountId}/{startDate}/{endDate}/{balance}/{name}/{currency}", inclusive = false)
                 })
                 Spacer(modifier = Modifier.padding(bottom = 16.dp))
-                SpeedoButton(text = "Add to Favourite", enabled = true, isTransparent = true)
+                // Button to add the recipient to Favourites
+                SpeedoButton(
+                    text = "Add to Favourite",
+                    enabled = true,
+                    isTransparent = true,
+                    onClick =  {
+                        // Launch a coroutine to add the customer to favourites
+                        scope.launch {
+                            try {
+                                Log.d("Favourite", "Attempting to add favourite")
+                                val favouriteRequest = FavouriteRequest(
+                                    accountNumber = receiverAccountNumberSuffix,
+                                    recipientName = receiverName
+                                )
+
+                                // Call ViewModel to add the favourite
+                                favViewModel.addCustomerToFavourite(token, favouriteRequest)
+
+                                // Log when the request has been made
+                                Log.d("Favourite", "Request sent to add favourite")
+
+                            } catch (e: Exception) {
+                                // Handle and log any errors that occur
+                                Log.e("Favourite Error", "Error during addCustomerToFavourite: ${e.localizedMessage}")
+                            }
+                        }
+                    }
+                )
+
                 Spacer(modifier = Modifier.padding(bottom = 16.dp))
             }
 
@@ -209,14 +265,14 @@ fun TransferDoneSuccesfullyArea(
 @Preview(showSystemUi = true)
 @Composable
 private fun TransferConfirmedPreview() {
-    TransferConfirmedDesign(
-        rememberNavController(),
-        currency = "EGP",
-        transferAmount = 11213,
-        senderName = "Asmaa Dosuky",
-        receiverName = "Jonathon Smith",
-        senderAccountNumberSuffix = "7890",
-        receiverAccountNumberSuffix = "7890"
-    )
+//    TransferConfirmedDesign(
+//        rememberNavController(),
+//        currency = "EGP",
+//        transferAmount = 11213,
+//        senderName = "Asmaa Dosuky",
+//        receiverName = "Jonathon Smith",
+//        senderAccountNumberSuffix = "7890",
+//        receiverAccountNumberSuffix = "7890"
+//    )
 
 }

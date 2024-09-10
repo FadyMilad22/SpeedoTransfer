@@ -152,7 +152,7 @@ fun MoreScreenDesign(
                 ArrowedSmallMenuItem(name = "Favourites",
                     icon = R.drawable.favorite,
                     modifier = modifier.clickable {
-                        navController.navigate(Route.FAVOURITES)
+                        navController.navigate("${Route.FAVOURITES}/${token}")
                     }
                     )
                 ArrowedSmallMenuItem(name = "Profile", icon = R.drawable.user, modifier = modifier.clickable {

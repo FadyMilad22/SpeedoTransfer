@@ -1,8 +1,8 @@
 package com.example.speedotransfer.AppRoutes
 
 
+import TransferAmountDesign
 import TransferConfirmedDesign
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -16,7 +16,6 @@ import com.example.speedotransfer.AppRoutes.Route.COMPLETE_SIGN_UP
 import com.example.speedotransfer.AppRoutes.Route.CONFIRMED_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.CONFIRM_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.EDIT_PROFILE
-import com.example.speedotransfer.AppRoutes.Route.FAVOURITES
 import com.example.speedotransfer.AppRoutes.Route.HOME
 import com.example.speedotransfer.AppRoutes.Route.ON_BOARDING
 import com.example.speedotransfer.AppRoutes.Route.MORE
@@ -29,11 +28,10 @@ import com.example.speedotransfer.AppRoutes.Route.SPLASH
 import com.example.speedotransfer.model.Client
 import com.example.speedotransfer.ui.screens.SplashScreen
 import com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen.TransferConfirmationDesign
-import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInScreen
 import com.example.speedotransfer.ui.screens.authentication.signUpScreen.CompleteSignUpScreen
 import com.example.speedotransfer.ui.screens.authentication.signUpScreen.SignUpScreen
-import com.example.speedotransfer.ui.screens.more.FavouriteScreen
+import com.example.speedotransfer.ui.screens.more.favourite.FavouriteScreen
 import com.example.speedotransfer.ui.screens.more.MoreScreenDesign
 import com.example.speedotransfer.ui.screens.profile.ChangePasswordScreen
 import com.example.speedotransfer.ui.screens.profile.ProfileInfoScreen
@@ -115,14 +113,15 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         }
 
         composable(
-            route = "$CONFIRMED_TRANSACTION/{transferAmount}/{currency}/{senderName}/{receiverName}/{senderAccountNumberSuffix}/{receiverAccountNumberSuffix}",
+            route = "$CONFIRMED_TRANSACTION/{transferAmount}/{currency}/{senderName}/{receiverName}/{senderAccountNumberSuffix}/{receiverAccountNumberSuffix}/{token}",
             arguments = listOf(
                 navArgument("transferAmount") { type = NavType.IntType },  // Assuming transferAmount is passed as a float
                 navArgument("currency") { type = NavType.StringType },
                 navArgument("senderName") { type = NavType.StringType },
                 navArgument("receiverName") { type = NavType.StringType },
                 navArgument("senderAccountNumberSuffix") { type = NavType.StringType },
-                navArgument("receiverAccountNumberSuffix") { type = NavType.StringType }
+                navArgument("receiverAccountNumberSuffix") { type = NavType.StringType },
+                navArgument("token") { type = NavType.StringType }
             )
         ) {
             val transferAmount = it.arguments?.getInt("transferAmount")!!  // Converting from Float to Double
@@ -131,6 +130,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             val receiverName = it.arguments?.getString("receiverName")!!
             val senderAccountNumberSuffix = it.arguments?.getString("senderAccountNumberSuffix")!!
             val receiverAccountNumberSuffix = it.arguments?.getString("receiverAccountNumberSuffix")!!
+            val token = it.arguments?.getString("token")!!
 
             // Call the Composable function CONFIRMEDTRANSACTION with the extracted parameters
             TransferConfirmedDesign(
@@ -140,7 +140,8 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 senderName = senderName,
                 receiverName = receiverName,
                 senderAccountNumberSuffix = senderAccountNumberSuffix,
-                receiverAccountNumberSuffix = receiverAccountNumberSuffix
+                receiverAccountNumberSuffix = receiverAccountNumberSuffix,
+                token = token  // handel it
             )
         }
 
@@ -409,7 +410,19 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         }
 
 
-
+        composable(
+            route = "${Route.FAVOURITES}/{token}",
+            arguments = listOf(navArgument("token") { type = NavType.StringType })
+        ) {
+            val token = it.arguments?.getString("token")!!
+//            val client = Client("Asmaa Dosuky", "7890")
+//            val list = listOf(client, client, client, client, client, client, client)
+            FavouriteScreen(
+                navController = navController,
+//                favouriteList= list,
+                token= token,
+                )
+        }
 
 
 
