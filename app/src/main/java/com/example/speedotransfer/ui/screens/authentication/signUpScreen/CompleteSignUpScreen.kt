@@ -1,5 +1,6 @@
-package com.example.speedotransfer.ui.screens.authentication
+package com.example.speedotransfer.ui.screens.authentication.signUpScreen
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,9 +41,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.network.APIClient
+import com.example.speedotransfer.data.repository.SignUpRepoImpl
 import com.example.speedotransfer.ui.elements.CountryRow
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
@@ -57,18 +61,31 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CompleteSignUpScreen(navController: NavController,
-    modifier: Modifier = Modifier) {
+fun CompleteSignUpScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
+
+    val signUpViewModel: SignUpViewModel =
+        viewModel(
+            factory = SignUpViewModelFactory(
+                SignUpRepoImpl(
+                    APIClient
+                )
+            )
+        )
     var country by remember { mutableStateOf("") }
-    var edit by remember { mutableStateOf<Boolean>(false) }
-    var showBottomSheet by remember { mutableStateOf(false) }
+    var showBottomSheet by remember { mutableStateOf(false) } // Track Bottom Sheet visibility
+    var isDatePickerShown by remember { mutableStateOf(false) } // Track Date Picker visibility
     val sheetState = rememberModalBottomSheetState()
     var selectedCountry by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
-    if (showBottomSheet) {
+    // Fix: Only show Bottom Sheet if Date Picker is not shown
+    if (showBottomSheet && !isDatePickerShown) {
         ModalBottomSheet(
             onDismissRequest = {
                 showBottomSheet = false
@@ -83,7 +100,6 @@ fun CompleteSignUpScreen(navController: NavController,
                     .height(400.dp)
                     .padding(16.dp)
             ) {
-
                 items(5) {
                     CountryRow(
                         countryName = "United States",
@@ -105,12 +121,8 @@ fun CompleteSignUpScreen(navController: NavController,
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = {
-                    CutomAppBarTitle(text = "Sign Up")
-                },
-                Modifier.background(
-                    brush = uiConstants.BRUSH2
-                ),
+                title = { CutomAppBarTitle(text = "Sign Up") },
+                Modifier.background(brush = uiConstants.BRUSH2),
                 navigationIcon = {
                     IconButton(onClick = {}) {
                         CustomAppBarIcon(icon = R.drawable.drop_down)
@@ -118,9 +130,7 @@ fun CompleteSignUpScreen(navController: NavController,
                 },
             )
         },
-        bottomBar = {
-
-        },
+        bottomBar = {},
         content = { paddingValues ->
             Column(
                 modifier = Modifier
@@ -137,29 +147,24 @@ fun CompleteSignUpScreen(navController: NavController,
                     text = "Speedo Transfer",
                     style = TitleSemiBold,
                     textAlign = TextAlign.Center,
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .height(29.dp)
+                    modifier = modifier.fillMaxWidth().height(29.dp)
                 )
 
                 Text(
                     text = "Welcome to Banque Misr!",
                     style = Heading3,
                     textAlign = TextAlign.Center,
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(top = 66.dp)
+                    modifier = modifier.fillMaxWidth().padding(top = 66.dp)
                 )
 
                 Text(
                     text = "Let's Complete your Profile",
                     style = BodyRegular16,
                     textAlign = TextAlign.Center,
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp, bottom = 32.dp)
+                    modifier = modifier.fillMaxWidth().padding(top = 16.dp, bottom = 32.dp)
                 )
 
+                // Fix: Don't show DatePicker if Bottom Sheet is active
                 SpeedoTextField(
                     labelText = "Country",
                     value = selectedCountry,
@@ -169,38 +174,29 @@ fun CompleteSignUpScreen(navController: NavController,
                     keyboardOptions = KeyboardOptions.Default,
                     visualTransformation = VisualTransformation.None,
                     modifier = modifier.clickable {
-                        showBottomSheet = true
-                        scope.launch {
-                            sheetState.show()
+                        if (!isDatePickerShown) {  // Only show Bottom Sheet if DatePicker is not shown
+                            showBottomSheet = true
+                            scope.launch { sheetState.show() }
                         }
                     }
                 )
 
-                var isDatePickerShown by remember {
-                    mutableStateOf(false)
-                }
-                var dateOfBirth by remember {
-                    mutableStateOf("")
-                }
-                var dateMillis by remember {
-                    mutableLongStateOf(0)
-                }
+                var dateOfBirth by remember { mutableStateOf("") }
+                var dateMillis by remember { mutableLongStateOf(0) }
 
-                val isFormValid by derivedStateOf {
-                    country.isNotBlank() && dateOfBirth.isNotBlank()
-                }
-                if (isDatePickerShown)
+                // Show Date Picker
+                if (isDatePickerShown) {
                     DatePickerChooser(onConfirm = {
-                        val dateFormated = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-                        Log.d("trace", "Date: $dateFormated")
+                        val dateFormatted = SimpleDateFormat("dd/MM/yyyy", Locale.US)
                         dateMillis = it.selectedDateMillis!!
-                        dateOfBirth = dateFormated.format(dateMillis)
-                        Log.d("trace", "Dateeeeeee: $dateOfBirth")
+                        dateOfBirth = dateFormatted.format(dateMillis)
                         isDatePickerShown = false
                     }, onDismiss = {
                         isDatePickerShown = false
                     })
+                }
 
+                // Fix: Don't show Bottom Sheet if DatePicker is active
                 SpeedoTextField(
                     labelText = "Date Of Birth",
                     value = dateOfBirth,
@@ -209,15 +205,32 @@ fun CompleteSignUpScreen(navController: NavController,
                     icon = R.drawable.date,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = VisualTransformation.None,
-                    modifier = modifier.clickable { isDatePickerShown = true }
+                    modifier = modifier.clickable {
+                        if (!showBottomSheet) {  // Only show DatePicker if Bottom Sheet is not shown
+                            isDatePickerShown = true
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
+                val isFormValid by derivedStateOf {
+                    selectedCountry.isNotBlank() && dateOfBirth.isNotBlank()
+                }
+
                 SpeedoButton(
                     text = "Continue",
                     enabled = isFormValid,
-                    isTransparent = false
+                    isTransparent = false,
+                    onClick = {
+                        signUpViewModel.onCountryChange(selectedCountry)
+                        signUpViewModel.onBirthDateChange(dateOfBirth)
+                        signUpViewModel.registerCustomer()
+
+                        navController.navigate(Route.SIGN_IN) {
+                            popUpTo(Route.COMPLETE_SIGN_UP) { inclusive = true }
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -229,7 +242,8 @@ fun CompleteSignUpScreen(navController: NavController,
                     navController = navController
                 )
             }
-        })
+        }
+    )
 }
 
 
@@ -241,7 +255,7 @@ fun DatePickerChooser(
     modifier: Modifier = Modifier
 ) {
     val datePickerState = rememberDatePickerState()
-    DatePickerDialog(onDismissRequest = {},
+    DatePickerDialog(onDismissRequest = onDismiss,  // Allow dismiss action
         confirmButton = {
             TextButton(onClick = { onConfirm(datePickerState) }) {
                 Text(text = "Ok")
@@ -255,8 +269,8 @@ fun DatePickerChooser(
     ) {
         DatePicker(state = datePickerState)
     }
-
 }
+
 //@Preview(showBackground = true)
 //@Composable
 //fun SignUpScreenPreview() {

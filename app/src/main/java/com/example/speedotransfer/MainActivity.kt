@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination?.route
                 Scaffold(modifier = Modifier.fillMaxSize(),
-                    bottomBar = { if (currentDestination != "splash") {
+                    bottomBar = { if (currentDestination != Route.SPLASH  &&currentDestination != Route.SIGN_IN && currentDestination != Route.SIGN_UP && currentDestination !=Route.COMPLETE_SIGN_UP && currentDestination !=Route.ON_BOARDING ) {
                         BottomNavBar(navController)
                     } },
 

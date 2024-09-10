@@ -30,6 +30,9 @@ import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.data.network.APIClient
 import com.example.speedotransfer.data.repository.SignInRepoImpl
 import com.example.speedotransfer.ui.uiConstants
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
@@ -79,8 +82,9 @@ fun SignInScreen(
                         customerState?.let { customer ->
                             // Navigate to home when customer details are available
                             LaunchedEffect(Unit) {
+
                                 navController.navigate(
-                                    "${Route.HOME}/${customer.id}/${customer.createdAt}/2024-09-30/${customer.phoneNumber}/${customer.name}/EGP"
+                                    "${Route.HOME}/${customer.accounts[0].id.toLong()}/${customer.accounts[0].createdAt}/${getCurrentDate()}/${customer.accounts[0].balance.toFloat()}/${customer.name}/${customer.accounts[0].currency}"
                                 )
                             }
                         }
@@ -160,4 +164,9 @@ fun SignInScreen(
             }
         }
     )
+}
+fun getCurrentDate(): String {
+    val currentDate = LocalDate.now()
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    return currentDate.format(formatter)
 }

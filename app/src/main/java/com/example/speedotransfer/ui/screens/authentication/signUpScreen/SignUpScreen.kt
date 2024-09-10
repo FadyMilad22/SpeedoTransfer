@@ -1,7 +1,9 @@
 package com.example.speedotransfer.ui.screens.authentication.signUpScreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,10 +24,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -38,7 +42,11 @@ import com.example.speedotransfer.ui.elements.SignTrailingText
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
 import com.example.speedotransfer.ui.theme.BodyRegular14
+import com.example.speedotransfer.ui.theme.BodyRegular16
 import com.example.speedotransfer.ui.theme.D300
+import com.example.speedotransfer.ui.theme.G100
+import com.example.speedotransfer.ui.theme.LinkMediumTextStyle
+import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
 import com.example.speedotransfer.ui.uiConstants
 
@@ -47,7 +55,8 @@ import com.example.speedotransfer.ui.uiConstants
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    signUpViewModel: SignUpViewModel = viewModel(factory = SignUpViewModelFactory(SignUpRepoImpl(
+    signUpViewModel: SignUpViewModel =
+        viewModel(factory = SignUpViewModelFactory(SignUpRepoImpl(
         APIClient
     )))
 ) {
@@ -174,21 +183,29 @@ fun SignUpScreen(
                 // Sign Up Button
                 SpeedoButton(
                     text = "Sign Up",
-                    enabled = signUpViewModel.isFormValid(),
+                    enabled =  signUpViewModel.isFormValid() && confirmPassword.isNotBlank() && isConfirmPasswordValid && confirmPassword==password,
                     isTransparent = false,
-                    onClick = { signUpViewModel.registerCustomer()
-                        navController.navigate(Route.HOME)}  // Calling registerCustomer on click
+                    onClick = {
+
+                        navController.navigate(Route.COMPLETE_SIGN_UP)}  // Calling registerCustomer on click
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                SignTrailingText(
-                    question = R.string.already_have_an_account_q,
-                    answer = R.string.sign_in_a,
-                    distination = Route.SIGN_IN,
-                    navController = navController
-//
-                )
+                Row() {
+                    Text(text = "${stringResource(id = R.string.already_have_an_account_q)} "
+                        , style = BodyRegular16, color = G100,)
+                        Text(text = stringResource(id = R.string.sign_in_a),
+                        style = LinkMediumTextStyle,
+                        color = P300,
+                        textDecoration = TextDecoration.Underline,
+                        modifier=modifier.clickable {
+                            navController.popBackStack(Route.SIGN_IN,false)
+                        }
+                    )
+
+                }
+
             }
         }
     )

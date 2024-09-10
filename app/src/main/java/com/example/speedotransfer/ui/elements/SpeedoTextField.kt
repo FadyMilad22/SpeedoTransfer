@@ -71,7 +71,14 @@ fun SpeedoTextField(
                                 onTrailingIconClick()
                             }
                     )
-                }
+                }else {
+                    Icon(
+                        painter = painterResource(id = icon),
+                        contentDescription = null,
+                        modifier = modifier.size(24.dp),
+
+                        )
+                    }
             },
             colors = OutlinedTextFieldDefaults.colors(),
             shape = RoundedCornerShape(6.dp),

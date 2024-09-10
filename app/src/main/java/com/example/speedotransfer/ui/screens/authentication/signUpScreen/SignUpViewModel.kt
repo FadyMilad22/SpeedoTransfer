@@ -18,6 +18,10 @@ class SignUpViewModel(private val signUpRepo: SignUpRepo) : ViewModel() {
     val confirmPassword = MutableStateFlow("")
     val isPasswordValid = MutableStateFlow(true)
     val isConfirmPasswordValid = MutableStateFlow(true)
+    // Add country and birthDate StateFlow
+    val country = MutableStateFlow("")  // Added country
+    val birthDate = MutableStateFlow("")  // Added birthDate
+
 
     // Regex pattern for password validation
     private val passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W_]).{6,}$".toRegex()
@@ -44,6 +48,18 @@ class SignUpViewModel(private val signUpRepo: SignUpRepo) : ViewModel() {
         isConfirmPasswordValid.value = newConfirmPassword == password.value
     }
 
+    // Function to update country
+    fun onCountryChange(newCountry: String) {  // Added this function to handle country change
+        country.value = newCountry
+    }
+
+    // Function to update birthDate
+    fun onBirthDateChange(newBirthDate: String) {  // Added this function to handle birthDate change
+        birthDate.value = newBirthDate
+    }
+
+
+
     // Function to handle the registerCustomer action
     fun registerCustomer() {
         if (isFormValid()) {
@@ -52,7 +68,10 @@ class SignUpViewModel(private val signUpRepo: SignUpRepo) : ViewModel() {
                     val request = RegisterCustomerRequest(
                         name = fullName.value,
                         email = email.value,
-                        password = password.value
+                        password = password.value,
+                        confirmPassword = confirmPassword.value,
+                        country = country.value,  // Pass country in the request
+                        birthDate = birthDate.value  // Pass birthDate in the request
                     )
                     val response =signUpRepo.registerCustomer(request)
 Log.d("sign up","createdAt: ${response.createdAt}")                  // Handle success (you can update the state here)
@@ -68,6 +87,10 @@ Log.d("sign up","createdAt: ${response.createdAt}")                  // Handle s
         return fullName.value.isNotBlank() &&
                 email.value.isNotBlank() &&
                 isPasswordValid.value &&
-                isConfirmPasswordValid.value
+                isConfirmPasswordValid.value && confirmPassword.value.isNotBlank()
+                && isConfirmPasswordValid.value &&
+                confirmPassword.value==password.value
+//                country.value.isNotBlank() &&
+//                birthDate.value.isNotBlank()
     }
 }

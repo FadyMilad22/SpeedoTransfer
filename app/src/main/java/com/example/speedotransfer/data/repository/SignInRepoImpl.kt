@@ -3,6 +3,7 @@ package com.example.speedotransfer.data.repository
 import SignInRequest
 import SignInResponse
 import com.example.speedotransfer.data.network.RemoteDataSource
+import com.example.speedotransfer.model.Account
 import com.example.speedotransfer.model.CustomerResponse
 
 class SignInRepoImpl(remoteDataSource: RemoteDataSource):SignInRepo {
@@ -25,13 +26,32 @@ class SignInRepoImpl(remoteDataSource: RemoteDataSource):SignInRepo {
     // Repo function to get customer details by email
     override suspend fun getCustomerByEmail(email: String): CustomerResponse {
         // Mocked response for testing purposes
-        val mockResponse = CustomerResponse(
+        // Mock Account Object
+        val mockAccount = Account(
+            accountDescription = "Personal Savings Account",
+            accountName = "John's Savings",
+            accountNumber = "1234567890",
+            accountType = "Savings",
+            active = true,
+            balance = 5000,
+            createdAt = "2023-01-01T12:00:00Z",
+            currency = "USD",
             id = 1,
+            updatedAt = "2023-08-01T12:00:00Z"
+        )
+
+// Mock CustomerResponse Object
+        val mockResponse = CustomerResponse(
+            accounts = listOf(mockAccount),  // A list of account objects
+            birthDate = "1990-01-01",
+            createdAt = "2022-05-01T12:00:00Z",
+            email = "john.doe@example.com",
+            gender = "Male",
+            id = 123,
             name = "John Doe",
-            email = email,
-            phoneNumber = "123-456-7890",
-            createdAt = "2024-01-01T12:00:00Z",
-            updatedAt = "2024-09-08T19:13:48.927Z"
+            phoneNumber = "+1234567890",
+            updatedAt = "2023-08-01T12:00:00Z",
+            username = "johndoe"
         )
 
         // Uncomment this when the API is live

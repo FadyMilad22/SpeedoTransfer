@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.speedotransfer.AppRoutes.Route.CHANGE_PASSWORD
+import com.example.speedotransfer.AppRoutes.Route.COMPLETE_SIGN_UP
 import com.example.speedotransfer.AppRoutes.Route.CONFIRMED_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.CONFIRM_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.EDIT_PROFILE
@@ -27,6 +28,7 @@ import com.example.speedotransfer.ui.screens.SplashScreen
 import com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen.TransferConfirmationDesign
 import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInScreen
+import com.example.speedotransfer.ui.screens.authentication.signUpScreen.CompleteSignUpScreen
 import com.example.speedotransfer.ui.screens.authentication.signUpScreen.SignUpScreen
 import com.example.speedotransfer.ui.screens.more.MoreScreenDesign
 import com.example.speedotransfer.ui.screens.profile.ChangePasswordScreen
@@ -51,6 +53,7 @@ object Route {
 
     const val SIGN_IN ="signIn"
     const val SIGN_UP ="signUp"
+
     const val MORE ="more"
     const val FAVOURITES ="favourites"
 
@@ -60,7 +63,7 @@ object Route {
     const val CHANGE_PASSWORD ="changePassword"
     const val SETTINGS ="settings"
 
-
+    const val COMPLETE_SIGN_UP = "completeSignUp"
 }
 
 
@@ -71,6 +74,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         // Add the routes
         composable(route = SPLASH) { SplashScreen(navController ,modifier=modifier) }
         composable(route = ON_BOARDING) { OnboardingScreen(navController) }
+        composable(route = COMPLETE_SIGN_UP) { CompleteSignUpScreen(navController) }
        // composable(route = HOME) { HomeScreen(navController = navController ,modifier=modifier) }
         // You can add other routes here in the future
         // Define the route as a string constant
