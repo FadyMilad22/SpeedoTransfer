@@ -180,7 +180,7 @@ fun BottomNavBar(
                                 when (screen.name) {
                                     "Home" -> { "${Route.HOME}/${account.id.toLong()}/${account.createdAt}}/${getCurrentDate()}/${account.balance.toFloat()}/${customer.name}/${account.currency}"
                                     }
-                                    "Transfer" -> { "${Route.BEGIN_TRANSACTION}/${customer.name}/${account.accountNumber}/${account.currency}"
+                                    "Transfer" -> { "${Route.BEGIN_TRANSACTION}/${customer.name}/${account.accountNumber}/${account.currency}/${tokenType} ${authToken}"
                                     }
                                     "Transactions" -> { "${Route.TRANSACTIONS_LIST}/${account.id.toLong()}/${account.createdAt}/${getCurrentDate()}"
                                     }

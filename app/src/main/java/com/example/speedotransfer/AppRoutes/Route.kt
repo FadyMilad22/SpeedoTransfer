@@ -154,7 +154,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
 
 
         composable(
-            route = "$CONFIRM_TRANSACTION/{transferAmount}/{currency}/{senderName}/{receiverName}/{senderAccountNumberSuffix}/{receiverAccountNumberSuffix}",
+            route = "$CONFIRM_TRANSACTION/{transferAmount}/{currency}/{senderName}/{receiverName}/{senderAccountNumberSuffix}/{receiverAccountNumberSuffix}/{token}",
             arguments = listOf(
                 navArgument("transferAmount") {
                     type = NavType.IntType
@@ -174,8 +174,10 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 },
                 navArgument("receiverAccountNumberSuffix") {
                     type = NavType.StringType
-                }
-            )
+                },
+                navArgument("token") { type = NavType.StringType },
+
+                )
         ) { backStackEntry ->
 
             // Extracting the arguments from the NavBackStackEntry
@@ -187,6 +189,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 backStackEntry.arguments?.getString("senderAccountNumberSuffix")!!
             val receiverAccountNumberSuffix =
                 backStackEntry.arguments?.getString("receiverAccountNumberSuffix")!!
+            val token = backStackEntry.arguments?.getString("token")!!
 
             // Calling the TransferConfirmationDesign composable with default values if none are passed
             TransferConfirmationDesign(
@@ -196,13 +199,14 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 senderName = senderName,
                 receiverName = receiverName,
                 senderAccountNumberSuffix = senderAccountNumberSuffix,
-                receiverAccountNumberSuffix = receiverAccountNumberSuffix
+                receiverAccountNumberSuffix = receiverAccountNumberSuffix,
+                token = token
             )
         }
 
 
         composable(
-            route = "${Route.BEGIN_TRANSACTION}/{senderName}/{senderAccountNumberSuffix}/{currency}",
+            route = "${Route.BEGIN_TRANSACTION}/{senderName}/{senderAccountNumberSuffix}/{currency}/{token}",
             arguments = listOf(
                 navArgument("senderName") {
                     type = NavType.StringType
@@ -212,8 +216,10 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 },
                 navArgument("currency") {
                     type = NavType.StringType
-                }
-            )
+                },
+                        navArgument("token") { type = NavType.StringType },
+
+                )
         ) { backStackEntry ->
 
             // Extracting the arguments from the NavBackStackEntry and ensuring they are non-null using !!
@@ -221,13 +227,15 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             val senderAccountNumberSuffix =
                 backStackEntry.arguments?.getString("senderAccountNumberSuffix")!!
             val currency = backStackEntry.arguments?.getString("currency")!!
+            val token = backStackEntry.arguments?.getString("token")!!
 
             // Call the TransferAmountDesign composable with the extracted parameters
             TransferAmountDesign(
                 navController = navController,
                 senderName = senderName,
                 senderAccountNumberSuffix = senderAccountNumberSuffix,
-                currency = currency
+                currency = currency,
+                token = token
             )
         }
 

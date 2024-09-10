@@ -69,6 +69,7 @@ fun TransferConfirmationDesign(navController: NavController,
     receiverName: String,
     senderAccountNumberSuffix: String,
     receiverAccountNumberSuffix: String,
+                               token :String,
     modifier: Modifier = Modifier
 ) {
 
@@ -158,7 +159,7 @@ fun TransferConfirmationDesign(navController: NavController,
 createNotificationchannel(context)
 sendNotification(context,senderName,"Transaction","Transaction was done Successfully ")
 
-                        navController.navigate(route = "${CONFIRMED_TRANSACTION}/${transferAmount}/${currency}/${senderName}/${receiverName}/${senderAccountNumberSuffix}/${receiverAccountNumberSuffix}")
+                        navController.navigate(route = "${CONFIRMED_TRANSACTION}/${transferAmount}/${currency}/${senderName}/${receiverName}/${senderAccountNumberSuffix}/${receiverAccountNumberSuffix}/${token}")
 
 
 
@@ -182,7 +183,7 @@ sendNotification(context,senderName,"Transaction","Transaction was done Successf
                 SpeedoButton(text = "Previous", enabled = true, isTransparent = true ){
 
 
-                    navController.popBackStack(route = "${Route.BEGIN_TRANSACTION}/{senderName}/{senderAccountNumberSuffix}/{currency}",
+                    navController.popBackStack(route = "${Route.BEGIN_TRANSACTION}/{senderName}/{senderAccountNumberSuffix}/{currency}/{token}",
                         false
                     )
 
@@ -338,14 +339,14 @@ fun createCircularInitialsBitmap(initials: String): Bitmap {
 @Preview(showSystemUi = true)
 @Composable
 private fun TransferConfirmationPreview() {
-    TransferConfirmationDesign(
-        rememberNavController(),
-        currency = "EGP",
-        transferAmount = 1000,
-        senderName = "Asmaa Dosuky",
-        receiverName = "Jonathon Smith",
-        senderAccountNumberSuffix = "7890",
-        receiverAccountNumberSuffix = "7890"
-    )
+//    TransferConfirmationDesign(
+//        rememberNavController(),
+//        currency = "EGP",
+//        transferAmount = 1000,
+//        senderName = "Asmaa Dosuky",
+//        receiverName = "Jonathon Smith",
+//        senderAccountNumberSuffix = "7890",
+//        receiverAccountNumberSuffix = "7890"
+//    )
 
 }

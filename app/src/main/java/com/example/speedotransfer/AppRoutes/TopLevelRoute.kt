@@ -26,7 +26,7 @@ fun getTopLevelRoute(): List<TopLevelRoute> {
     bottomNavigationRoutes.add(
         TopLevelRoute(
             "Transfer",
-            "${Route.BEGIN_TRANSACTION}/{senderName}/{senderAccountNumberSuffix}/{currency}",
+            "${Route.BEGIN_TRANSACTION}/{senderName}/{senderAccountNumberSuffix}/{currency}/{token}",
             R.drawable.transfer1
         )
     )

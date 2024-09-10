@@ -44,6 +44,7 @@ fun TransferAmountDesign(
     senderName: String,
     senderAccountNumberSuffix: String,
     currency: String,
+    token :String,
     favViewModel: FavViewModel = viewModel(
         factory = FavViewModelFactory(
             FavRepoImpl(APIClient)
@@ -100,7 +101,8 @@ fun TransferAmountDesign(
                     senderAccountNumberSuffix,
                     amount,
                     currency,
-                    favourites,  // Using the collected list of favourites
+                    favourites,
+                    token,// Using the collected list of favourites
                     modifier
                 )
             }
@@ -116,7 +118,8 @@ fun RecipientInformationArea(
     senderAccountNumberSuffix: String,
     amount: String,
     currency: String,
-    favouritesList: List<FavouriteResponse>,  // Accept the dynamic list from ViewModel
+    favouritesList: List<FavouriteResponse>,
+    token :String,// Accept the dynamic list from ViewModel
     modifier: Modifier = Modifier
 ) {
     var recipientName by rememberSaveable { mutableStateOf("") }
@@ -175,7 +178,7 @@ fun RecipientInformationArea(
 
     SpeedoButton(text = "Continue", enabled = true, isTransparent = false) {
         navController.navigate(
-            route = "${Route.CONFIRM_TRANSACTION}/${amount}/${currency}/$senderName/${recipientName}/$senderAccountNumberSuffix/$recipientAccountNumber"
+            route = "${Route.CONFIRM_TRANSACTION}/${amount}/${currency}/$senderName/${recipientName}/$senderAccountNumberSuffix/$recipientAccountNumber/$token"
         )
     }
 
@@ -274,10 +277,10 @@ fun AmountArea(
 @Preview(showSystemUi = true, device = "spec:parent=pixel_5")
 @Composable
 private fun TransferAmountDesignPreview() {
-    TransferAmountDesign(
-        navController = rememberNavController(),
-        senderName = "Fady",
-        senderAccountNumberSuffix = "4893",
-        currency = "EGP"
-    )
+//    TransferAmountDesign(
+//        navController = rememberNavController(),
+//        senderName = "Fady",
+//        senderAccountNumberSuffix = "4893",
+//        currency = "EGP"
+//    )
 }
