@@ -1,6 +1,10 @@
 package com.example.speedotransfer.ui.screens.more
 
+import EditProfileScreenViewModel
 import android.content.Intent
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,6 +32,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,15 +46,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.Route.PROFILE
+import com.example.speedotransfer.AppRoutes.Route.SIGN_IN
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.network.APIClient
+import com.example.speedotransfer.data.repository.EditProfileRepoImpl
+import com.example.speedotransfer.data.repository.logout.LogoutRepo
+import com.example.speedotransfer.data.repository.logout.LogoutRepoImpl
 import com.example.speedotransfer.ui.uiConstants
 import com.example.speedotransfer.ui.elements.ArrowedSmallMenuItem
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
+import com.example.speedotransfer.ui.screens.more.logout.LogoutViewModel
+import com.example.speedotransfer.ui.screens.more.logout.LogoutViewModelFactory
+import com.example.speedotransfer.ui.screens.profile.EditProfileScreen.EditProfileScreenViewModelFactory
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyRegular14
 import com.example.speedotransfer.ui.theme.G0
@@ -65,9 +80,21 @@ fun MoreScreenDesign(
     name: String,  // Passed from the previous screen
     email: String,    // Passed from the previous screen
     birthDate: String,    // Passed from the previous screen
-    country: String,       // Passed from the previous screen
+    country: String,// Passed from the previous screen
+    token: String,
+    logoutViewModel: LogoutViewModel = viewModel(
+        factory = LogoutViewModelFactory(
+            LogoutRepoImpl(APIClient)
+        )
+
+    ),
     modifier: Modifier = Modifier
 ) {
+
+    val logoutState by logoutViewModel.logoutState.collectAsState()
+
+    val token by logoutViewModel.token.collectAsState()
+
     val scrollState = rememberScrollState()
     val context = LocalContext.current
     val website = "https://www.banquemisr.com/en/Home/Pages/BM-Online"
@@ -75,6 +102,12 @@ fun MoreScreenDesign(
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
+    if (logoutState?.httpStatus  == "OK") {
+        // Show the success toast and navigate back to the profile screen
+        Log.d("logout" , "${logoutState?.httpStatus}")
+        Toast.makeText(context, "Successfully", Toast.LENGTH_SHORT).show()
+        navController.popBackStack(SIGN_IN, inclusive = false)
+    }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -131,8 +164,9 @@ fun MoreScreenDesign(
                     name = "Help",
                     icon = R.drawable.compliance,
                     modifier = modifier.clickable { showBottomSheet = true })
+
                 ArrowedSmallMenuItem(name = "logout", icon = R.drawable.logout, modifier = modifier.clickable {
-                    navController.navigate(Route.SIGN_IN)
+                    logoutViewModel.logout()
                 })
             }
 
@@ -153,9 +187,33 @@ fun MoreScreenDesign(
                             .height(140.dp)
                     ) {
 
-                        HelpBtmSheetCardEmail(icon = R.drawable.email, title = "Send Email")
+                        HelpBtmSheetCardEmail(icon = R.drawable.email,
+                            title = "Send Email",
+                            modifier.clickable {
+                                val emailIntent = Intent(
+                                    Intent.ACTION_SENDTO
+                                ).apply {
+                                    data = Uri.parse("mailto:" + "speedotransfer@example.com") // Replace with the desired email
+                                    // Optional: Add extra data such as subject or body
+                                    putExtra(Intent.EXTRA_SUBJECT, "Subject of the email")
+                                    putExtra(Intent.EXTRA_TEXT, "Body of the email")
+                                }
+                                context.startActivity(emailIntent)
+
+                        })
                         Spacer(modifier = modifier.width(32.dp))
-                        HelpBtmSheetCardCall(icon = R.drawable.call, title = "Call us", "000000")
+                        HelpBtmSheetCardCall(icon = R.drawable.call,
+                            title = "Call us", "000000",
+                            modifier.clickable {
+                            val intent = Intent(
+                                Intent.ACTION_DIAL
+                            ).apply {
+                                data =
+                                    Uri.parse("tel:" + "+201234561239")
+                            }
+                                context.startActivity(intent)
+
+                            })
 
 
                     }
