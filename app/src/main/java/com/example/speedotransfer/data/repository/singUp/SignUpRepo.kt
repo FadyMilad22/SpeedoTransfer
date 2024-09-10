@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.repository
+package com.example.speedotransfer.data.repository.singUp
 
 import RegisterCustomerRequest
 import RegisterCustomerResponse

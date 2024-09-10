@@ -4,7 +4,7 @@ import EditProfileScreenViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.speedotransfer.data.repository.EditProfileRepo
+import com.example.speedotransfer.data.repository.EditProfile.EditProfileRepo
 
 class EditProfileScreenViewModelFactory (private val editProfileRepo: EditProfileRepo):
     ViewModelProvider.Factory{

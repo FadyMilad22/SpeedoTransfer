@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.repository
+package com.example.speedotransfer.data.repository.signIn
 
 import SignInRequest
 import SignInResponse

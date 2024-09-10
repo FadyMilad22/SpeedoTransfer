@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens
+package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.notificationsScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +23,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -30,10 +32,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.network.APIClient
+import com.example.speedotransfer.data.repository.transaction.TransactionRepoImpl
 import com.example.speedotransfer.model.Transaction
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
+import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionViewModel
+import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionViewModelFactory
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyRegular14
 import com.example.speedotransfer.ui.theme.G100
@@ -47,7 +55,21 @@ import com.example.speedotransfer.ui.uiConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotificationScreenDesign(transactionsList: List<Transaction> ,modifier: Modifier = Modifier) {
+fun NotificationScreenDesign(navController: NavController,
+                             accountId: Long,    // Passed from the previous screen
+                             startDate: String,  // Passed from the previous screen
+                             endDate: String,
+                             modifier: Modifier = Modifier) {
+    val notificationsViewModel: NotificationsViewModel = viewModel(factory = NotificationsViewModelFactory(
+        TransactionRepoImpl(APIClient)))
+
+    notificationsViewModel.fetchTransactionHistory(accountId, startDate, endDate)
+
+
+    val transactionHistory by notificationsViewModel.notificationHistory.collectAsState()
+    val isLoading by notificationsViewModel.isLoading.collectAsState()
+    val errorMessage by notificationsViewModel.errorMessage.collectAsState()
+
 
     Scaffold(
         topBar = {
@@ -83,14 +105,14 @@ fun NotificationScreenDesign(transactionsList: List<Transaction> ,modifier: Modi
 
 
         LazyColumn {
-            items(transactionsList) {
+            items(transactionHistory) {
                 NotificationMenuItem(
-                    it.isReceived,
-                    it.amount,
+                    accountId == it.recipientAccountId,
+                    it.amount.toString(),
                     it.currency,
-                    it.name,
-                    it.cardNumber,
-                    it.date
+                    if(accountId == it.senderAccountId) it.recipientAccountId.toString()  else it.senderAccountId.toString(),
+                    it.id.toString(),
+                    it.transactionDate
                 )
                 Spacer(modifier = modifier.padding(bottom = 16.dp))
             }
@@ -193,17 +215,17 @@ fun NotificationMenuItem(
 private fun NotificationScreenPreview() {
   //  NotificationMenuItem(true,"1000","USD" , "Fady Milad", "4342","12 Jul 2024 09:00 PM")
     // test code
-    val transaction = Transaction(
-        name = "Ahmed Mohamed",
-        cardType = "Visa . MasterCard",
-        cardNumber = "1234",
-        amount = "500",
-        date = "Today 11:00",
-        status = "Received",
-        currency = "EGP"
-    )
-    val list = listOf(transaction, transaction, transaction, transaction, transaction)
+//    val transaction = Transaction(
+//        name = "Ahmed Mohamed",
+//        cardType = "Visa . MasterCard",
+//        cardNumber = "1234",
+//        amount = "500",
+//        date = "Today 11:00",
+//        status = "Received",
+//        currency = "EGP"
+//    )
+// //   val list = listOf(transaction, transaction, transaction, transaction, transaction)
 
 
-    NotificationScreenDesign(list)
+    //NotificationScreenDesign(list)
 }

@@ -2,7 +2,6 @@ package com.example.speedotransfer
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,8 +17,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.TopAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -28,10 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,19 +39,14 @@ import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.Route.MORE
 import com.example.speedotransfer.AppRoutes.getTopLevelRoute
 import com.example.speedotransfer.model.Account
-import com.example.speedotransfer.model.Client
 import com.example.speedotransfer.model.CustomerResponse
-import com.example.speedotransfer.ui.screens.SplashScreen
+import com.example.speedotransfer.ui.interactionDetector.InactivityHandler
 import com.example.speedotransfer.ui.screens.authentication.signInScreen.getCurrentDate
-import com.example.speedotransfer.ui.screens.more.FavouriteScreen
-import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.theme.G0
 import com.example.speedotransfer.ui.theme.G200
-import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.SmallFontTextStyle
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
-import com.example.speedotransfer.ui.theme.TitleMedium
 
 
 class MainActivity : ComponentActivity() {
@@ -66,6 +55,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences("customerPrefs", MODE_PRIVATE)
+
         enableEdgeToEdge(
 //            statusBarStyle = SystemBarStyle.light(
 //                android.graphics.Color.TRANSPARENT,
@@ -76,9 +66,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             SpeedoTransferTheme(darkTheme = false) {
 
+
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination?.route
+                val authToken = sharedPreferences.getString("auth_token", "") ?: ""
+                val tokenType = sharedPreferences.getString("token_type", "") ?: ""
+                InactivityHandler(
+                    navController = navController,
+                  token = "${tokenType} ${authToken}"
+                ) {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {
@@ -94,6 +91,7 @@ class MainActivity : ComponentActivity() {
 
                 }
 
+            }
             }
         }
     }
@@ -186,7 +184,7 @@ fun BottomNavBar(
                                     }
                                     "Transactions" -> { "${Route.TRANSACTIONS_LIST}/${account.id.toLong()}/${account.createdAt}/${getCurrentDate()}"
                                     }
-                                    else -> { "$MORE/${customer.id.toLong()}/${customer.name}}/${customer.email}/${customer.birthDate}/{Egypt}/${tokenType} ${authToken}" }
+                                    else -> { "$MORE/${customer.id.toLong()}/${customer.name}}/${customer.email}/${customer.birthDate}/{Egypt}/${tokenType} ${authToken}/${account.createdAt}" }
                                 }
                             ){
 //                                "${Route.HOME}/$accountId/$startDate/$endDate/${balance.toFloat()}/$name/$currency"){

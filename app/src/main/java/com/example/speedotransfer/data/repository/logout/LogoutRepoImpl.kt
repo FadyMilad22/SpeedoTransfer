@@ -1,7 +1,6 @@
 package com.example.speedotransfer.data.repository.logout
 
 import com.example.speedotransfer.data.network.RemoteDataSource
-import com.example.speedotransfer.data.repository.EditProfileRepo
 import com.example.speedotransfer.model.LogoutResponse
 
 class LogoutRepoImpl(remoteDataSource: RemoteDataSource) : LogoutRepo {

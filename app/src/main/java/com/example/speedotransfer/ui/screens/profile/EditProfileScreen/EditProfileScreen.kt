@@ -42,13 +42,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.speedotransfer.AppRoutes.Route.CONFIRMED_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.PROFILE
 import com.example.speedotransfer.AppRoutes.Route.SETTINGS
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
-import com.example.speedotransfer.data.repository.EditProfileRepoImpl
-import com.example.speedotransfer.model.UpdateCustomerResponse
+import com.example.speedotransfer.data.repository.EditProfile.EditProfileRepoImpl
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.SpeedoButton
@@ -92,7 +90,7 @@ fun EditProfileScreen(
     if (updateState?.httpStatusCode?.is2xxSuccessful == true) {
         // Show the success toast and navigate back to the profile screen
         Toast.makeText(context, "Successfully", Toast.LENGTH_SHORT).show()
-        navController.popBackStack("$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}", inclusive = false) // Navigate back to the profile screen
+        navController.popBackStack("$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{createdDate}", inclusive = false) // Navigate back to the profile screen
     }
 //    var birthDate by remember {
 //        mutableStateOf("")

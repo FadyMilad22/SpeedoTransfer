@@ -1,6 +1,5 @@
 package com.example.speedotransfer.ui.screens.more
 
-import EditProfileScreenViewModel
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -46,17 +45,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.speedotransfer.AppRoutes.Route
-import com.example.speedotransfer.AppRoutes.Route.PROFILE
 import com.example.speedotransfer.AppRoutes.Route.SIGN_IN
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
-import com.example.speedotransfer.data.repository.EditProfileRepoImpl
-import com.example.speedotransfer.data.repository.logout.LogoutRepo
 import com.example.speedotransfer.data.repository.logout.LogoutRepoImpl
 import com.example.speedotransfer.ui.uiConstants
 import com.example.speedotransfer.ui.elements.ArrowedSmallMenuItem
@@ -64,7 +59,6 @@ import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.screens.more.logout.LogoutViewModel
 import com.example.speedotransfer.ui.screens.more.logout.LogoutViewModelFactory
-import com.example.speedotransfer.ui.screens.profile.EditProfileScreen.EditProfileScreenViewModelFactory
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyRegular14
 import com.example.speedotransfer.ui.theme.G0
@@ -82,18 +76,19 @@ fun MoreScreenDesign(
     birthDate: String,    // Passed from the previous screen
     country: String,// Passed from the previous screen
     token: String,
+    createdDate:String,
+    modifier: Modifier = Modifier,
     logoutViewModel: LogoutViewModel = viewModel(
         factory = LogoutViewModelFactory(
             LogoutRepoImpl(APIClient)
         )
 
-    ),
-    modifier: Modifier = Modifier
+    )
 ) {
 
     val logoutState by logoutViewModel.logoutState.collectAsState()
 
-    val token by logoutViewModel.token.collectAsState()
+
 
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -157,7 +152,7 @@ fun MoreScreenDesign(
                     )
                 ArrowedSmallMenuItem(name = "Profile", icon = R.drawable.user, modifier = modifier.clickable {
                     navController.navigate(
-                        route = "${Route.PROFILE}/${accountId}/${name}/$email/$birthDate/${country}")
+                        route = "${Route.PROFILE}/${accountId}/${name}/$email/$birthDate/${country}/${createdDate}")
 
                 })
                 ArrowedSmallMenuItem(
@@ -166,7 +161,7 @@ fun MoreScreenDesign(
                     modifier = modifier.clickable { showBottomSheet = true })
 
                 ArrowedSmallMenuItem(name = "logout", icon = R.drawable.logout, modifier = modifier.clickable {
-                    logoutViewModel.logout()
+                    logoutViewModel.logout(token)
                 })
             }
 

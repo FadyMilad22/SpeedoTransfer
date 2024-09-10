@@ -31,7 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.data.network.APIClient
-import com.example.speedotransfer.data.repository.SignInRepoImpl
+import com.example.speedotransfer.data.repository.signIn.SignInRepoImpl
 import com.example.speedotransfer.ui.uiConstants
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -46,7 +46,8 @@ fun SignInScreen(
 
     val context = LocalContext.current
     val sharedPreferences: SharedPreferences = context.getSharedPreferences("customerPrefs", Context.MODE_PRIVATE)
-    val  signInViewModel: SignInViewModel = viewModel(factory = SignInViewModelFactory(SignInRepoImpl(APIClient),sharedPreferences))
+    val  signInViewModel: SignInViewModel = viewModel(factory = SignInViewModelFactory(
+        SignInRepoImpl(APIClient),sharedPreferences))
 
 
 

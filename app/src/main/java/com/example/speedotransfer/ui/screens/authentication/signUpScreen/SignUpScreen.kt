@@ -36,9 +36,8 @@ import androidx.navigation.NavController
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
-import com.example.speedotransfer.data.repository.SignUpRepoImpl
+import com.example.speedotransfer.data.repository.singUp.SignUpRepoImpl
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
-import com.example.speedotransfer.ui.elements.SignTrailingText
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
 import com.example.speedotransfer.ui.theme.BodyRegular14
@@ -56,9 +55,11 @@ fun SignUpScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     signUpViewModel: SignUpViewModel =
-        viewModel(factory = SignUpViewModelFactory(SignUpRepoImpl(
+        viewModel(factory = SignUpViewModelFactory(
+            SignUpRepoImpl(
         APIClient
-    )))
+    )
+        ))
 ) {
 
     // Observing StateFlow from ViewModel

@@ -2,9 +2,8 @@ package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.speedotransfer.data.repository.TransactionRepo
+import com.example.speedotransfer.data.repository.transaction.TransactionRepo
 import com.example.speedotransfer.model.TransactionResponse
-import com.example.speedotransfer.model.TransferResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

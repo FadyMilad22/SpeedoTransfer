@@ -32,6 +32,7 @@ import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.ArrowedLargeMenuItem
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
+import com.example.speedotransfer.ui.screens.authentication.signInScreen.getCurrentDate
 import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.G40
 import com.example.speedotransfer.ui.theme.G900
@@ -46,7 +47,7 @@ fun ProfileScreen(navController: NavController,
                   email: String,    // Passed from the previous screen
                   birthDate: String,    // Passed from the previous screen
                   country: String,       // Passed from the previous screen
-
+dateCreated :String,
                   modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
@@ -63,7 +64,7 @@ fun ProfileScreen(navController: NavController,
 
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack("${Route.MORE}/{accountId}/{name}/{email}/{birthDate}/{country}/{token}", inclusive = false)
+                        navController.popBackStack("${Route.MORE}/{accountId}/{name}/{email}/{birthDate}/{country}/{token}/{createdDate}", inclusive = false)
                     }) {
                         CustomAppBarIcon(
                             icon = R.drawable.drop_down
@@ -139,6 +140,7 @@ fun ProfileScreen(navController: NavController,
                     enableStroke = true,
                     modifier = modifier.clickable {
 //                        navController.navigate()
+navController.navigate("${Route.PAYMENT_HISTORY}/${accountId}/${dateCreated}/${getCurrentDate()}")
                     }
                 )
                 ArrowedLargeMenuItem(

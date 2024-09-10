@@ -4,7 +4,7 @@ import RegisterCustomerRequest
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.speedotransfer.data.repository.SignUpRepo
+import com.example.speedotransfer.data.repository.singUp.SignUpRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

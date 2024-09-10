@@ -3,8 +3,7 @@ package com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.speedotransfer.data.repository.TransferRepo
-import com.example.speedotransfer.model.Transfer
+import com.example.speedotransfer.data.repository.transfer.TransferRepo
 import com.example.speedotransfer.model.TransferRequest
 import com.example.speedotransfer.model.TransferResponse
 import kotlinx.coroutines.flow.MutableStateFlow

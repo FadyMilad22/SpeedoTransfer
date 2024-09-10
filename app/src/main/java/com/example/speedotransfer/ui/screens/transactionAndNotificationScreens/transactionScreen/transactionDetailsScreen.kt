@@ -41,7 +41,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
-import com.example.speedotransfer.data.repository.TransactionRepoImpl
+import com.example.speedotransfer.data.repository.transaction.TransactionRepoImpl
 import com.example.speedotransfer.ui.elements.BeneficiaryCard
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle

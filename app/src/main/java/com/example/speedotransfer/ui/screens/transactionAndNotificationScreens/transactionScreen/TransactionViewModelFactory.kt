@@ -2,7 +2,7 @@ package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.speedotransfer.data.repository.TransactionRepo
+import com.example.speedotransfer.data.repository.transaction.TransactionRepo
 
 class TransactionViewModelFactory(private val transactionRepo: TransactionRepo): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

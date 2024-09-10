@@ -1,7 +1,6 @@
-package com.example.speedotransfer.data.repository
+package com.example.speedotransfer.data.repository.transfer
 
 import com.example.speedotransfer.model.TransactionResponse
-import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.model.TransferRequest
 import com.example.speedotransfer.model.TransferResponse
 

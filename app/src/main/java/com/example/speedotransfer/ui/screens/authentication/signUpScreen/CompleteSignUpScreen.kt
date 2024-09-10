@@ -1,7 +1,6 @@
 package com.example.speedotransfer.ui.screens.authentication.signUpScreen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -46,7 +45,7 @@ import androidx.navigation.NavController
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
-import com.example.speedotransfer.data.repository.SignUpRepoImpl
+import com.example.speedotransfer.data.repository.singUp.SignUpRepoImpl
 import com.example.speedotransfer.ui.elements.CountryRow
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle

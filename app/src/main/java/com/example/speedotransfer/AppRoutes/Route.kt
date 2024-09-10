@@ -43,31 +43,32 @@ import com.example.speedotransfer.ui.screens.onboarding.OnboardingScreen
 import com.example.speedotransfer.ui.screens.profile.AccountInfoScreen
 import com.example.speedotransfer.ui.screens.profile.EditProfileScreen.EditProfileScreen
 import com.example.speedotransfer.ui.screens.tansfer.HomeScreen
+import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.notificationsScreen.NotificationScreenDesign
 import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionDetailsScreen
 import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionsScreen
 
 object Route {
-    const val SPLASH ="splash"
-    const val ON_BOARDING ="onBoarding"
-    const val HOME ="home"
+    const val SPLASH = "splash"
+    const val ON_BOARDING = "onBoarding"
+    const val HOME = "home"
     const val BEGIN_TRANSACTION = "beginTransaction"
-    const val CONFIRM_TRANSACTION ="confirmTransaction"
-    const val CONFIRMED_TRANSACTION ="confirmedTransaction"
+    const val CONFIRM_TRANSACTION = "confirmTransaction"
+    const val CONFIRMED_TRANSACTION = "confirmedTransaction"
     const val TRANSACTIONS_LIST = "transactions"
     const val TRANSACTION_DETAILS = "transactionDetails"
 
-    const val SIGN_IN ="signIn"
-    const val SIGN_UP ="signUp"
+    const val SIGN_IN = "signIn"
+    const val SIGN_UP = "signUp"
 
-    const val MORE ="more"
-    const val FAVOURITES ="favourites"
-
-    const val PROFILE ="profile"
-    const val PERSONAL_INFO ="personalInfo"
-    const val EDIT_PROFILE ="editProfile"
-    const val CHANGE_PASSWORD ="changePassword"
-    const val SETTINGS ="settings"
-    const val ACCOUNT_INFO ="accountInfo"
+    const val MORE = "more"
+    const val FAVOURITES = "favourites"
+    const val PAYMENT_HISTORY = "paymentHistory"
+    const val PROFILE = "profile"
+    const val PERSONAL_INFO = "personalInfo"
+    const val EDIT_PROFILE = "editProfile"
+    const val CHANGE_PASSWORD = "changePassword"
+    const val SETTINGS = "settings"
+    const val ACCOUNT_INFO = "accountInfo"
 
     const val COMPLETE_SIGN_UP = "completeSignUp"
 }
@@ -76,12 +77,12 @@ object Route {
 @Composable
 fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
 
-    NavHost( navController, startDestination = SPLASH, modifier = modifier) {
+    NavHost(navController, startDestination = SPLASH, modifier = modifier) {
         // Add the routes
-        composable(route = SPLASH) { SplashScreen(navController ,modifier=modifier) }
+        composable(route = SPLASH) { SplashScreen(navController, modifier = modifier) }
         composable(route = ON_BOARDING) { OnboardingScreen(navController) }
         composable(route = COMPLETE_SIGN_UP) { CompleteSignUpScreen(navController) }
-       // composable(route = HOME) { HomeScreen(navController = navController ,modifier=modifier) }
+        // composable(route = HOME) { HomeScreen(navController = navController ,modifier=modifier) }
         // You can add other routes here in the future
         // Define the route as a string constant
 
@@ -117,7 +118,9 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         composable(
             route = "$CONFIRMED_TRANSACTION/{transferAmount}/{currency}/{senderName}/{receiverName}/{senderAccountNumberSuffix}/{receiverAccountNumberSuffix}",
             arguments = listOf(
-                navArgument("transferAmount") { type = NavType.IntType },  // Assuming transferAmount is passed as a float
+                navArgument("transferAmount") {
+                    type = NavType.IntType
+                },  // Assuming transferAmount is passed as a float
                 navArgument("currency") { type = NavType.StringType },
                 navArgument("senderName") { type = NavType.StringType },
                 navArgument("receiverName") { type = NavType.StringType },
@@ -125,16 +128,18 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 navArgument("receiverAccountNumberSuffix") { type = NavType.StringType }
             )
         ) {
-            val transferAmount = it.arguments?.getInt("transferAmount")!!  // Converting from Float to Double
+            val transferAmount =
+                it.arguments?.getInt("transferAmount")!!  // Converting from Float to Double
             val currency = it.arguments?.getString("currency")!!
             val senderName = it.arguments?.getString("senderName")!!
             val receiverName = it.arguments?.getString("receiverName")!!
             val senderAccountNumberSuffix = it.arguments?.getString("senderAccountNumberSuffix")!!
-            val receiverAccountNumberSuffix = it.arguments?.getString("receiverAccountNumberSuffix")!!
+            val receiverAccountNumberSuffix =
+                it.arguments?.getString("receiverAccountNumberSuffix")!!
 
             // Call the Composable function CONFIRMEDTRANSACTION with the extracted parameters
             TransferConfirmedDesign(
-                navController= navController,
+                navController = navController,
                 transferAmount = transferAmount,
                 currency = currency,
                 senderName = senderName,
@@ -176,8 +181,10 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             val currency = backStackEntry.arguments?.getString("currency")!!
             val senderName = backStackEntry.arguments?.getString("senderName")!!
             val receiverName = backStackEntry.arguments?.getString("receiverName")!!
-            val senderAccountNumberSuffix = backStackEntry.arguments?.getString("senderAccountNumberSuffix") !!
-            val receiverAccountNumberSuffix = backStackEntry.arguments?.getString("receiverAccountNumberSuffix")!!
+            val senderAccountNumberSuffix =
+                backStackEntry.arguments?.getString("senderAccountNumberSuffix")!!
+            val receiverAccountNumberSuffix =
+                backStackEntry.arguments?.getString("receiverAccountNumberSuffix")!!
 
             // Calling the TransferConfirmationDesign composable with default values if none are passed
             TransferConfirmationDesign(
@@ -209,7 +216,8 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
 
             // Extracting the arguments from the NavBackStackEntry and ensuring they are non-null using !!
             val senderName = backStackEntry.arguments?.getString("senderName")!!
-            val senderAccountNumberSuffix = backStackEntry.arguments?.getString("senderAccountNumberSuffix")!!
+            val senderAccountNumberSuffix =
+                backStackEntry.arguments?.getString("senderAccountNumberSuffix")!!
             val currency = backStackEntry.arguments?.getString("currency")!!
 
             // Call the TransferAmountDesign composable with the extracted parameters
@@ -241,6 +249,25 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             )
         }
 
+        composable(
+            route = "${Route.PAYMENT_HISTORY}/{accountId}/{startDate}/{endDate}",
+            arguments = listOf(
+                navArgument("accountId") { type = NavType.LongType },
+                navArgument("startDate") { type = NavType.StringType },
+                navArgument("endDate") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val accountId = backStackEntry.arguments?.getLong("accountId")!!
+            val startDate = backStackEntry.arguments?.getString("startDate")!!
+            val endDate = backStackEntry.arguments?.getString("endDate")!!
+
+            NotificationScreenDesign(
+                navController = navController,
+                accountId = accountId,
+                startDate = startDate,
+                endDate = endDate
+            )
+        }
 
         composable(route = SIGN_IN) {
             SignInScreen(navController = navController)  // Pass the navController to SignInScreen for navigation
@@ -249,7 +276,8 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             SignUpScreen(navController = navController)  // Pass the navController to SignInScreen for navigation
         }
 
-        composable(route = "$MORE/{accountId}/{name}/{email}/{birthDate}/{country}/{token}",
+        composable(
+            route = "$MORE/{accountId}/{name}/{email}/{birthDate}/{country}/{token}/{createdDate}",
             arguments = listOf(
                 navArgument("accountId") { type = NavType.LongType },
                 navArgument("name") { type = NavType.StringType },
@@ -257,35 +285,42 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 navArgument("birthDate") { type = NavType.StringType },
                 navArgument("country") { type = NavType.StringType },
                 navArgument("token") { type = NavType.StringType },
+                navArgument("createdDate") { type = NavType.StringType },
+            )
+        )
 
-                ) )
+        {
+            val accountId = it.arguments?.getLong("accountId")!!
+            val name = it.arguments?.getString("name")!!
+            val email = it.arguments?.getString("email")!!
+            val birthDate = it.arguments?.getString("birthDate")!!
+            val country = it.arguments?.getString("country")!!
+            val token = it.arguments?.getString("token")!!
+            val createDate = it.arguments?.getString("createdDate")!!
 
-            {
-                val accountId = it.arguments?.getLong("accountId")!!
-                val name = it.arguments?.getString("name")!!
-                val email = it.arguments?.getString("email")!!
-                val birthDate = it.arguments?.getString("birthDate")!!
-                val country = it.arguments?.getString("country")!!
-                val token = it.arguments?.getString("token")!!
-
-                MoreScreenDesign(navController = navController,
+            MoreScreenDesign(
+                navController = navController,
                 accountId = accountId,
                 name = name,
                 email = email,
                 birthDate = birthDate,
                 country = country,
-                    token = token )
+                token = token, createdDate = createDate
+            )
         }
 
 
-        composable(route = "$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}",
+        composable(
+            route = "$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{createdDate}",
             arguments = listOf(
                 navArgument("accountId") { type = NavType.LongType },
                 navArgument("name") { type = NavType.StringType },
                 navArgument("email") { type = NavType.StringType },
                 navArgument("birthDate") { type = NavType.StringType },
                 navArgument("country") { type = NavType.StringType },
-            ) )
+                navArgument("createdDate") { type = NavType.StringType },
+            )
+        )
 
         {
             val accountId = it.arguments?.getLong("accountId")!!
@@ -293,21 +328,27 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             val email = it.arguments?.getString("email")!!
             val birthDate = it.arguments?.getString("birthDate")!!
             val country = it.arguments?.getString("country")!!
-            ProfileScreen(navController = navController,
+            val createdDate = it.arguments?.getString("createdDate")!!
+            ProfileScreen(
+                navController = navController,
                 accountId = accountId,
                 name = name,
                 email = email,
                 birthDate = birthDate,
-                country = country)
+                country = country,
+                dateCreated = createdDate
+            )
         }
-        composable(route = "$SETTINGS/{accountId}/{name}/{email}/{birthDate}/{country}",
+        composable(
+            route = "$SETTINGS/{accountId}/{name}/{email}/{birthDate}/{country}",
             arguments = listOf(
                 navArgument("accountId") { type = NavType.LongType },
                 navArgument("name") { type = NavType.StringType },
                 navArgument("email") { type = NavType.StringType },
                 navArgument("birthDate") { type = NavType.StringType },
                 navArgument("country") { type = NavType.StringType },
-            ) )
+            )
+        )
 
         {
             val accountId = it.arguments?.getLong("accountId")!!
@@ -315,22 +356,26 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             val email = it.arguments?.getString("email")!!
             val birthDate = it.arguments?.getString("birthDate")!!
             val country = it.arguments?.getString("country")!!
-            SettingsScreen(navController = navController,
+            SettingsScreen(
+                navController = navController,
                 accountId = accountId,
                 name = name,
                 email = email,
                 birthDate = birthDate,
-                country = country)
+                country = country
+            )
         }
 
-        composable(route = "$EDIT_PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}",
+        composable(
+            route = "$EDIT_PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}",
             arguments = listOf(
                 navArgument("accountId") { type = NavType.LongType },
                 navArgument("name") { type = NavType.StringType },
                 navArgument("email") { type = NavType.StringType },
                 navArgument("birthDate") { type = NavType.StringType },
                 navArgument("country") { type = NavType.StringType },
-            ) )
+            )
+        )
 
         {
             val accountId = it.arguments?.getLong("accountId")!!
@@ -338,17 +383,20 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             val email = it.arguments?.getString("email")!!
             val birthDate = it.arguments?.getString("birthDate")!!
             val country = it.arguments?.getString("country")!!
-            EditProfileScreen(navController = navController,
+            EditProfileScreen(
+                navController = navController,
                 accountId = accountId,
                 name = name,
                 email = email,
                 birthDate = birthDate,
-                country = country)
+                country = country
+            )
         }
         composable(route = CHANGE_PASSWORD) {
             ChangePasswordScreen(navController = navController)
         }
-        composable(route = "$PERSONAL_INFO/{accountId}/{name}/{email}/{birthDate}/{country}/{bankAccount}",
+        composable(
+            route = "$PERSONAL_INFO/{accountId}/{name}/{email}/{birthDate}/{country}/{bankAccount}",
             arguments = listOf(
                 navArgument("accountId") { type = NavType.LongType },
                 navArgument("name") { type = NavType.StringType },
@@ -367,16 +415,18 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             val country = it.arguments?.getString("country")!!
             val bankAccount = it.arguments?.getString("bankAccount")!!
 
-            ProfileInfoScreen(navController = navController,
+            ProfileInfoScreen(
+                navController = navController,
                 accountId = accountId,
                 name = name,
                 email = email,
                 birthDate = birthDate,
                 country = country,
                 bankAccount = bankAccount
-                )
+            )
         }
-        composable(route = "$ACCOUNT_INFO/{accountDescription}/{accountName}/{accountNumber}/{accountType}/{active}/{balance}/{currency}",
+        composable(
+            route = "$ACCOUNT_INFO/{accountDescription}/{accountName}/{accountNumber}/{accountType}/{active}/{balance}/{currency}",
             arguments = listOf(
                 navArgument("accountDescription") { type = NavType.StringType },
                 navArgument("accountName") { type = NavType.StringType },
@@ -397,14 +447,15 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             val balance = it.arguments?.getInt("balance")!!
             val currency = it.arguments?.getString("currency")!!
 
-            AccountInfoScreen(navController = navController,
-                accountDescription= accountDescription,
-                accountName=accountName,
-                accountNumber=accountNumber,
-                accountType=accountType,
-                active= active,
-                balance=balance,
-                currency= currency,
+            AccountInfoScreen(
+                navController = navController,
+                accountDescription = accountDescription,
+                accountName = accountName,
+                accountNumber = accountNumber,
+                accountType = accountType,
+                active = active,
+                balance = balance,
+                currency = currency,
             )
         }
 

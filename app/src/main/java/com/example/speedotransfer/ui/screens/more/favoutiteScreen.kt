@@ -90,7 +90,7 @@ fun FavouriteScreen(navController: NavController,favouriteList: List<Client>, mo
 
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack("$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}", inclusive = false) // Navigate back to the profile screen
+                        navController.popBackStack("$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{createdDate}", inclusive = false) // Navigate back to the profile screen
 
                     }) {
                         CustomAppBarIcon(

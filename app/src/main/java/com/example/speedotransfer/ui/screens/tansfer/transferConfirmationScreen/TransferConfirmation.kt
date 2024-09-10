@@ -1,9 +1,14 @@
 package com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen
 
-import android.util.Log
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,15 +25,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -36,17 +44,19 @@ import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.Route.CONFIRMED_TRANSACTION
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
-import com.example.speedotransfer.data.repository.TransferRepoImpl
-import com.example.speedotransfer.model.Transfer
+import com.example.speedotransfer.data.repository.transfer.TransferRepoImpl
 import com.example.speedotransfer.model.TransferRequest
 import com.example.speedotransfer.ui.elements.BeneficiaryCard
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.StepsRow
+import com.example.speedotransfer.ui.screens.tansfer.getInitials
 import com.example.speedotransfer.ui.theme.BodyMedium16
 import com.example.speedotransfer.ui.theme.BodyRegular16
+import com.example.speedotransfer.ui.theme.G0
 import com.example.speedotransfer.ui.theme.G900
+import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
 import com.example.speedotransfer.ui.uiConstants
 
@@ -70,8 +80,7 @@ fun TransferConfirmationDesign(navController: NavController,
         )
     )
     val transferResult by transferViewModel.transferResult.collectAsState()
-
-
+    val context = LocalContext.current
 //
 //        transferResult?.let { result ->
 //            if(result.status) {
@@ -142,10 +151,15 @@ fun TransferConfirmationDesign(navController: NavController,
                                receiverAccNumber= receiverAccountNumberSuffix,
                                 amount = transferAmount,
                                 sendCurrency = currency
+
                             )
                         )
                    //     Log.d("NavGraphFady", "Graph is: ${navController.graph.id}")
+createNotificationchannel(context)
+sendNotification(context,senderName,"Transaction","Transaction was done Successfully ")
+
                         navController.navigate(route = "${CONFIRMED_TRANSACTION}/${transferAmount}/${currency}/${senderName}/${receiverName}/${senderAccountNumberSuffix}/${receiverAccountNumberSuffix}")
+
 
 
 //                        Log.d("TagTransferinsdeCLick", "Transfer response: ${transferResult?.status} is called")
@@ -258,6 +272,67 @@ fun TransferAmountArea(
             )
         }
     }
+}
+
+
+
+private fun createNotificationchannel(context: Context) {
+        val name = "transactionNotification"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel("1", name, importance)
+        channel.description = "When transaction is done Notification"
+        // Register the channel with the system
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+private  fun sendNotification(context: Context,initials: String, title: String, text: String) {
+
+    val initialsBitmap = createCircularInitialsBitmap(getInitials(initials))
+
+    // Use MessagingStyle to add a conversation-style notification
+    val messagingStyle = NotificationCompat.MessagingStyle(initials)
+        .setConversationTitle(title)
+        .addMessage(text, System.currentTimeMillis(), initials) // The message with initials as sender
+
+    // Build the notification
+    val builder = NotificationCompat.Builder(context, "1")
+        .setSmallIcon(R.drawable.notifications)
+        .setStyle(messagingStyle)
+        .setLargeIcon(initialsBitmap) // Set the initials bitmap as large icon
+        .setContentTitle(title)
+        .setContentText(text)
+        .setAutoCancel(true)
+
+    // Issue the notification
+    NotificationManagerCompat.from(context).notify(99, builder.build())
+}
+
+fun createCircularInitialsBitmap(initials: String): Bitmap {
+    val size = 128 // Size of the circle
+    val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+
+    // Draw the circular background
+    val paint = Paint().apply {
+        isAntiAlias = true
+        color = P300.toArgb() // Set circle color here
+    }
+    val rect = RectF(0f, 0f, size.toFloat(), size.toFloat())
+    canvas.drawOval(rect, paint)
+
+    // Draw the initials text
+    paint.apply {
+        color = G0.toArgb()
+        textSize = 48f // Set text size
+        textAlign = Paint.Align.CENTER
+    }
+    val textX = size / 2f
+    val textY = (size / 2f) - ((paint.descent() + paint.ascent()) / 2f)
+    canvas.drawText(initials, textX, textY, paint)
+
+    return bitmap
 }
 
 @Preview(showSystemUi = true)

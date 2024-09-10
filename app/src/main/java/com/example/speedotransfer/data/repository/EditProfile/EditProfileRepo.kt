@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.repository
+package com.example.speedotransfer.data.repository.EditProfile
 
 import com.example.speedotransfer.model.UpdateCustomerRequest
 import com.example.speedotransfer.model.UpdateCustomerResponse

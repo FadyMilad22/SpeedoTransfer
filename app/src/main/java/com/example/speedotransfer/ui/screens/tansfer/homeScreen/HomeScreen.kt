@@ -42,7 +42,7 @@ import androidx.navigation.NavController
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
-import com.example.speedotransfer.data.repository.TransferRepoImpl
+import com.example.speedotransfer.data.repository.transfer.TransferRepoImpl
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.screens.tansfer.homeScreen.HomeViewModelFactory

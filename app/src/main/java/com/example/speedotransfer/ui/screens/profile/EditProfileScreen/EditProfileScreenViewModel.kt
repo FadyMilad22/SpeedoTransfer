@@ -1,6 +1,6 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.speedotransfer.data.repository.EditProfileRepo
+import com.example.speedotransfer.data.repository.EditProfile.EditProfileRepo
 import com.example.speedotransfer.model.UpdateCustomerRequest
 import com.example.speedotransfer.model.UpdateCustomerResponse
 import kotlinx.coroutines.Dispatchers

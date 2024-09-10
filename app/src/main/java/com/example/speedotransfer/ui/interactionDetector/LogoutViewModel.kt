@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens.more.logout
+package com.example.speedotransfer.ui.interactionDetector
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,6 +21,9 @@ class LogoutViewModel (private val logoutRepo: LogoutRepo) : ViewModel(){
     val errorMessage: StateFlow<String?> = _errorMessage
 
 
+fun setStateBacktoNull (){
+    _logoutState.value = null
+}
 
     // Method to update profile
     fun logout(token :String) {

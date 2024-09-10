@@ -1,10 +1,10 @@
-package com.example.speedotransfer.data.repository
+package com.example.speedotransfer.data.repository.singUp
 
 import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.data.network.RemoteDataSource
 
-class SignUpRepoImpl(remoteDataSource: RemoteDataSource):SignUpRepo {
+class SignUpRepoImpl(remoteDataSource: RemoteDataSource): SignUpRepo {
     // Repo function to register a new customer using repository pattern
     override suspend fun registerCustomer(registerRequest: RegisterCustomerRequest): RegisterCustomerResponse {
         // Mocked object for testing purposes

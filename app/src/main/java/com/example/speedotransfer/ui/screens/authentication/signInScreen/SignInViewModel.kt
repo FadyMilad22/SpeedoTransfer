@@ -4,14 +4,14 @@ import SignInRequest
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.speedotransfer.data.repository.SignInRepo
+import com.example.speedotransfer.data.repository.signIn.SignInRepo
 import com.example.speedotransfer.model.CustomerResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class SignInViewModel(private val signInRepo: SignInRepo , private val sharedPreferences: SharedPreferences ) : ViewModel() {
+class SignInViewModel(private val signInRepo: SignInRepo, private val sharedPreferences: SharedPreferences ) : ViewModel() {
 
 
     // StateFlow for handling the current state of the screen

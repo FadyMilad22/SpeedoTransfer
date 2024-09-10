@@ -41,7 +41,7 @@ fun getTopLevelRoute(): List<TopLevelRoute> {
     bottomNavigationRoutes.add(
         TopLevelRoute(
             "More",
-            "$MORE/{accountId}/{name}/{email}/{birthDate}/{country}/{token}",
+            "$MORE/{accountId}/{name}/{email}/{birthDate}/{country}/{token}/{createdDate}",
             R.drawable.more
         )
     )

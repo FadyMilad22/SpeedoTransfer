@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.repository
+package com.example.speedotransfer.data.repository.signIn
 
 import SignInRequest
 import SignInResponse
@@ -6,7 +6,7 @@ import com.example.speedotransfer.data.network.RemoteDataSource
 import com.example.speedotransfer.model.Account
 import com.example.speedotransfer.model.CustomerResponse
 
-class SignInRepoImpl(remoteDataSource: RemoteDataSource):SignInRepo {
+class SignInRepoImpl(remoteDataSource: RemoteDataSource): SignInRepo {
 
     // Repo function to log in using repository pattern
     override suspend fun signIn(signInRequest: SignInRequest): SignInResponse {

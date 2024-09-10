@@ -3,8 +3,7 @@ package com.example.speedotransfer.ui.screens.tansfer.homeScreen
 import HomeViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.speedotransfer.data.repository.SignInRepo
-import com.example.speedotransfer.data.repository.TransferRepo
+import com.example.speedotransfer.data.repository.transfer.TransferRepo
 
 
 class HomeViewModelFactory(private val homeRepo: TransferRepo): ViewModelProvider.Factory {

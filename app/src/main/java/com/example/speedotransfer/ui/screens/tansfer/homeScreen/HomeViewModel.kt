@@ -4,8 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import com.example.speedotransfer.model.TransactionResponse
-import com.example.speedotransfer.model.Transfer
-import com.example.speedotransfer.data.repository.TransferRepo
+import com.example.speedotransfer.data.repository.transfer.TransferRepo
 
 class HomeViewModel(private val transferRepo: TransferRepo) : ViewModel() {
 
