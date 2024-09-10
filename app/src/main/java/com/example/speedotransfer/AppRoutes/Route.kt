@@ -239,14 +239,16 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             SignUpScreen(navController = navController)  // Pass the navController to SignInScreen for navigation
         }
 
-        composable(route = "$MORE/{accountId}/{name}/{email}/{birthDate}/{country}",
+        composable(route = "$MORE/{accountId}/{name}/{email}/{birthDate}/{country}/{token}",
             arguments = listOf(
                 navArgument("accountId") { type = NavType.LongType },
                 navArgument("name") { type = NavType.StringType },
                 navArgument("email") { type = NavType.StringType },
                 navArgument("birthDate") { type = NavType.StringType },
                 navArgument("country") { type = NavType.StringType },
-               ) )
+                navArgument("token") { type = NavType.StringType },
+
+                ) )
 
             {
                 val accountId = it.arguments?.getLong("accountId")!!
@@ -254,12 +256,15 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 val email = it.arguments?.getString("email")!!
                 val birthDate = it.arguments?.getString("birthDate")!!
                 val country = it.arguments?.getString("country")!!
-            MoreScreenDesign(navController = navController,
+                val token = it.arguments?.getString("token")!!
+
+                MoreScreenDesign(navController = navController,
                 accountId = accountId,
                 name = name,
                 email = email,
                 birthDate = birthDate,
-                country = country)
+                country = country,
+                    token = token )
         }
 
 
