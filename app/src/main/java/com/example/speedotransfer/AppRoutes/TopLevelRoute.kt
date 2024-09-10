@@ -1,6 +1,7 @@
 package com.example.speedotransfer.AppRoutes
 
 import androidx.annotation.DrawableRes
+import com.example.speedotransfer.AppRoutes.Route.MORE
 import com.example.speedotransfer.R
 
 data class TopLevelRoute(
@@ -37,7 +38,13 @@ fun getTopLevelRoute(): List<TopLevelRoute> {
         )
     )
     bottomNavigationRoutes.add(TopLevelRoute("My cards", Route.HOME, R.drawable.cards1))
-    bottomNavigationRoutes.add(TopLevelRoute("More", Route.HOME, R.drawable.more))
+    bottomNavigationRoutes.add(
+        TopLevelRoute(
+            "More",
+            "$MORE/{accountId}/{name}/{email}/{birthDate}/{country}/{token}",
+            R.drawable.more
+        )
+    )
 
     return bottomNavigationRoutes
 }

@@ -1,5 +1,7 @@
 package com.example.speedotransfer.ui.screens.authentication.signInScreen
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -9,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -38,8 +41,14 @@ import java.time.format.DateTimeFormatter
 fun SignInScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    signInViewModel: SignInViewModel = viewModel(factory = SignInViewModelFactory(SignInRepoImpl(APIClient)))
+
 ) {
+
+    val context = LocalContext.current
+    val sharedPreferences: SharedPreferences = context.getSharedPreferences("customerPrefs", Context.MODE_PRIVATE)
+    val  signInViewModel: SignInViewModel = viewModel(factory = SignInViewModelFactory(SignInRepoImpl(APIClient),sharedPreferences))
+
+
 
     // Observing StateFlow from ViewModel
     val signInState by signInViewModel.signInState.collectAsState()
