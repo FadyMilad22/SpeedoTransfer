@@ -25,20 +25,21 @@ import com.example.speedotransfer.ui.uiConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileInfoScreen(navController: NavController,
-                      accountId : Long,
-                      name : String,
-                      email : String,
-                      birthDate : String,
-                      country : String,
-                      bankAccount : String,
+fun AccountInfoScreen(navController: NavController,
+                      accountDescription: String,
+                       accountName: String,
+                       accountNumber: String,
+                       accountType: String,
+                       active: Boolean,
+                       balance: Int,
+                       currency: String,
                       modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     CutomAppBarTitle(
-                        text = "Profile information",
+                        text = "Account information",
 
                         )
                 },
@@ -71,28 +72,38 @@ fun ProfileInfoScreen(navController: NavController,
             ) {
                 Spacer(modifier = modifier.padding(top = 32.dp))
                 ProfileInfoItem(
-                    title = "Full Name",
-                    details = name,
+                    title = "Account Description",
+                    details = accountDescription,
                     enableStroke = true
                 )
                 ProfileInfoItem(
-                    title = "Email",
-                    details = email,
+                    title = "Account Name",
+                    details = accountName,
                     enableStroke = true
                 )
                 ProfileInfoItem(
-                    title = "Date Of Brith",
-                    details = birthDate,
+                    title = "Account Number",
+                    details = accountNumber,
                     enableStroke = true
                 )
                 ProfileInfoItem(
-                    title = "Country",
-                    details = country,
+                    title = "Account Type",
+                    details = accountType,
                     enableStroke = true
                 )
                 ProfileInfoItem(
-                    title = "Bank Account",
-                    details = bankAccount,
+                    title = "Active",
+                    details = active.toString(),
+                    enableStroke = true
+                )
+                ProfileInfoItem(
+                    title = "Balance",
+                    details = balance.toString(),
+                    enableStroke = true
+                )
+                ProfileInfoItem(
+                    title = "Currency",
+                    details = currency,
                     enableStroke = false
                 )
             }
