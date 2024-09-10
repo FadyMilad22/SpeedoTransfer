@@ -9,6 +9,9 @@ import SignInResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.model.CustomerResponse
+import com.example.speedotransfer.model.DeleteFavouriteResponse
+import com.example.speedotransfer.model.FavouriteRequest
+import com.example.speedotransfer.model.FavouriteResponse
 import com.example.speedotransfer.model.LogoutResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
@@ -75,4 +78,21 @@ object APIClient : RemoteDataSource {
     override suspend fun getCustomerByEmail(email: String): CustomerResponse {
         return APIHelper.callable.getCustomerByEmail(email)
     }
+
+    // API Client function to get all favourites for the logged-in customer
+    override suspend fun getAllFavourites(authToken: String): List<FavouriteResponse> {
+        return APIHelper.callable.getAllFavourites("Bearer $authToken")
+    }
+
+    // API Client function to add a customer to favourites
+    override suspend fun addCustomerToFavourite(authToken: String, favouriteRequest: FavouriteRequest): FavouriteResponse {
+        return APIHelper.callable.addCustomerToFavourite("Bearer $authToken", favouriteRequest)
+    }
+
+    // API Client function to delete a favourite
+    override suspend fun deleteFavourite(authToken: String, favouriteId: Long): DeleteFavouriteResponse {
+        return APIHelper.callable.deleteFavourite("Bearer $authToken", favouriteId)
+    }
+
+
 }

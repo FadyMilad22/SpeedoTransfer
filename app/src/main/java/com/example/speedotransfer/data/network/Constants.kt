@@ -18,6 +18,10 @@ object Constants {
     const val UPDATE_CUSTOMER_BY_EMAIL_ENDPOINT = "/api/customer/update"
     const val LOGOUT_ENDPOINT = "/api/auth/logout"
     const val GET_CUSTOMER_BY_EMAIL_ENDPOINT = "/api/customer/{email}"
+    const val DELETE_FAVOURITE_ENDPOINT = "/api/favourites/{id}"
+    const val ADD_FAVOURITE_ENDPOINT = "/api/favourites"
+    const val GET_ALL_FAVOURITES_ENDPOINT = "/api/favourites"
+
 
 
     // Query Parameters

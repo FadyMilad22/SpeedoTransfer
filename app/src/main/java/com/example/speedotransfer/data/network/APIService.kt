@@ -9,12 +9,16 @@ import SignInResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.model.CustomerResponse
+import com.example.speedotransfer.model.DeleteFavouriteResponse
+import com.example.speedotransfer.model.FavouriteRequest
+import com.example.speedotransfer.model.FavouriteResponse
 import com.example.speedotransfer.model.LogoutResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.model.UpdateCustomerRequest
 import com.example.speedotransfer.model.UpdateCustomerResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -81,4 +85,23 @@ interface APIService {
     suspend fun getCustomerByEmail(
         @Path("email") email: String
     ): CustomerResponse
+
+    @GET(Constants.GET_ALL_FAVOURITES_ENDPOINT)
+    suspend fun getAllFavourites(
+        @Header("Authorization") authToken: String // NEW: Auth header
+    ): List<FavouriteResponse>
+
+    @POST(Constants.ADD_FAVOURITE_ENDPOINT)
+    suspend fun addCustomerToFavourite(
+        @Header("Authorization") authToken: String, // NEW: Auth header
+        @Body favouriteRequest: FavouriteRequest
+    ): FavouriteResponse
+
+    @DELETE(Constants.DELETE_FAVOURITE_ENDPOINT)
+    suspend fun deleteFavourite(
+        @Header("Authorization") authToken: String, // NEW: Auth header
+        @Path("id") favouriteId: Long
+    ): DeleteFavouriteResponse
+
+
 }

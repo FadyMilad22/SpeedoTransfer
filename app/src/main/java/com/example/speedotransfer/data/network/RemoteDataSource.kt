@@ -9,6 +9,9 @@ import SignInResponse
 import RegisterCustomerRequest
 import RegisterCustomerResponse
 import com.example.speedotransfer.model.CustomerResponse
+import com.example.speedotransfer.model.DeleteFavouriteResponse
+import com.example.speedotransfer.model.FavouriteRequest
+import com.example.speedotransfer.model.FavouriteResponse
 import com.example.speedotransfer.model.LogoutResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
@@ -31,4 +34,7 @@ interface RemoteDataSource {
     suspend fun logout(token: String): LogoutResponse
     suspend fun getCustomerByEmail(email: String): CustomerResponse
 
+    suspend fun getAllFavourites(authToken: String): List<FavouriteResponse>
+    suspend fun addCustomerToFavourite(authToken: String, favouriteRequest: FavouriteRequest): FavouriteResponse
+    suspend fun deleteFavourite(authToken: String, favouriteId: Long): DeleteFavouriteResponse
 }
