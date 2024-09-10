@@ -155,7 +155,7 @@ fun TransferConfirmedDesign(
 
 
 
-                SpeedoButton(text = "Back to Home", enabled = true, isTransparent = false ,Modifier.clickable {
+                SpeedoButton(text = "Back to Home", enabled = true, isTransparent = false ,) {
                     val currentEntry = navController.currentBackStackEntry
                     val previousEntry = navController.previousBackStackEntry
 
@@ -166,7 +166,7 @@ fun TransferConfirmedDesign(
                         Log.d("NavBackStack", "No previous destination")
                     }
                     navController.popBackStack("$HOME/{accountId}/{startDate}/{endDate}/{balance}/{name}/{currency}", inclusive = false)
-                })
+                }
                 Spacer(modifier = Modifier.padding(bottom = 16.dp))
                 // Button to add the recipient to Favourites
                 SpeedoButton(
