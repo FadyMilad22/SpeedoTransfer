@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.speedotransfer.AppRoutes.Route.SETTINGS
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
@@ -54,7 +55,10 @@ fun ChangePasswordScreen(navController: NavController, modifier: Modifier = Modi
                 ),
 
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        navController.popBackStack("$SETTINGS/{accountId}/{name}/{email}/{birthDate}/{country}", inclusive = false) // Navigate back to the profile screen
+
+                    }) {
                         CustomAppBarIcon(
                             icon = R.drawable.drop_down
                         )

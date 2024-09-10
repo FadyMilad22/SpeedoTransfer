@@ -63,7 +63,7 @@ fun ProfileScreen(navController: NavController,
 
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack("$MORE/{accountId}/{name}/{email}/{birthDate}/{country}", inclusive = false)
+                        navController.popBackStack("${Route.MORE}/{accountId}/{name}/{email}/{birthDate}/{country}/{token}", inclusive = false)
                     }) {
                         CustomAppBarIcon(
                             icon = R.drawable.drop_down

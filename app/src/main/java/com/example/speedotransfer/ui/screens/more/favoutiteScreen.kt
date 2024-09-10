@@ -35,6 +35,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.speedotransfer.AppRoutes.Route.PROFILE
 import com.example.speedotransfer.R
 import com.example.speedotransfer.model.Client
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
@@ -60,7 +62,7 @@ import com.example.speedotransfer.ui.uiConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) {
+fun FavouriteScreen(navController: NavController,favouriteList: List<Client>, modifier: Modifier = Modifier) {
 
 
     val sheetState = rememberModalBottomSheetState()
@@ -87,7 +89,10 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
                 ),
 
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        navController.popBackStack("$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}", inclusive = false) // Navigate back to the profile screen
+
+                    }) {
                         CustomAppBarIcon(
                             icon = R.drawable.drop_down
                         )
@@ -95,9 +100,7 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
                 },
             )
         },
-        bottomBar = {
 
-        },
         content = { paddingValues ->
             Column(
                 modifier = Modifier.padding(paddingValues)
@@ -225,5 +228,5 @@ fun FavouriteScreen(favouriteList: List<Client>, modifier: Modifier = Modifier) 
 private fun FavouriteScreenPreview() {
     val client = Client("Asmaa Dosuky", "7890")
     val list = listOf(client, client, client, client, client, client, client)
-    FavouriteScreen(list)
+//    FavouriteScreen(list)
 }
