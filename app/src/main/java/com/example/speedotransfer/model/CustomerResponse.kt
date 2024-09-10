@@ -1,4 +1,3 @@
-
 package com.example.speedotransfer.model
 
 data class CustomerResponse(
