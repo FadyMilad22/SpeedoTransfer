@@ -1,5 +1,6 @@
 package com.example.speedotransfer
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -41,9 +42,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.AppRoutes.AppNavHost
 import com.example.speedotransfer.AppRoutes.Route
+import com.example.speedotransfer.AppRoutes.Route.MORE
 import com.example.speedotransfer.AppRoutes.getTopLevelRoute
+import com.example.speedotransfer.model.Account
 import com.example.speedotransfer.model.Client
+import com.example.speedotransfer.model.CustomerResponse
 import com.example.speedotransfer.ui.screens.SplashScreen
+import com.example.speedotransfer.ui.screens.authentication.signInScreen.getCurrentDate
 import com.example.speedotransfer.ui.screens.more.FavouriteScreen
 import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.theme.G0
@@ -56,8 +61,11 @@ import com.example.speedotransfer.ui.theme.TitleMedium
 
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedPreferences = getSharedPreferences("customerPrefs", MODE_PRIVATE)
         enableEdgeToEdge(
 //            statusBarStyle = SystemBarStyle.light(
 //                android.graphics.Color.TRANSPARENT,
@@ -71,26 +79,18 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination?.route
-                Scaffold(modifier = Modifier.fillMaxSize(),
-                    bottomBar = { if (currentDestination != Route.SPLASH  &&currentDestination != Route.SIGN_IN && currentDestination != Route.SIGN_UP && currentDestination !=Route.COMPLETE_SIGN_UP && currentDestination !=Route.ON_BOARDING ) {
-                        BottomNavBar(navController)
-                    } },
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        if (currentDestination != Route.SPLASH && currentDestination != Route.SIGN_IN && currentDestination != Route.SIGN_UP && currentDestination != Route.COMPLETE_SIGN_UP && currentDestination != Route.ON_BOARDING) {
+                            BottomNavBar(navController, sharedPreferences)
+                        }
+                    },
 
-                 )
+                    )
                 { _ ->
 
-                    AppNavHost(navController=navController)
-//                    TransferConfirmationDesign(
-//                        navController,
-//                        currency = "EGP",
-//                        transferAmount = 1000.0,
-//                        senderName = "Asmaa Dosuky",
-//                        receiverName = "Jonathon Smith",
-//                        senderAccountNumberSuffix = 7890,
-//                        receiverAccountNumberSuffix = 7890
-//                    )
-
-
+                    AppNavHost(navController = navController)
 
                 }
 
@@ -100,10 +100,17 @@ class MainActivity : ComponentActivity() {
 }
 
 
-
-
 @Composable
-fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier) {
+fun BottomNavBar(
+    navController: NavController,
+    sharedPreferences: SharedPreferences,
+    modifier: Modifier = Modifier
+) {
+
+    val (customer, account) = fetchCustomerDataFromPreferences(sharedPreferences)
+
+    val authToken = sharedPreferences.getString("auth_token", "") ?: ""
+    val tokenType = sharedPreferences.getString("token_type", "") ?: ""
 
 
     Card(
@@ -112,7 +119,14 @@ fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier) {
             .navigationBarsPadding()  // This handles the navigation bar padding
             .systemBarsPadding(),
         elevation = CardDefaults.elevatedCardElevation(4.dp),
-        colors = CardDefaults.cardColors(containerColor = G0), shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp, bottomStart = 0.dp, bottomEnd = 0.dp)) {
+        colors = CardDefaults.cardColors(containerColor = G0),
+        shape = RoundedCornerShape(
+            topStart = 28.dp,
+            topEnd = 28.dp,
+            bottomStart = 0.dp,
+            bottomEnd = 0.dp
+        )
+    ) {
         BottomNavigation(
             backgroundColor = G0,
             contentColor = G200,
@@ -125,20 +139,30 @@ fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
 
-            Row(horizontalArrangement = Arrangement.SpaceEvenly , modifier = modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp)) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly, modifier = modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp)
+            ) {
                 getTopLevelRoute().forEach { screen ->
 
                     BottomNavigationItem(
                         icon = {
-                           Box(modifier =modifier.padding(start = 4.dp , end = 4.dp , bottom = 4.dp) ){ Icon(
-                                painterResource(id = screen.icon),
-                                contentDescription = "${screen.name} Icon",
-                                modifier = modifier.size(24.dp),
-                                tint = if (currentDestination?.hierarchy?.any { it.route == screen.route } == true) P300 else G200  // Tint selected item with P300 and unselected with G200
+                            Box(
+                                modifier = modifier.padding(
+                                    start = 4.dp,
+                                    end = 4.dp,
+                                    bottom = 4.dp
+                                )
+                            ) {
+                                Icon(
+                                    painterResource(id = screen.icon),
+                                    contentDescription = "${screen.name} Icon",
+                                    modifier = modifier.size(24.dp),
+                                    tint = if (currentDestination?.hierarchy?.any { it.route == screen.route } == true) P300 else G200  // Tint selected item with P300 and unselected with G200
 
-                            )}
+                                )
+                            }
                         },
                         label = {
                             Text(
@@ -147,32 +171,25 @@ fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier) {
                                 fontSize = 11.sp,
                                 color = if (currentDestination?.hierarchy?.any { it.route == screen.route } == true) P300 else G200,
                                 maxLines = 1,  // Ensure the text stays on one line
-                                softWrap = false  // Disable text wrapping
-                                ,
+                                softWrap = false,  // Disable text wrapping
 
-                                )
+                            )
                         },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
-                            // this is just a temp code , till we implement it
-                            val accountId: Long = 12345L // Replace with actual accountId
-                            val startDate: String = "2023-09-01" // Replace with actual startDate
-                            val endDate: String = "2023-09-30" // Replace with actual endDate
-                            val balance: Double = 1500.0 // Replace with actual balance
-                            val name: String = "John Doe" // Replace with actual name
-                         //   val currency: String = "USD" // Replace with actual currency
-
-                            val senderName = "Asmaa Dosuky"
-                            val senderAccountNumberSuffix = 7890
-                            val currency = "EGP"
 
                             navController.navigate(
-                            "${Route.BEGIN_TRANSACTION}/$senderName/$senderAccountNumberSuffix/$currency"){
+                                when (screen.name) {
+                                    "Home" -> { "${Route.HOME}/${account.id.toLong()}/${account.createdAt}}/${getCurrentDate()}/${account.balance.toFloat()}/${customer.name}/${account.currency}"
+                                    }
+                                    "Transfer" -> { "${Route.BEGIN_TRANSACTION}/${customer.name}/${account.accountNumber}/${account.currency}"
+                                    }
+                                    "Transactions" -> { "${Route.TRANSACTIONS_LIST}/${account.id.toLong()}/${account.createdAt}/${getCurrentDate()}"
+                                    }
+                                    else -> { "$MORE/${customer.id.toLong()}/${customer.name}}/${customer.email}/${customer.birthDate}/{Egypt}/${tokenType} ${authToken}" }
+                                }
+                            ){
 //                                "${Route.HOME}/$accountId/$startDate/$endDate/${balance.toFloat()}/$name/$currency"){
-
-
-                                    // navController.navigate(screen.route) {
-
 
                                 // Pop up to the start destination of the graph to
                                 // avoid building up a large stack of destinations
@@ -191,6 +208,35 @@ fun BottomNavBar(navController: NavController,modifier: Modifier = Modifier) {
     }
 }
 
+fun fetchCustomerDataFromPreferences(sharedPreferences: SharedPreferences): Pair<CustomerResponse, Account> {
+    val account = Account(
+        accountDescription = sharedPreferences.getString("account_description", "") ?: "",
+        accountName = sharedPreferences.getString("account_name", "") ?: "",
+        accountNumber = sharedPreferences.getString("account_number", "") ?: "",
+        accountType = sharedPreferences.getString("account_type", "") ?: "",
+        active = sharedPreferences.getBoolean("account_active", true),
+        balance = sharedPreferences.getInt("account_balance", 0),
+        createdAt = sharedPreferences.getString("account_createdAt", "") ?: "",
+        currency = sharedPreferences.getString("account_currency", "") ?: "",
+        id = sharedPreferences.getInt("account_id", 0),
+        updatedAt = sharedPreferences.getString("account_updatedAt", "") ?: ""
+    )
+
+    val customer = CustomerResponse(
+        accounts = listOf(account),
+        birthDate = sharedPreferences.getString("customer_birthDate", "") ?: "",
+        createdAt = sharedPreferences.getString("customer_createdAt", "") ?: "",
+        email = sharedPreferences.getString("customer_email", "") ?: "",
+        gender = sharedPreferences.getString("customer_gender", "") ?: "",
+        id = sharedPreferences.getInt("customer_id", 0),
+        name = sharedPreferences.getString("customer_name", "") ?: "",
+        phoneNumber = sharedPreferences.getString("customer_phoneNumber", "") ?: "",
+        updatedAt = sharedPreferences.getString("customer_updatedAt", "") ?: "",
+        username = sharedPreferences.getString("customer_username", "") ?: ""
+    )
+
+    return Pair(customer, account)
+}
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
