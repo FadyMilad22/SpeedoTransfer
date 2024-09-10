@@ -10,11 +10,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.speedotransfer.AppRoutes.Route.ACCOUNT_INFO
 import com.example.speedotransfer.AppRoutes.Route.CHANGE_PASSWORD
 import com.example.speedotransfer.AppRoutes.Route.COMPLETE_SIGN_UP
 import com.example.speedotransfer.AppRoutes.Route.CONFIRMED_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.CONFIRM_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.EDIT_PROFILE
+import com.example.speedotransfer.AppRoutes.Route.FAVOURITES
 import com.example.speedotransfer.AppRoutes.Route.HOME
 import com.example.speedotransfer.AppRoutes.Route.ON_BOARDING
 import com.example.speedotransfer.AppRoutes.Route.MORE
@@ -24,18 +26,21 @@ import com.example.speedotransfer.AppRoutes.Route.SETTINGS
 import com.example.speedotransfer.AppRoutes.Route.SIGN_IN
 import com.example.speedotransfer.AppRoutes.Route.SIGN_UP
 import com.example.speedotransfer.AppRoutes.Route.SPLASH
+import com.example.speedotransfer.model.Client
 import com.example.speedotransfer.ui.screens.SplashScreen
 import com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen.TransferConfirmationDesign
 import com.example.speedotransfer.ui.screens.tansfer.TransferAmountDesign
 import com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInScreen
 import com.example.speedotransfer.ui.screens.authentication.signUpScreen.CompleteSignUpScreen
 import com.example.speedotransfer.ui.screens.authentication.signUpScreen.SignUpScreen
+import com.example.speedotransfer.ui.screens.more.FavouriteScreen
 import com.example.speedotransfer.ui.screens.more.MoreScreenDesign
 import com.example.speedotransfer.ui.screens.profile.ChangePasswordScreen
 import com.example.speedotransfer.ui.screens.profile.ProfileInfoScreen
 import com.example.speedotransfer.ui.screens.profile.ProfileScreen
 import com.example.speedotransfer.ui.screens.profile.SettingsScreen
 import com.example.speedotransfer.ui.screens.onboarding.OnboardingScreen
+import com.example.speedotransfer.ui.screens.profile.AccountInfoScreen
 import com.example.speedotransfer.ui.screens.profile.EditProfileScreen.EditProfileScreen
 import com.example.speedotransfer.ui.screens.tansfer.HomeScreen
 import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionDetailsScreen
@@ -62,6 +67,7 @@ object Route {
     const val EDIT_PROFILE ="editProfile"
     const val CHANGE_PASSWORD ="changePassword"
     const val SETTINGS ="settings"
+    const val ACCOUNT_INFO ="accountInfo"
 
     const val COMPLETE_SIGN_UP = "completeSignUp"
 }
@@ -342,9 +348,69 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         composable(route = CHANGE_PASSWORD) {
             ChangePasswordScreen(navController = navController)
         }
-        composable(route = PERSONAL_INFO) {
-            ProfileInfoScreen(navController = navController)
+        composable(route = "$PERSONAL_INFO/{accountId}/{name}/{email}/{birthDate}/{country}/{bankAccount}",
+            arguments = listOf(
+                navArgument("accountId") { type = NavType.LongType },
+                navArgument("name") { type = NavType.StringType },
+                navArgument("email") { type = NavType.StringType },
+                navArgument("birthDate") { type = NavType.StringType },
+                navArgument("country") { type = NavType.StringType },
+                navArgument("bankAccount") { type = NavType.StringType },
+
+                )
+
+        ) {
+            val accountId = it.arguments?.getLong("accountId")!!
+            val name = it.arguments?.getString("name")!!
+            val email = it.arguments?.getString("email")!!
+            val birthDate = it.arguments?.getString("birthDate")!!
+            val country = it.arguments?.getString("country")!!
+            val bankAccount = it.arguments?.getString("bankAccount")!!
+
+            ProfileInfoScreen(navController = navController,
+                accountId = accountId,
+                name = name,
+                email = email,
+                birthDate = birthDate,
+                country = country,
+                bankAccount = bankAccount
+                )
         }
+        composable(route = "$ACCOUNT_INFO/{accountDescription}/{accountName}/{accountNumber}/{accountType}/{active}/{balance}/{currency}",
+            arguments = listOf(
+                navArgument("accountDescription") { type = NavType.StringType },
+                navArgument("accountName") { type = NavType.StringType },
+                navArgument("accountNumber") { type = NavType.StringType },
+                navArgument("accountType") { type = NavType.StringType },
+                navArgument("active") { type = NavType.BoolType },
+                navArgument("balance") { type = NavType.IntType },
+                navArgument("currency") { type = NavType.StringType },
+
+                )
+
+        ) {
+            val accountDescription = it.arguments?.getString("accountDescription")!!
+            val accountName = it.arguments?.getString("accountName")!!
+            val accountNumber = it.arguments?.getString("accountNumber")!!
+            val accountType = it.arguments?.getString("accountType")!!
+            val active = it.arguments?.getBoolean("active")!!
+            val balance = it.arguments?.getInt("balance")!!
+            val currency = it.arguments?.getString("currency")!!
+
+            AccountInfoScreen(navController = navController,
+                accountDescription= accountDescription,
+                accountName=accountName,
+                accountNumber=accountNumber,
+                accountType=accountType,
+                active= active,
+                balance=balance,
+                currency= currency,
+            )
+        }
+
+
+
+
 
 
         composable(
