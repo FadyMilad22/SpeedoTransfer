@@ -113,7 +113,7 @@ fun MoreScreenDesign(
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {
@@ -163,6 +163,8 @@ fun MoreScreenDesign(
                 ArrowedSmallMenuItem(name = "logout", icon = R.drawable.logout, modifier = modifier.clickable {
                     logoutViewModel.logout(token)
                 })
+                Spacer(modifier = modifier.height(80.dp))
+
             }
 
             if (showBottomSheet) {

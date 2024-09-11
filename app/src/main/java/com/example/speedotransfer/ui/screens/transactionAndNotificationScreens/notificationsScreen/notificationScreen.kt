@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,11 +38,8 @@ import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
 import com.example.speedotransfer.data.repository.transaction.TransactionRepoImpl
-import com.example.speedotransfer.model.Transaction
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
-import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionViewModel
-import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionViewModelFactory
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyRegular14
 import com.example.speedotransfer.ui.theme.G100
@@ -55,13 +53,18 @@ import com.example.speedotransfer.ui.uiConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotificationScreenDesign(navController: NavController,
-                             accountId: Long,    // Passed from the previous screen
-                             startDate: String,  // Passed from the previous screen
-                             endDate: String,
-                             modifier: Modifier = Modifier) {
-    val notificationsViewModel: NotificationsViewModel = viewModel(factory = NotificationsViewModelFactory(
-        TransactionRepoImpl(APIClient)))
+fun NotificationScreenDesign(
+    navController: NavController,
+    accountId: Long,    // Passed from the previous screen
+    startDate: String,  // Passed from the previous screen
+    endDate: String,
+    modifier: Modifier = Modifier
+) {
+    val notificationsViewModel: NotificationsViewModel = viewModel(
+        factory = NotificationsViewModelFactory(
+            TransactionRepoImpl(APIClient)
+        )
+    )
 
     notificationsViewModel.fetchTransactionHistory(accountId, startDate, endDate)
 
@@ -81,7 +84,7 @@ fun NotificationScreenDesign(navController: NavController,
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {
@@ -98,30 +101,33 @@ fun NotificationScreenDesign(navController: NavController,
         },
         content = { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier
+                    .padding(paddingValues)
                     .padding(horizontal = 16.dp)
 
-    ) {
+            ) {
 
 
-        LazyColumn {
-            items(transactionHistory) {
-                NotificationMenuItem(
-                    accountId == it.recipientAccountId,
-                    it.amount.toString(),
-                    it.currency,
-                    if(accountId == it.senderAccountId) it.recipientAccountId.toString()  else it.senderAccountId.toString(),
-                    it.id.toString(),
-                    it.transactionDate
-                )
-                Spacer(modifier = modifier.padding(bottom = 16.dp))
+                LazyColumn {
+                    items(transactionHistory) {
+                        NotificationMenuItem(
+                            accountId == it.recipientAccountId,
+                            it.amount.toString(),
+                            it.currency,
+                            if (accountId == it.senderAccountId) it.recipientAccountId.toString() else it.senderAccountId.toString(),
+                            it.id.toString(),
+                            it.transactionDate
+                        )
+                        Spacer(modifier = modifier.padding(bottom = 16.dp))
+                    }
+                }
+
             }
+            Spacer(modifier = modifier.height(80.dp))
+
         }
-
-    }
-
+    )
 }
-    )}
 
 
 @Composable
@@ -130,7 +136,7 @@ fun NotificationMenuItem(
     amount: String,
     currency: String,
     name: String,
-    accountNumber: String,date:String,
+    accountNumber: String, date: String,
     modifier: Modifier = Modifier
 ) {
 
@@ -179,7 +185,10 @@ fun NotificationMenuItem(
             }
 
 
-            Column(modifier=modifier.padding(start = 16.dp), verticalArrangement = Arrangement.Center) {
+            Column(
+                modifier = modifier.padding(start = 16.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
 
                 Text(
                     text = "$direction Transaction",
@@ -190,13 +199,12 @@ fun NotificationMenuItem(
                     text = actionText,
                     style = BodyRegular14,
                     fontSize = 12.sp, lineHeight = 18.sp,
-                    color = G700
-                    , modifier = modifier.padding(end = 16.dp)
+                    color = G700, modifier = modifier.padding(end = 16.dp)
 
-                    )
+                )
                 Text(
                     text = date,
-                    style = BodyRegular14,lineHeight = 18.sp,
+                    style = BodyRegular14, lineHeight = 18.sp,
                     fontSize = 12.sp,
                     color = G100,
                 )
@@ -213,7 +221,7 @@ fun NotificationMenuItem(
 @Preview(showSystemUi = true)
 @Composable
 private fun NotificationScreenPreview() {
-  //  NotificationMenuItem(true,"1000","USD" , "Fady Milad", "4342","12 Jul 2024 09:00 PM")
+    //  NotificationMenuItem(true,"1000","USD" , "Fady Milad", "4342","12 Jul 2024 09:00 PM")
     // test code
 //    val transaction = Transaction(
 //        name = "Ahmed Mohamed",

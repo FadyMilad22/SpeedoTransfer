@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.Route.EDIT_PROFILE
-import com.example.speedotransfer.AppRoutes.Route.HOME
 import com.example.speedotransfer.AppRoutes.Route.PROFILE
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.ArrowedLargeMenuItem
@@ -46,7 +45,7 @@ fun SettingsScreen(navController: NavController,
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {

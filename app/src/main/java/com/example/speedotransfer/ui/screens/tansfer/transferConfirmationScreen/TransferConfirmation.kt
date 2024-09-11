@@ -39,7 +39,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.Route.CONFIRMED_TRANSACTION
 import com.example.speedotransfer.R
@@ -110,7 +109,7 @@ fun TransferConfirmationDesign(navController: NavController,
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {

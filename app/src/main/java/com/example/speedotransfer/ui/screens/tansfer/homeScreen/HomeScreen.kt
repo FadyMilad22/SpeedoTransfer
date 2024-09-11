@@ -18,8 +18,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -103,7 +105,7 @@ fun HomeScreen(
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 )
@@ -137,6 +139,8 @@ fun HomeScreen(
                         modifier = Modifier.padding(8.dp)
                     )
                 }
+//                Spacer(modifier = Modifier.height(32.dp))
+
 
             }
 
@@ -177,6 +181,8 @@ fun RecentTransactionsArea(navController: NavController,accountId: Long,startDat
 
             }
         }
+        Spacer(modifier = Modifier.height(32.dp))
+
     }
 
 }
@@ -206,7 +212,7 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
                         .align(Alignment.CenterVertically)
                         .background(color = P50, shape = RoundedCornerShape(8.dp))
                         .width(64.dp)
-                        .height(61.dp)
+                        .height(64.dp)
 
                 ) {
 
@@ -265,8 +271,8 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
 
             Text(
                 text = "${transaction.amount}${transaction.currency}",
-                style = BodyRegular14,
-                fontSize = 12.sp,
+                style = BodyMedium16,
+//                fontSize = 12.sp,
                 color = P300
             )
 

@@ -24,8 +24,6 @@ import com.example.speedotransfer.ui.elements.NotificationBanner
 import com.example.speedotransfer.ui.elements.SignTrailingText
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
-import com.example.speedotransfer.ui.theme.BodyRegular14
-import com.example.speedotransfer.ui.theme.D300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -35,6 +33,7 @@ import com.example.speedotransfer.data.repository.signIn.SignInRepoImpl
 import com.example.speedotransfer.ui.uiConstants
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.regex.Pattern
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,13 +42,25 @@ fun SignInScreen(
     modifier: Modifier = Modifier,
 
 ) {
+    // Validation functions
+    fun isValidPassword(password: String): Boolean {
+        val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%^&*]).{6,}$"
+        return Pattern.compile(passwordRegex).matcher(password).matches()
+    }
+
+    fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+        return Pattern.compile(emailRegex).matcher(email).matches()
+    }
 
     val context = LocalContext.current
     val sharedPreferences: SharedPreferences = context.getSharedPreferences("customerPrefs", Context.MODE_PRIVATE)
     val  signInViewModel: SignInViewModel = viewModel(factory = SignInViewModelFactory(
         SignInRepoImpl(APIClient),sharedPreferences))
 
-
+    var text by remember { mutableStateOf("") }
+    var isError by remember { mutableStateOf(false) }
+    var showError by remember { mutableStateOf(false) }
 
     // Observing StateFlow from ViewModel
     val signInState by signInViewModel.signInState.collectAsState()
@@ -58,12 +69,24 @@ fun SignInScreen(
     val isPasswordValid by signInViewModel.isPasswordValid.collectAsState()
     val customerState by signInViewModel.customerState.collectAsState() // Observing customer details
     var showPassword by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+    var emailError by remember { mutableStateOf(false) }
+// Check if both email and password meet validation criteria
+    val isFormValid by derivedStateOf {
+        password.length > 5 && email.isNotBlank() && isValidPassword(password) && isValidEmail(email)
+    }
+    val isPasswordLengthValid by derivedStateOf { password.length > 5 }
 
+
+    // Button enabled when both email and password are valid
+//    val isFormValid by derivedStateOf {
+//        email.isNotBlank() && password.isNotBlank() && isValidPassword(password)
+//    }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { CutomAppBarTitle(text = "Sign In") },
-                Modifier.background(brush = uiConstants.BRUSH2)
+                Modifier.background(brush = uiConstants.AUTH_BACKGROUND_COLOR)
             )
         },
         content = { paddingValues ->
@@ -115,15 +138,19 @@ fun SignInScreen(
                 )
                 Spacer(modifier = Modifier.height(64.dp))
 
-                val isFormValid by derivedStateOf {
-                    email.isNotBlank() && password.isNotBlank() && isPasswordValid
-                }
+
 
                 // Email TextField
                 SpeedoTextField(
                     labelText = "Email",
                     value = email,
-                    onValueChange = { signInViewModel.onEmailChange(it) },
+                    onValueChange = { signInViewModel.onEmailChange(it)
+                        showError = false  // Reset error on change
+                    },
+                    isError = showError && !isValidEmail(email),
+                    showError = showError,
+
+                    errorMessage = "Enter a valid email, e.g., example@domain.com.",
                     placeholderText = "Enter your email address",
                     icon = R.drawable.email,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -134,7 +161,13 @@ fun SignInScreen(
                 SpeedoTextField(
                     labelText = "Password",
                     value = password,
-                    onValueChange = { signInViewModel.onPasswordChange(it) },
+                    onValueChange = { signInViewModel.onPasswordChange(it)
+                        showError = false
+
+                    },
+                    isError = showError && !isValidPassword(password),
+                    showError = showError,
+                    errorMessage = "Password: 6+ chars,uppercase,lowercase,special character.",
                     placeholderText = "Enter your password",
                     icon = if (showPassword) R.drawable.eye_comp2 else R.drawable.eye_comp,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -143,24 +176,29 @@ fun SignInScreen(
                     onTrailingIconClick = { showPassword = !showPassword }
                 )
 
-                if (!isPasswordValid) {
-                    Text(
-                        text = "Password must be at least 6 characters, include one uppercase letter, one lowercase letter, and one special character.",
-                        color = D300,
-                        style = BodyRegular14,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
-                    )
-                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 // Sign In Button
                 SpeedoButton(
                     text = stringResource(R.string.sign_in_a),
-                    enabled = isFormValid,
+                    enabled = isPasswordLengthValid,
                     isTransparent = false,
-                    onClick = { signInViewModel.logIn() }
+
+                    onClick = {
+                        // Check email and password validation on click
+                        if (!isValidPassword(password) || !isValidEmail(email)) {
+                            showError = true
+                            passwordError = !isValidPassword(password)
+                            emailError = !isValidEmail(email)
+                        } else {
+                            // If valid, proceed with sign-in
+                            showError = false
+                            passwordError = false
+                            emailError = false
+                            signInViewModel.logIn()
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -170,6 +208,7 @@ fun SignInScreen(
                     answer = R.string.sign_up,
                     navController = navController,
                     distination = Route.SIGN_UP)
+                Spacer(modifier = Modifier.height(32.dp))
 
             }
         }

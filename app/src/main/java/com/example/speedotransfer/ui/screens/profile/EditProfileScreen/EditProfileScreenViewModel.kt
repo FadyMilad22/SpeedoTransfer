@@ -9,7 +9,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class EditProfileScreenViewModel(private val editProfileRepo: EditProfileRepo) : ViewModel() {
-
+    fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+        return email.matches(Regex(emailRegex))
+    }
+    // Regex pattern for password validation
+    private val passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W_]).{6,}$".toRegex()
     // StateFlow for handling the current state of the screen
     private val _editProfileState = MutableStateFlow<UpdateCustomerResponse?>(null)
     val editProfileState: StateFlow<UpdateCustomerResponse?> = _editProfileState

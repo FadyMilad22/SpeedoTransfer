@@ -346,7 +346,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 email = email,
                 birthDate = birthDate,
                 country = country,
-                dateCreated = createdDate
+                dateCreated = createdDate, token = "", bankAccount = ""
             )
         }
         composable(

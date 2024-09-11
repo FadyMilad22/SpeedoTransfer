@@ -95,7 +95,7 @@ fun TransactionDetailsScreen(
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {

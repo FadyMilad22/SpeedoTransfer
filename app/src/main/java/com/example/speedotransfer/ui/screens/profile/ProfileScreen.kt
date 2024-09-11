@@ -26,7 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.speedotransfer.AppRoutes.Route
-import com.example.speedotransfer.AppRoutes.Route.MORE
+import com.example.speedotransfer.AppRoutes.Route.PERSONAL_INFO
 import com.example.speedotransfer.AppRoutes.Route.SETTINGS
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.ArrowedLargeMenuItem
@@ -45,7 +45,9 @@ fun ProfileScreen(navController: NavController,
                   accountId: Long,    // Passed from the previous screen
                   name: String,  // Passed from the previous screen
                   email: String,    // Passed from the previous screen
-                  birthDate: String,    // Passed from the previous screen
+                  birthDate: String,
+    token:String,
+                  bankAccount:String,// Passed from the previous screen
                   country: String,       // Passed from the previous screen
 dateCreated :String,
                   modifier: Modifier = Modifier) {
@@ -59,7 +61,7 @@ dateCreated :String,
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {
@@ -121,7 +123,7 @@ dateCreated :String,
                     icon = R.drawable.user,
                     enableStroke = true,
                     modifier = modifier.clickable {
-                        navController.navigate(Route.PERSONAL_INFO)
+                        navController.navigate("$PERSONAL_INFO/${accountId}/${name}/${email}/${birthDate}/${country}/${bankAccount}")
                     }
                 )
                 ArrowedLargeMenuItem(
@@ -149,8 +151,7 @@ navController.navigate("${Route.PAYMENT_HISTORY}/${accountId}/${dateCreated}/${g
                     icon = R.drawable.favorite,
                     enableStroke = false,
                     modifier = modifier.clickable {
-                        navController.navigate(Route.FAVOURITES)
-                    }
+                        navController.navigate("${Route.FAVOURITES}/${token}")                    }
                 )
             }
         }

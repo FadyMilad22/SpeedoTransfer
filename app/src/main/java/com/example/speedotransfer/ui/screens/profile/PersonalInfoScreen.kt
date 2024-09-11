@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.Route.PROFILE
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
@@ -43,7 +43,7 @@ fun ProfileInfoScreen(navController: NavController,
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {
@@ -58,9 +58,7 @@ fun ProfileInfoScreen(navController: NavController,
                 },
             )
         },
-        bottomBar = {
 
-        },
         content = { paddingValues ->
             Column(
                 modifier = Modifier
@@ -95,6 +93,7 @@ fun ProfileInfoScreen(navController: NavController,
                     details = bankAccount,
                     enableStroke = false
                 )
+                Spacer(modifier = modifier.height(80.dp))
             }
 
         })
