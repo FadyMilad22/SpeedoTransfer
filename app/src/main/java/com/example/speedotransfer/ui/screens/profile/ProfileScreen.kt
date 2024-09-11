@@ -126,7 +126,7 @@ dateCreated :String,
                     icon = R.drawable.user,
                     enableStroke = true,
                     modifier = modifier.clickable {
-                        navController.navigate("$PERSONAL_INFO/${accountId}/${name}/${email}/${birthDate}/${country}/${accountId.toString()}")
+                        navController.navigate("${Route.PERSONAL_INFO}/${accountId}/${name}/${email}/${birthDate}/${country}/${accountId.toString()}")
                     }
                 )
                 ArrowedLargeMenuItem(

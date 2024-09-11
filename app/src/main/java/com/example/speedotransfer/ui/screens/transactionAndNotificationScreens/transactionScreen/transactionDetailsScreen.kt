@@ -120,20 +120,20 @@ fun TransactionDetailsScreen(
     ) {
                 TransferDoneSuccesfullyArea(
                     amount = transaction.amount.toString(),
-                    currency = transaction.currency
+                    currency = "EGP"
                 )
 
                 AccountsDetailsArea(
-                    senderName = transaction.senderAccountId.toString(),
-                    receiverName = transaction.recipientAccountId.toString(),
-                    senderAccountNumberSuffix = transaction.senderAccountId.toString(),
-                    receiverAccountNumberSuffix = transaction.recipientAccountId.toString()
+                    senderName = transaction.fromAccount,
+                    receiverName = transaction.toAccount,
+                    senderAccountNumberSuffix = transaction.fromAccount.substring(8),
+                    receiverAccountNumberSuffix = transaction.toAccount.substring(8)
                 )
                 TransactionInfoFields(
                     amount = transaction.amount.toString(),
-                    currency = transaction.currency,
-                    reference = transaction.id.toString(),
-                    date = transaction.transactionDate
+                    currency = "EGP",
+                    reference = "4968509674583",
+                    date = transaction.timestamp
                 )
 
 }

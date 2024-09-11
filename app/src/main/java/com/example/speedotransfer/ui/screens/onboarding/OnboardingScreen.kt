@@ -68,6 +68,8 @@ fun OnboardingScreen(navController: NavController,modifier: Modifier=Modifier) {
 //        }
 //    }
 
+
+
     Scaffold(
         topBar = {
             TopAppBar(

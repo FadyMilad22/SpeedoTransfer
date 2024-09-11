@@ -37,6 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.AppRoutes.AppNavHost
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.Route.ACCOUNT_INFO
+import com.example.speedotransfer.AppRoutes.Route.COMPLETE_SIGN_UP
 import com.example.speedotransfer.AppRoutes.Route.MORE
 import com.example.speedotransfer.AppRoutes.getTopLevelRoute
 import com.example.speedotransfer.model.Account
@@ -80,7 +81,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {
-                        if (currentDestination != Route.SPLASH && currentDestination != Route.SIGN_IN && currentDestination != Route.SIGN_UP && currentDestination != Route.COMPLETE_SIGN_UP && currentDestination != Route.ON_BOARDING) {
+                        if (currentDestination != Route.SPLASH && currentDestination != Route.SIGN_IN && currentDestination != Route.SIGN_UP && currentDestination != "$COMPLETE_SIGN_UP/{name}/{email}/{password}" && currentDestination != Route.ON_BOARDING) {
                             BottomNavBar(navController, sharedPreferences)
                         }
                     },

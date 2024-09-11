@@ -217,7 +217,7 @@ fun SignUpScreen(
 
                         //     navController.navigate(Route.COMPLETE_SIGN_UP)
                         }
-                    }
+
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))

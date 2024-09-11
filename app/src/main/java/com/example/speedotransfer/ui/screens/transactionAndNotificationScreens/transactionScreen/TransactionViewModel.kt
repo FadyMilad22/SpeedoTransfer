@@ -36,7 +36,7 @@ class TransactionViewModel(private val transferRepo: TransactionRepo):ViewModel(
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                val history = transferRepo.getTransactionHistory(accountId, startDate, endDate)
+                val history = transferRepo.getTransactionHistory()
                 _transactionHistory.value = history
             } catch (e: Exception) {
                 _errorMessage.value = "Error fetching transaction history: ${e.message}"

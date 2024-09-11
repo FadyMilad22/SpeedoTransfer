@@ -68,7 +68,6 @@ object Route {
     const val CHANGE_PASSWORD = "changePassword"
     const val SETTINGS = "settings"
     const val ACCOUNT_INFO = "accountInfo"
-
     const val COMPLETE_SIGN_UP = "completeSignUp"
 }
 
