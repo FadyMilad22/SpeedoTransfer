@@ -1,6 +1,8 @@
 package com.example.speedotransfer.data.repository.transfer
 
+import android.util.Log
 import com.example.speedotransfer.data.network.RemoteDataSource
+import com.example.speedotransfer.model.ResponseHistory
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.TransferRequest
 import com.example.speedotransfer.model.TransferResponse
@@ -9,9 +11,9 @@ class TransferRepoImpl(private val remoteDataSource: RemoteDataSource) : Transfe
 
 
     // Repo function to get transaction history by account ID, start date, and end date
-    override suspend fun getTransactionHistory(): List<TransactionResponse> {
-
-      return remoteDataSource.getTransactionHistory()
+    override suspend fun getTransactionHistory(token :String): ResponseHistory{//List<TransactionResponse> {
+Log.d("API trans" , token)
+      return remoteDataSource.getTransactionHistory(token )
 
     }
 
@@ -35,9 +37,10 @@ class TransferRepoImpl(private val remoteDataSource: RemoteDataSource) : Transfe
 
 
     // Repo function to get transaction details by ID
-    override suspend fun getTransactionById(transactionId: Long): TransactionResponse {
+    override suspend fun getTransactionById(token: String,transactionId: Long): TransactionResponse {
 
-        return remoteDataSource.getTransactionById(transactionId)
+
+        return remoteDataSource.getTransactionById(token,transactionId)
 
     }
 

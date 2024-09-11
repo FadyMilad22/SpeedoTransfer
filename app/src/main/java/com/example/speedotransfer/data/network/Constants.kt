@@ -13,7 +13,7 @@ object Constants {
     const val CREATE_ACCOUNT_ENDPOINT = "/api/account"
     const val GET_ACCOUNT_BY_ID_ENDPOINT = "/api/account/{accountId}"
     const val TRANSACTION_HISTORY_ENDPOINT = "/api/transactions/history"
-    const val TRANSFER_MONEY_ENDPOINT = "/api/transfer"
+    const val TRANSFER_MONEY_ENDPOINT = "/api/transfer/account"
     const val GET_TRANSACTION_BY_ID_ENDPOINT = "/api/{id}"
     const val UPDATE_CUSTOMER_BY_EMAIL_ENDPOINT = "/api/customer/update"
     const val LOGOUT_ENDPOINT = "/api/auth/logout"

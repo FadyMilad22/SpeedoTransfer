@@ -50,7 +50,7 @@ fun SettingsScreen(navController: NavController,
 
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack("$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{createdDate}", inclusive = false)
+                        navController.popBackStack("$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{createdDate}/{token}", inclusive = false)
 
                     }) {
                         CustomAppBarIcon(

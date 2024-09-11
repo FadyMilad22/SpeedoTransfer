@@ -13,6 +13,7 @@ import com.example.speedotransfer.model.FavouriteRequest
 import com.example.speedotransfer.model.FavouriteResponse
 import com.example.speedotransfer.model.LogoutResponse
 import com.example.speedotransfer.model.RegisterCustomerResponse
+import com.example.speedotransfer.model.ResponseHistory
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.model.UpdateCustomerRequest
@@ -60,10 +61,10 @@ interface APIService {
 //    ): List<TransactionResponse>
 
     @GET(Constants.TRANSACTION_HISTORY_ENDPOINT)
-    suspend fun getTransactionHistory(
+    suspend fun getTransactionHistory( @Header("Authorization") token: String,
         @Query(Constants.PAGE) page: Int = 0,
         @Query(Constants.SIZE) size: Int = 10
-    ): List<TransactionResponse>
+    ):ResponseHistory
 
 
     // APIHelper function to transfer money
@@ -72,7 +73,8 @@ interface APIService {
 
     // APIHelper function to get transaction by ID
     @GET(Constants.GET_TRANSACTION_BY_ID_ENDPOINT)
-    suspend fun getTransactionById(@Path(Constants.TRANSACTION_ID_PATH) transactionId: Long): TransactionResponse
+    suspend fun getTransactionById(@Header("Authorization") token: String,
+                                    @Path(Constants.TRANSACTION_ID_PATH) transactionId: Long): TransactionResponse
 
 
     @PUT(Constants.UPDATE_CUSTOMER_BY_EMAIL_ENDPOINT)

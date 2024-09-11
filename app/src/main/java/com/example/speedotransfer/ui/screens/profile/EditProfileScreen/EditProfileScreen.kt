@@ -124,7 +124,7 @@ fun EditProfileScreen(
         // Show the success toast and navigate back to the profile screen
         Toast.makeText(context, "Successfully", Toast.LENGTH_SHORT).show()
         navController.popBackStack(
-            "$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{createdDate}",
+            "$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{createdDate}/{token}",
             inclusive = false
         ) // Navigate back to the profile screen
     }

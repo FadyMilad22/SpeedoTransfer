@@ -16,7 +16,7 @@ import com.example.speedotransfer.AppRoutes.Route.SIGN_IN
 import com.example.speedotransfer.data.network.APIClient
 import com.example.speedotransfer.data.repository.logout.LogoutRepoImpl
 
-private const val INACTIVITY_TIMEOUT = 2 * 60 * 1000L // 2 minutes
+private const val INACTIVITY_TIMEOUT = 2 * 90 * 1000L // 2 minutes
 
 @Composable
 fun InactivityHandler(

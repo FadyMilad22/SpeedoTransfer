@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.notificationsScreen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,11 +20,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -45,6 +48,7 @@ import com.example.speedotransfer.ui.theme.BodyRegular14
 import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.G900
+import com.example.speedotransfer.ui.theme.Heading3
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
 import com.example.speedotransfer.ui.theme.P75
@@ -66,7 +70,14 @@ fun NotificationScreenDesign(
         )
     )
 
-    notificationsViewModel.fetchTransactionHistory(accountId, startDate, endDate)
+    LaunchedEffect(Unit) {
+
+        Log.d("API Notifiy UI", endDate)
+
+        notificationsViewModel.fetchTransactionHistory("",endDate)
+
+
+    }
 
 
     val transactionHistory by notificationsViewModel.notificationHistory.collectAsState()
@@ -107,20 +118,28 @@ fun NotificationScreenDesign(
 
             ) {
 
-
+                transactionHistory.let { it ->
+                    if (it.isNotEmpty()) {
                 LazyColumn {
-//                    items(transactionHistory) {
-//                        NotificationMenuItem(
-//                            accountId == it.recipientAccountId,
-//                            it.amount.toString(),
-//                            it.currency,
-//                            if (accountId == it.senderAccountId) it.recipientAccountId.toString() else it.senderAccountId.toString(),
-//                            it.id.toString(),
-//                            it.transactionDate
-//                        )
-//                        Spacer(modifier = modifier.padding(bottom = 16.dp))
-//                    }
+                    items(transactionHistory) {
+                        NotificationMenuItem(
+                            accountId.toString() == it.toAccount,
+                            it.amount.toString(),
+                            "EGP",
+                            if (accountId.toString() == it.fromAccount) it.toAccount else it.fromAccount,
+                            it.transactionId.toString(),
+                            it.timestamp
+                        )
+                        Spacer(modifier = modifier.padding(bottom = 16.dp))
+                    }
+                } } else {
+
+                        Text(text = "No Transactions Done yet", style = Heading3 , color = P300 ,modifier=Modifier.align(Alignment.CenterHorizontally).padding(24.dp))
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+
+                    }
                 }
+
 
             }
             Spacer(modifier = modifier.height(80.dp))

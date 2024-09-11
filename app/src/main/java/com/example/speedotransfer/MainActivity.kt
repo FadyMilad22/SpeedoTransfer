@@ -2,6 +2,7 @@ package com.example.speedotransfer
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -111,6 +112,7 @@ fun BottomNavBar(
 
     val authToken = sharedPreferences.getString("auth_token", "") ?: ""
     val tokenType = sharedPreferences.getString("token_type", "") ?: ""
+    Log.d("API TransactionUI pref","$tokenType $authToken")
 
 
     Card(
@@ -180,11 +182,11 @@ fun BottomNavBar(
 
                             navController.navigate(
                                 when (screen.name) {
-                                    "Home" -> { "${Route.HOME}/${account.id.toLong()}/${account.createdAt}}/${getCurrentDate()}/${account.balance.toFloat()}/${customer.name}/${account.currency}"
+                                    "Home" -> { "${Route.HOME}/${account.id.toLong()}/${authToken}}/${tokenType}/${account.balance.toFloat()}/${customer.name}/${account.currency}"
                                     }
                                     "Transfer" -> { "${Route.BEGIN_TRANSACTION}/${customer.name}/${account.accountNumber}/${account.currency}/${tokenType} ${authToken}"
                                     }
-                                    "Transactions" -> { "${Route.TRANSACTIONS_LIST}/${account.id.toLong()}/${account.createdAt}/${getCurrentDate()}"
+                                    "Transactions" -> { "${Route.TRANSACTIONS_LIST}/${account.id.toLong()}/${authToken}/${tokenType}"
                                     }
                                     "My card" ->{"$ACCOUNT_INFO/${account.accountDescription}/${account.accountName}/${account.accountNumber}/${account.accountType}/${account.active}/${account.balance}/${account.currency}"}
                                     else -> { "$MORE/${customer.id.toLong()}/${customer.name}/${customer.email}/${customer.birthDate}/Egypt/${tokenType} ${authToken}/${account.createdAt}" }

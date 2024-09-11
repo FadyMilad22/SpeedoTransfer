@@ -72,6 +72,7 @@ fun TransferConfirmationDesign(navController: NavController,
     modifier: Modifier = Modifier
 ) {
 
+
     val transferViewModel: TransferViewModel = viewModel(
         factory = TransferViewModelFactory(
             TransferRepoImpl(
@@ -173,6 +174,7 @@ sendNotification(context,senderName,"Transaction","Transaction was done Successf
 
 
 
+
                     }
 
 
@@ -187,7 +189,7 @@ sendNotification(context,senderName,"Transaction","Transaction was done Successf
                     )
 
                 }
-                Spacer(modifier = Modifier.padding(bottom = 16.dp))
+                Spacer(modifier = Modifier.padding(bottom = 64.dp))
             }
 
 

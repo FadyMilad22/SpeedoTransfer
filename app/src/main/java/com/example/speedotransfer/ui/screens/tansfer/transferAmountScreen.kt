@@ -104,6 +104,8 @@ fun TransferAmountDesign(
                     token,// Using the collected list of favourites
                     modifier
                 )
+
+            Spacer(modifier = modifier.height(64.dp))
             }
         }
     )

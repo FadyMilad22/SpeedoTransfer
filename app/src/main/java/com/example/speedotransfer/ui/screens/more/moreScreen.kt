@@ -152,7 +152,7 @@ fun MoreScreenDesign(
                     )
                 ArrowedSmallMenuItem(name = "Profile", icon = R.drawable.user, modifier = modifier.clickable {
                     navController.navigate(
-                        route = "${Route.PROFILE}/${accountId}/${name}/$email/$birthDate/${country}/${createdDate}")
+                        route = "${Route.PROFILE}/${accountId}/${name}/$email/$birthDate/${country}/${createdDate}/${token}")
 
                 })
                 ArrowedSmallMenuItem(

@@ -13,6 +13,7 @@ import com.example.speedotransfer.model.FavouriteRequest
 import com.example.speedotransfer.model.FavouriteResponse
 import com.example.speedotransfer.model.LogoutResponse
 import com.example.speedotransfer.model.RegisterCustomerResponse
+import com.example.speedotransfer.model.ResponseHistory
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.model.UpdateCustomerRequest
@@ -28,8 +29,8 @@ interface RemoteDataSource {
     suspend fun createAccount(newAccountData: CreateAccountRequest): CreateAccountResponse
     suspend fun getAccountById(accountId: Long): AccountDetailsResponse
     suspend fun transferMoney(transferRequest: Transfer): Transfer
-    suspend fun getTransactionHistory(): List<TransactionResponse>
-    suspend fun getTransactionById(transactionId: Long): TransactionResponse
+    suspend fun getTransactionHistory(token: String): ResponseHistory// List<TransactionResponse>
+    suspend fun getTransactionById(token :String ,transactionId: Long): TransactionResponse
     suspend fun updateCustomerByEmail(email: String, updateRequest: UpdateCustomerRequest): UpdateCustomerResponse
     suspend fun logout(token: String): LogoutResponse
     suspend fun getCustomerByEmail(authToken: String,email: String): CustomerResponse

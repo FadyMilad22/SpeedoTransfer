@@ -28,13 +28,16 @@ class HomeViewModel(private val transferRepo: TransferRepo) : ViewModel() {
    val errorMessage: StateFlow<String?> = _errorMessage
 
    // Fetch transaction history
-   fun fetchTransactionHistory(accountId: Long, startDate: String, endDate: String) {
+   fun fetchTransactionHistory(token :String) {
+
+
+
       viewModelScope.launch {
          _isLoading.value = true
          _errorMessage.value = null
          try {
-            val history = transferRepo.getTransactionHistory()
-            _transactionHistory.value = history
+            val history = transferRepo.getTransactionHistory(token)
+            _transactionHistory.value = history.transactions
          } catch (e: Exception) {
             _errorMessage.value = "Error fetching transaction history: ${e.message}"
          } finally {
@@ -45,12 +48,12 @@ class HomeViewModel(private val transferRepo: TransferRepo) : ViewModel() {
 
 
    // Fetch transaction details by ID
-   fun getTransactionById(transactionId: Long) {
+   fun getTransactionById(token :String, transactionId: Long) {
       viewModelScope.launch {
          _isLoading.value = true
          _errorMessage.value = null
          try {
-            val transaction = transferRepo.getTransactionById(transactionId)
+            val transaction = transferRepo.getTransactionById(token,transactionId)
             _transactionDetails.value = transaction
          } catch (e: Exception) {
             _errorMessage.value = "Error fetching transaction details: ${e.message}"

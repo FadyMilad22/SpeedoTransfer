@@ -14,6 +14,7 @@ import com.example.speedotransfer.model.FavouriteRequest
 import com.example.speedotransfer.model.FavouriteResponse
 import com.example.speedotransfer.model.LogoutResponse
 import com.example.speedotransfer.model.RegisterCustomerResponse
+import com.example.speedotransfer.model.ResponseHistory
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.model.UpdateCustomerRequest
@@ -54,14 +55,14 @@ object APIClient : RemoteDataSource {
     }
 
     // APIClient function to get transaction history by account ID, start date, and end date
-    override suspend fun getTransactionHistory(): List<TransactionResponse> {
-        return APIHelper.callable.getTransactionHistory(0,10)
+    override suspend fun getTransactionHistory(token: String): ResponseHistory {//List<TransactionResponse> {
+        return APIHelper.callable.getTransactionHistory(token,0,10)
     }
 
 
     // APIClient function to get transaction details by ID
-    override suspend fun getTransactionById(transactionId: Long): TransactionResponse {
-        return APIHelper.callable.getTransactionById(transactionId)
+    override suspend fun getTransactionById(token: String,transactionId: Long): TransactionResponse {
+        return APIHelper.callable.getTransactionById(token,transactionId)
     }
 
 

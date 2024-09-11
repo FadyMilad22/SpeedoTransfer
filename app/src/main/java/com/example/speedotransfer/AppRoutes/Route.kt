@@ -25,7 +25,6 @@ import com.example.speedotransfer.AppRoutes.Route.SETTINGS
 import com.example.speedotransfer.AppRoutes.Route.SIGN_IN
 import com.example.speedotransfer.AppRoutes.Route.SIGN_UP
 import com.example.speedotransfer.AppRoutes.Route.SPLASH
-import com.example.speedotransfer.model.Client
 import com.example.speedotransfer.ui.screens.SplashScreen
 import com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen.TransferConfirmationDesign
 import com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInScreen
@@ -41,7 +40,6 @@ import com.example.speedotransfer.ui.screens.onboarding.OnboardingScreen
 import com.example.speedotransfer.ui.screens.profile.AccountInfoScreen
 import com.example.speedotransfer.ui.screens.profile.EditProfileScreen.EditProfileScreen
 import com.example.speedotransfer.ui.screens.tansfer.HomeScreen
-import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.notificationsScreen.NotificationScreenDesign
 import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.notificationsScreen.NotificationScreenDesign
 import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionDetailsScreen
 import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionsScreen
@@ -113,8 +111,8 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             HomeScreen(
                 navController = navController,
                 accountId = accountId,
-                startDate = startDate,
-                endDate = endDate,
+                authToken = startDate,
+                tokenType = endDate,
                 balance = balance,
                 name = name,
                 currency = currency
@@ -328,7 +326,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
 
 
         composable(
-            route = "$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{createdDate}",
+            route = "$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{createdDate}/{token}",
             arguments = listOf(
                 navArgument("accountId") { type = NavType.LongType },
                 navArgument("name") { type = NavType.StringType },
@@ -336,9 +334,9 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 navArgument("birthDate") { type = NavType.StringType },
                 navArgument("country") { type = NavType.StringType },
                 navArgument("createdDate") { type = NavType.StringType },
+                navArgument("token") { type = NavType.StringType }
             )
         )
-
         {
             val accountId = it.arguments?.getLong("accountId")!!
             val name = it.arguments?.getString("name")!!
@@ -346,6 +344,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             val birthDate = it.arguments?.getString("birthDate")!!
             val country = it.arguments?.getString("country")!!
             val createdDate = it.arguments?.getString("createdDate")!!
+            val token = it.arguments?.getString("token")!!
             ProfileScreen(
                 navController = navController,
                 accountId = accountId,
@@ -353,7 +352,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 email = email,
                 birthDate = birthDate,
                 country = country,
-                dateCreated = createdDate, token = "", bankAccount = ""
+                dateCreated = createdDate, token = token, bankAccount = ""
             )
         }
         composable(
@@ -493,13 +492,16 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
 
 
         composable(
-            route = "${Route.TRANSACTION_DETAILS}/{transactionId}",
-            arguments = listOf(navArgument("transactionId") { type = NavType.LongType })
+            route = "${Route.TRANSACTION_DETAILS}/{transactionId}/{token}",
+            arguments = listOf(navArgument("transactionId") { type = NavType.LongType },
+            navArgument("token") { type = NavType.StringType })
         ) { backStackEntry ->
-            val transactionId = backStackEntry.arguments?.getLong("transactionId") ?: 0L
+            val transactionId = backStackEntry.arguments?.getLong("transactionId")!!
+            val token = backStackEntry.arguments?.getString("token")!!
             TransactionDetailsScreen(
                 navController = navController,
-                transactionId = transactionId // Pass the ID to fetch transaction details
+                transactionId = transactionId,
+                token = token
             )
         }
 

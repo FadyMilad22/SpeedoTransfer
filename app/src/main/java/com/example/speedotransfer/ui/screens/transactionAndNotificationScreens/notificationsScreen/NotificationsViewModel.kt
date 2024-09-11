@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.notificationsScreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.repository.transaction.TransactionRepo
@@ -27,13 +28,15 @@ class NotificationsViewModel(private val transferRepo: TransactionRepo):ViewMode
     val errorMessage: StateFlow<String?> = _errorMessage
 
     // Fetch transaction history
-    fun fetchTransactionHistory(accountId: Long, startDate: String, endDate: String) {
+    fun fetchTransactionHistory( startDate: String, endDate: String) {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                val history = transferRepo.getTransactionHistory()
-                _notificationHistory.value = history
+                val history = transferRepo.getTransactionHistory(endDate)
+                Log.d("API Notifiy VM", endDate)
+
+                _notificationHistory.value = history.transactions
             } catch (e: Exception) {
                 _errorMessage.value = "Error fetching notification history: ${e.message}"
             } finally {

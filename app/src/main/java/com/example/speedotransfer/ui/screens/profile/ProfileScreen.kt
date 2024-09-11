@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.profile
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -145,7 +146,9 @@ dateCreated :String,
                     enableStroke = true,
                     modifier = modifier.clickable {
 //                        navController.navigate()
-navController.navigate("${Route.PAYMENT_HISTORY}/${accountId}/${dateCreated}/${getCurrentDate()}")
+navController.navigate("${Route.PAYMENT_HISTORY}/${accountId}/${dateCreated}/${token}")
+                        Log.d("API Notifiy Profile Screen Nav",token)
+
                     }
                 )
                 ArrowedLargeMenuItem(

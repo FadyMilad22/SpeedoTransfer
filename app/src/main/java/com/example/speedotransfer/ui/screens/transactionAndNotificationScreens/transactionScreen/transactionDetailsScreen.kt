@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -61,6 +62,7 @@ import com.example.speedotransfer.ui.uiConstants
 fun TransactionDetailsScreen(
     navController: NavController,
     transactionId : Long ,
+    token:String,
 
 //    senderName: String,
 //    receiverName: String,
@@ -79,8 +81,12 @@ fun TransactionDetailsScreen(
 
     val transactionDetails by transactionViewModel.transactionDetails.collectAsState()
 
-    LaunchedEffect(transactionId) {
-        transactionViewModel.getTransactionById(transactionId)
+
+
+    LaunchedEffect(Unit) {
+        transactionViewModel.getTransactionById(token = token,transactionId)
+        Log.d("API Notify details", "$token")
+
     }
 
     val scrollState = rememberScrollState()
@@ -299,7 +305,7 @@ fun AccountsDetailsArea(
 @Composable
 private fun TransactionDetailsScreenPreview() {
 
-    TransactionDetailsScreen(
-    rememberNavController(),12L)
+  //  TransactionDetailsScreen(
+//    rememberNavController(),12L)
 
 }

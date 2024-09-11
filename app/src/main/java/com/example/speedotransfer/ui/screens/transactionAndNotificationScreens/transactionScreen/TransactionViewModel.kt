@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.repository.transaction.TransactionRepo
@@ -31,13 +32,14 @@ class TransactionViewModel(private val transferRepo: TransactionRepo):ViewModel(
     val errorMessage: StateFlow<String?> = _errorMessage
 
     // Fetch transaction history
-    fun fetchTransactionHistory(accountId: Long, startDate: String, endDate: String) {
+    fun fetchTransactionHistory(startDate: String, endDate: String) {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                val history = transferRepo.getTransactionHistory()
-                _transactionHistory.value = history
+                val history = transferRepo.getTransactionHistory("$endDate $startDate")
+Log.d("API TransactionUI","inside : $endDate $startDate")
+                _transactionHistory.value = history.transactions
             } catch (e: Exception) {
                 _errorMessage.value = "Error fetching transaction history: ${e.message}"
             } finally {
@@ -48,12 +50,13 @@ class TransactionViewModel(private val transferRepo: TransactionRepo):ViewModel(
 
 
     // Fetch transaction details by ID
-    fun getTransactionById(transactionId: Long) {
+    fun getTransactionById(token :String,transactionId: Long) {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                val transaction = transferRepo.getTransactionById(transactionId)
+                val transaction = transferRepo.getTransactionById(token,transactionId)
+                Log.d("API Notify Details VM",token)
                 _transactionDetails.value = transaction
             } catch (e: Exception) {
                 _errorMessage.value = "Error fetching transaction details: ${e.message}"

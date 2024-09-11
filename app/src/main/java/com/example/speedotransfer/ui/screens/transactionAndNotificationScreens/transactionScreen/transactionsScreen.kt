@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,11 +20,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -43,6 +46,7 @@ import com.example.speedotransfer.data.network.APIClient
 import com.example.speedotransfer.data.repository.transaction.TransactionRepoImpl
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
+import com.example.speedotransfer.ui.screens.tansfer.RecentTransactionsArea
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyMedium16
 import com.example.speedotransfer.ui.theme.BodyRegular14
@@ -52,6 +56,7 @@ import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.G200
 import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.G900
+import com.example.speedotransfer.ui.theme.Heading3
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
 import com.example.speedotransfer.ui.theme.TitleSemiBold
@@ -74,7 +79,9 @@ fun TransactionsScreen(
             )
         )
     )
-    transactionViewModel.fetchTransactionHistory(accountId, startDate, endDate)
+
+        transactionViewModel.fetchTransactionHistory(startDate, endDate)
+    Log.d("API TransactionUIF" , "$endDate $startDate")
 
 
     val transactionHistory by transactionViewModel.transactionHistory.collectAsState()
@@ -112,9 +119,10 @@ fun TransactionsScreen(
             Column(
                 modifier = Modifier
                     .padding(paddingValues)
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp).fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
 
 
                 Text(
@@ -123,27 +131,52 @@ fun TransactionsScreen(
                     color = G900,
                     modifier = modifier.padding(bottom = 16.dp)
                 )
+                transactionHistory.let {
+                    if (it.isNotEmpty()) {
+                        // Log.d("API Test SignIN", customerState.toString())
 
-                LazyColumn {
-                    items(transactionHistory) {
-                        TransactionsMenuItem(
-                            accountId.toString() == it.toAccount,
-                            true,
-                            it.amount.toString(),
-                            "EGP",
-                            it.transactionId.toString(),
-                            if (accountId.toString() == it.fromAccount) it.toAccount else it.fromAccount,
-                            it.timestamp,
-                            "Successful Transaction",
-                            onClick = {
-                                // Navigate to the details screen by transaction ID
-                                navController.navigate("${Route.TRANSACTION_DETAILS}/${it.transactionId}")
+                        LazyColumn {
+                            items(transactionHistory) {
+                                TransactionsMenuItem(
+                                    accountId.toString() == it.toAccount,
+                                    true,
+                                    it.amount.toString(),
+                                    "EGP",
+                                    it.transactionId.toString(),
+                                    if (accountId.toString() == it.fromAccount) it.toAccount else it.fromAccount,
+                                    it.timestamp,
+                                    "Successful Transaction",
+                                    onClick = {
+                                        // Navigate to the details screen by transaction ID
+                                        navController.navigate("${Route.TRANSACTION_DETAILS}/${it.transactionId}/$endDate $startDate")
+                                        Log.d("API Details @ transaction Screen","$endDate $startDate")
+
+                                    }
+                                )
+                                Spacer(modifier = modifier.padding(bottom = 16.dp))
                             }
-                        )
-                        Spacer(modifier = modifier.padding(bottom = 16.dp))
-                    }
 
+                        }
+
+
+                    } else {
+
+                        Text(text = "No Transactions Done yet", style = Heading3 , color = P300 ,modifier=Modifier.padding(24.dp))
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+
+                    }
                 }
+
+
+//
+//                if (isLoading) {
+//
+//                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+//
+//                }
+
+
+
 
 
 

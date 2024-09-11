@@ -123,7 +123,7 @@ modifier: Modifier = Modifier
                 navigationIcon = {
                     IconButton(onClick = {
                         navController.popBackStack(
-                            "$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}",
+                            "$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{token}",
                             inclusive = false
                         ) // Navigate back to the profile screen
 
