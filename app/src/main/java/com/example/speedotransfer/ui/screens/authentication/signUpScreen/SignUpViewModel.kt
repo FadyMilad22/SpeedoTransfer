@@ -1,10 +1,14 @@
 package com.example.speedotransfer.ui.screens.authentication.signUpScreen
 
 import RegisterCustomerRequest
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.repository.singUp.SignUpRepo
+import com.example.speedotransfer.model.RegisterCustomerResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -22,6 +26,7 @@ class SignUpViewModel(private val signUpRepo: SignUpRepo) : ViewModel() {
     val country = MutableStateFlow("")  // Added country
     val birthDate = MutableStateFlow("")  // Added birthDate
 
+    val response = MutableStateFlow<RegisterCustomerResponse?>(null)
 
     // Regex pattern for password validation
     private val passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W_]).{6,}$".toRegex()
@@ -61,10 +66,10 @@ class SignUpViewModel(private val signUpRepo: SignUpRepo) : ViewModel() {
 
 
     // Function to handle the registerCustomer action
-    fun registerCustomer() {
-        if (isFormValid()) {
+    fun registerCustomer(context: Context) {
+      //  if (isFormValid()) {
             viewModelScope.launch(Dispatchers.IO) {
-                try {
+try {
                     val request = RegisterCustomerRequest(
                         name = fullName.value,
                         email = email.value,
@@ -73,11 +78,18 @@ class SignUpViewModel(private val signUpRepo: SignUpRepo) : ViewModel() {
                         country = country.value,  // Pass country in the request
                         birthDate = birthDate.value  // Pass birthDate in the request
                     )
-                    val response =signUpRepo.registerCustomer(request)
-Log.d("sign up","createdAt: ${response.createdAt}")                  // Handle success (you can update the state here)
-                } catch (e: Exception) {
+
+                Log.d("API Test SignUP","createdAt: $request")
+
+                     response.value =signUpRepo.registerCustomer(request)
+         } catch (e: Exception) {
+
+
+
+    Log.d("API Test SignUP","catch ")
+                ////    Log.d("API Test SignUP"," ${e.message}\n ${e.localizedMessage}")
                     // Handle error (you can update the state here)
-                }
+             //   }
             }
         }
     }

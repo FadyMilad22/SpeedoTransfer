@@ -80,7 +80,15 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         // Add the routes
         composable(route = SPLASH) { SplashScreen(navController ,modifier=modifier) }
         composable(route = ON_BOARDING) { OnboardingScreen(navController) }
-        composable(route = COMPLETE_SIGN_UP) { CompleteSignUpScreen(navController) }
+        composable(route = "$COMPLETE_SIGN_UP/{name}/{email}/{password}", arguments = listOf(
+            navArgument("name") { type = NavType.StringType },
+            navArgument("email") { type = NavType.StringType },
+            navArgument("password") { type = NavType.StringType })){
+            val name = it.arguments?.getString("name")!!
+            val email = it.arguments?.getString("email")!!
+            val password = it.arguments?.getString("password")!!
+            CompleteSignUpScreen(navController, name , email , password)
+        }
        // composable(route = HOME) { HomeScreen(navController = navController ,modifier=modifier) }
         // You can add other routes here in the future
         // Define the route as a string constant

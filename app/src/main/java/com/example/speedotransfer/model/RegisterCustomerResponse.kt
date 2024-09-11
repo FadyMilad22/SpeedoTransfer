@@ -1,7 +1,10 @@
+package com.example.speedotransfer.model
+
 data class RegisterCustomerResponse(
-        val id: Long,           // Customer ID
-        val name: String,       // Customer name
-        val email: String,      // Customer email
-        val createdAt: String,  // Registration timestamp
-        val updatedAt: String   // Update timestamp
-    )
+    val createdAt: String,
+    val details: String,
+    val httpStatus: String,
+    val message: String,
+    val timestamp: String,
+    val updatedAt: String
+)

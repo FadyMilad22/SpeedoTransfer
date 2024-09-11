@@ -7,12 +7,13 @@ import CustomerDetailsResponse
 import SignInRequest
 import SignInResponse
 import RegisterCustomerRequest
-import RegisterCustomerResponse
+import android.util.Log
 import com.example.speedotransfer.model.CustomerResponse
 import com.example.speedotransfer.model.DeleteFavouriteResponse
 import com.example.speedotransfer.model.FavouriteRequest
 import com.example.speedotransfer.model.FavouriteResponse
 import com.example.speedotransfer.model.LogoutResponse
+import com.example.speedotransfer.model.RegisterCustomerResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.model.UpdateCustomerRequest
@@ -25,6 +26,7 @@ object APIClient : RemoteDataSource {
 
     // APIClient function to register a new customer
     override suspend fun registerCustomer(registerRequest: RegisterCustomerRequest): RegisterCustomerResponse {
+        Log.d("API Test SignUP @Client","@client  ")
         return APIHelper.callable.registerCustomer(registerRequest)
     }
     // APIClient function to log in and generate JWT token
@@ -52,8 +54,8 @@ object APIClient : RemoteDataSource {
     }
 
     // APIClient function to get transaction history by account ID, start date, and end date
-    override suspend fun getTransactionHistory(accountId: Long, startDate: String, endDate: String): List<TransactionResponse> {
-        return APIHelper.callable.getTransactionHistory(accountId, startDate, endDate)
+    override suspend fun getTransactionHistory(): List<TransactionResponse> {
+        return APIHelper.callable.getTransactionHistory(0,10)
     }
 
 
@@ -75,8 +77,10 @@ object APIClient : RemoteDataSource {
 
 
     // API Client function to get customer details by email
-    override suspend fun getCustomerByEmail(email: String): CustomerResponse {
-        return APIHelper.callable.getCustomerByEmail(email)
+    override suspend fun getCustomerByEmail(authToken: String,email: String): CustomerResponse {
+        Log.d("API Test SignIN","Bearer $authToken")
+
+        return APIHelper.callable.getCustomerByEmail("Bearer $authToken",email=email)
     }
 
     // API Client function to get all favourites for the logged-in customer

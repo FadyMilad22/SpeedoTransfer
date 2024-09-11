@@ -1,7 +1,9 @@
 package com.example.speedotransfer.ui.screens.authentication.signInScreen
 
 import SignInRequest
+import SignInResponse
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.repository.signIn.SignInRepo
@@ -13,7 +15,6 @@ import kotlinx.coroutines.launch
 
 class SignInViewModel(private val signInRepo: SignInRepo, private val sharedPreferences: SharedPreferences ) : ViewModel() {
 
-
     // StateFlow for handling the current state of the screen
     private val _signInState = MutableStateFlow<SignInState>(SignInState.Idle)
     val signInState: StateFlow<SignInState> = _signInState
@@ -22,6 +23,8 @@ class SignInViewModel(private val signInRepo: SignInRepo, private val sharedPref
     private val _customerState = MutableStateFlow<CustomerResponse?>(null)
     val customerState: StateFlow<CustomerResponse?> = _customerState
 
+    private val _response = MutableStateFlow<SignInResponse?>(null)
+    val response: StateFlow<SignInResponse?> = _response
 
     // MutableStateFlow for email and password
     var email = MutableStateFlow("")
@@ -47,56 +50,46 @@ class SignInViewModel(private val signInRepo: SignInRepo, private val sharedPref
         return passwordPattern.matches(password)
     }
 
-    // Function to log in the user
-//    fun logIn() {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            try {
-//                _signInState.value = SignInState.Loading
-//                val request = SignInRequest(email.value, password.value)
-//                val response = signInRepo.signIn(request)
-//                _signInState.value = SignInState.Success("Login successful: ${response.message}")
-//            } catch (e: Exception) {
-//                _signInState.value = SignInState.Error("Login failed: ${e.message}")
-//            }
-//        }
-//    }
-    // Function to log in the user
+    // NEW: Function to log in the user and ensure fetch happens sequentially
     fun logIn() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _signInState.value = SignInState.Loading
                 val request = SignInRequest(email.value, password.value)
-                val response = signInRepo.signIn(request)
+
+                _response.value = signInRepo.signIn(request)
 
                 sharedPreferences.edit().apply {
-                    putString("auth_token", response.token)
-                    putString("token_type", response.tokenType)
+                    putString("auth_token", _response.value?.token)
+                    putString("token_type", _response.value?.tokenType)
                     apply() // Apply changes to SharedPreferences
                 }
-                // If login is successful, fetch customer details by email
-                fetchCustomerByEmail(email.value)
-                _signInState.value = SignInState.Success("Login successful: ${response.message}")
+
+                // NEW: After successful login, fetch customer details
+                _signInState.value = SignInState.Success("Login successful: ${response.value?.message}")
+
+                // Ensure fetch only happens if login is successful
+
+
             } catch (e: Exception) {
                 _signInState.value = SignInState.Error("Login failed: ${e.message}")
             }
         }
     }
 
-
-
-
-    private fun fetchCustomerByEmail(email: String) {
+    // NEW: Fetch customer details only after login is successful
+     fun fetchCustomerByEmail(authToken:String,email: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val customer = signInRepo.getCustomerByEmail(email)
-                _customerState.value = customer // Store customer details
-                saveCustomerDataToPreferences(customer)
+
+                _customerState.value = signInRepo.getCustomerByEmail(authToken,email)// Store customer details
             } catch (e: Exception) {
                 _signInState.value = SignInState.Error("Failed to fetch customer details: ${e.message}")
             }
         }
     }
-    private fun saveCustomerDataToPreferences(customer: CustomerResponse) {
+
+    fun saveCustomerDataToPreferences(customer: CustomerResponse) {
         sharedPreferences.edit().apply {
             // Save customer data
             putString("customer_birthDate", customer.birthDate)
@@ -122,7 +115,6 @@ class SignInViewModel(private val signInRepo: SignInRepo, private val sharedPref
             putInt("account_id", account.id)
             putString("account_updatedAt", account.updatedAt)
 
-
             apply() // Apply changes to SharedPreferences
         }
     }
@@ -133,6 +125,7 @@ class SignInViewModel(private val signInRepo: SignInRepo, private val sharedPref
 sealed class SignInState {
     object Idle : SignInState()
     object Loading : SignInState()
+
     data class Success(val message: String) : SignInState()
     data class Error(val message: String) : SignInState()
 }

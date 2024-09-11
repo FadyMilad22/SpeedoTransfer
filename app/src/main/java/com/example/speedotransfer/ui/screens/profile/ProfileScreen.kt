@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.Route.MORE
+import com.example.speedotransfer.AppRoutes.Route.PERSONAL_INFO
 import com.example.speedotransfer.AppRoutes.Route.SETTINGS
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.ArrowedLargeMenuItem
@@ -114,14 +115,15 @@ dateCreated :String,
                         color = G900
                     )
                 }
-
+/*TODO account Id replace with account number
+* */
                 ArrowedLargeMenuItem(
                     name = "Personal information",
                     descritipn = "Your information",
                     icon = R.drawable.user,
                     enableStroke = true,
                     modifier = modifier.clickable {
-                        navController.navigate(Route.PERSONAL_INFO)
+                        navController.navigate("$PERSONAL_INFO/${accountId}/${name}/${email}/${birthDate}/${country}/${accountId.toString()}")
                     }
                 )
                 ArrowedLargeMenuItem(

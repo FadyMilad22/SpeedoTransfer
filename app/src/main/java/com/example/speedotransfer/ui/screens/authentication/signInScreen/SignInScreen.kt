@@ -2,6 +2,8 @@ package com.example.speedotransfer.ui.screens.authentication.signInScreen
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -35,21 +37,18 @@ import com.example.speedotransfer.data.repository.signIn.SignInRepoImpl
 import com.example.speedotransfer.ui.uiConstants
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.math.sin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-
 ) {
-
     val context = LocalContext.current
     val sharedPreferences: SharedPreferences = context.getSharedPreferences("customerPrefs", Context.MODE_PRIVATE)
-    val  signInViewModel: SignInViewModel = viewModel(factory = SignInViewModelFactory(
-        SignInRepoImpl(APIClient),sharedPreferences))
-
-
+    val signInViewModel: SignInViewModel = viewModel(factory = SignInViewModelFactory(
+        SignInRepoImpl(APIClient), sharedPreferences))
 
     // Observing StateFlow from ViewModel
     val signInState by signInViewModel.signInState.collectAsState()
@@ -58,6 +57,48 @@ fun SignInScreen(
     val isPasswordValid by signInViewModel.isPasswordValid.collectAsState()
     val customerState by signInViewModel.customerState.collectAsState() // Observing customer details
     var showPassword by remember { mutableStateOf(false) }
+
+
+    val response by signInViewModel.response.collectAsState()  // Observe response state
+
+    LaunchedEffect(response) {
+        response?.let {
+            if (it.status == "ACCEPTED") {
+                // Show success toast
+                Log.d("API Test SignIN",response!!.token)
+                signInViewModel.fetchCustomerByEmail(response!!.token,email)
+
+
+                // Navigate to the Sign-In screen
+            } else {
+                Toast.makeText(context, "Server Error: Try Again Later", Toast.LENGTH_SHORT).show()
+
+
+            }
+        }
+    }
+
+    LaunchedEffect(customerState) {
+        customerState?.let {
+            if (it.id != -1 ) {
+                // Show success toast
+              signInViewModel.saveCustomerDataToPreferences(it)
+                Log.d("API Test SignIN", customerState.toString())
+
+                navController.navigate(
+                    "${Route.HOME}/${it.accounts[0].id.toLong()}/${it.accounts[0].createdAt}/${getCurrentDate()}/${it.accounts[0].balance.toFloat()}/${it.name}/${it.accounts[0].currency}"
+                )
+
+                // Navigate to the Sign-In screen
+               // navController.popBackStack(Route.SIGN_IN, inclusive = false)
+            } else {
+                Toast.makeText(context, "Server Error: Try Again Later", Toast.LENGTH_SHORT).show()
+
+
+            }
+        }
+    }
+
 
     Scaffold(
         topBar = {
@@ -89,21 +130,11 @@ fun SignInScreen(
                             message = (signInState as SignInState.Success).message,
                             onCloseClick = { }
                         )
-                        customerState?.let { customer ->
-                            // Navigate to home when customer details are available
-                            LaunchedEffect(Unit) {
-
-                                navController.navigate(
-                                    "${Route.HOME}/${customer.accounts[0].id.toLong()}/${customer.accounts[0].createdAt}/${getCurrentDate()}/${customer.accounts[0].balance.toFloat()}/${customer.name}/${customer.accounts[0].currency}"
-                                )
-                            }
-                        }
-
-
-
                     }
                     else -> Unit
                 }
+
+
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -160,7 +191,7 @@ fun SignInScreen(
                     text = stringResource(R.string.sign_in_a),
                     enabled = isFormValid,
                     isTransparent = false,
-                    onClick = { signInViewModel.logIn() }
+                    onClick = { signInViewModel.logIn() } // Call login when clicked
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -169,12 +200,13 @@ fun SignInScreen(
                     question = R.string.already_have_an_account_q,
                     answer = R.string.sign_up,
                     navController = navController,
-                    distination = Route.SIGN_UP)
-
+                    distination = Route.SIGN_UP
+                )
             }
         }
     )
 }
+
 fun getCurrentDate(): String {
     val currentDate = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")

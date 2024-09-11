@@ -1,6 +1,7 @@
 package com.example.speedotransfer.ui.screens.authentication.signUpScreen
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -36,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -60,11 +64,18 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+data class CountryData(
+    val iconResId: Int,  // Resource ID for the flag icon
+    val countryName: String,
+    val countryCode : String
+)
+
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompleteSignUpScreen(
     navController: NavController,
+    name :String,email :String ,password :String,
     modifier: Modifier = Modifier
 ) {
 
@@ -82,6 +93,45 @@ fun CompleteSignUpScreen(
     val sheetState = rememberModalBottomSheetState()
     var selectedCountry by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+
+    val response by signUpViewModel.response.collectAsState()  // Observe response state
+
+    LaunchedEffect(response) {
+        response?.let {
+            if (it.httpStatus == "CREATED") {
+                // Show success toast
+                Toast.makeText(context, "Account Created Successfully", Toast.LENGTH_SHORT).show()
+
+                // Navigate to the Sign-In screen
+                navController.popBackStack(Route.SIGN_IN, inclusive = false)
+            } else if(it.httpStatus == "500 INTERNAL_SERVER_ERROR"){
+                Toast.makeText(context, "Server Error: Try Again Later", Toast.LENGTH_SHORT).show()
+
+
+            }
+        }
+    }
+
+
+    val countries = listOf(
+        CountryData(
+            iconResId = R.drawable.united_states, // Flag resource for the US
+            countryName = "United States", countryCode = "US"
+        ),
+        CountryData(
+            iconResId = R.drawable.uk_flag, // Replace with UK flag resource
+            countryName = "United Kindom"
+            , countryCode = "UK"
+        ),
+        CountryData(
+            iconResId = R.drawable.eg_flag, // Replace with Egypt flag resource
+            countryName = "Egypt"
+            , countryCode = "EG"
+        )
+    )
+
 
     // Fix: Only show Bottom Sheet if Date Picker is not shown
     if (showBottomSheet && !isDatePickerShown) {
@@ -93,18 +143,21 @@ fun CompleteSignUpScreen(
             scrimColor = Color.Black.copy(alpha = 0.8f),
             dragHandle = null
         ) {
+
             LazyColumn(
                 modifier = modifier
                     .fillMaxWidth()
                     .height(400.dp)
                     .padding(16.dp)
             ) {
-                items(5) {
+                items(countries.size) { index ->
+                    val country = countries[index]
                     CountryRow(
-                        countryName = "United States",
-                        isSelected = selectedCountry == "United States",
+                        icon = country.iconResId,  // Circular flag icon
+                        countryName = country.countryName,
+                        isSelected = selectedCountry == country.countryCode,  // FIX: Correct property name
                         onCountrySelected = {
-                            selectedCountry = it
+                            selectedCountry = country.countryCode  // FIX: Set the selected country code properly
                             scope.launch {
                                 showBottomSheet = false
                                 sheetState.hide()
@@ -146,25 +199,31 @@ fun CompleteSignUpScreen(
                     text = "Speedo Transfer",
                     style = TitleSemiBold,
                     textAlign = TextAlign.Center,
-                    modifier = modifier.fillMaxWidth().height(29.dp)
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .height(29.dp)
                 )
 
                 Text(
                     text = "Welcome to Banque Misr!",
                     style = Heading3,
                     textAlign = TextAlign.Center,
-                    modifier = modifier.fillMaxWidth().padding(top = 66.dp)
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(top = 66.dp)
                 )
 
                 Text(
                     text = "Let's Complete your Profile",
                     style = BodyRegular16,
                     textAlign = TextAlign.Center,
-                    modifier = modifier.fillMaxWidth().padding(top = 16.dp, bottom = 32.dp)
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 32.dp)
                 )
 
                 // Fix: Don't show DatePicker if Bottom Sheet is active
-                SpeedoTextField(
+                SpeedoTextField(isEnabled = false,
                     labelText = "Country",
                     value = selectedCountry,
                     onValueChange = { selectedCountry = it },
@@ -186,7 +245,7 @@ fun CompleteSignUpScreen(
                 // Show Date Picker
                 if (isDatePickerShown) {
                     DatePickerChooser(onConfirm = {
-                        val dateFormatted = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                        val dateFormatted = SimpleDateFormat("yyyy-MM-dd", Locale.US)
                         dateMillis = it.selectedDateMillis!!
                         dateOfBirth = dateFormatted.format(dateMillis)
                         isDatePickerShown = false
@@ -196,7 +255,7 @@ fun CompleteSignUpScreen(
                 }
 
                 // Fix: Don't show Bottom Sheet if DatePicker is active
-                SpeedoTextField(
+                SpeedoTextField(isEnabled = false,
                     labelText = "Date Of Birth",
                     value = dateOfBirth,
                     onValueChange = { dateOfBirth = it },
@@ -218,17 +277,20 @@ fun CompleteSignUpScreen(
                 }
 
                 SpeedoButton(
-                    text = "Continue",
+                    text = "Sign Up",
                     enabled = isFormValid,
                     isTransparent = false,
                     onClick = {
                         signUpViewModel.onCountryChange(selectedCountry)
                         signUpViewModel.onBirthDateChange(dateOfBirth)
-                        signUpViewModel.registerCustomer()
+                        signUpViewModel.onFullNameChange(name)
+                        signUpViewModel.onEmailChange(email)
+                        signUpViewModel.onPasswordChange(password)
+                        signUpViewModel.onConfirmPasswordChange(password)
+                        signUpViewModel.registerCustomer(context)
+                  //      Toast.makeText(context, "Account Created Successfully", Toast.LENGTH_SHORT).show();
+                    //    navController.popBackStack(Route.SIGN_IN, inclusive = false )
 
-                        navController.navigate(Route.SIGN_IN) {
-                            popUpTo(Route.COMPLETE_SIGN_UP) { inclusive = true }
-                        }
                     }
                 )
 
@@ -269,6 +331,8 @@ fun DatePickerChooser(
         DatePicker(state = datePickerState)
     }
 }
+
+
 
 //@Preview(showBackground = true)
 //@Composable

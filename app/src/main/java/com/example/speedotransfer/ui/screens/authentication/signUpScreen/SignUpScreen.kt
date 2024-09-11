@@ -183,12 +183,12 @@ fun SignUpScreen(
 
                 // Sign Up Button
                 SpeedoButton(
-                    text = "Sign Up",
+                    text = "Continue",
                     enabled =  signUpViewModel.isFormValid() && confirmPassword.isNotBlank() && isConfirmPasswordValid && confirmPassword==password,
                     isTransparent = false,
                     onClick = {
 
-                        navController.navigate(Route.COMPLETE_SIGN_UP)}  // Calling registerCustomer on click
+                        navController.navigate("${Route.COMPLETE_SIGN_UP}/${fullName}/${email}/${password}")}  // Calling registerCustomer on click
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))

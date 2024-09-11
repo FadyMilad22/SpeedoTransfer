@@ -7,7 +7,7 @@ import com.example.speedotransfer.model.TransferResponse
 interface TransferRepo {
 
 
-    suspend fun getTransactionHistory(accountId: Long, startDate: String, endDate: String): List<TransactionResponse>
+    suspend fun getTransactionHistory(): List<TransactionResponse>
     suspend fun getTransactionById(transactionId: Long): TransactionResponse
     suspend fun transferMoney(transferRequest: TransferRequest): TransferResponse
 

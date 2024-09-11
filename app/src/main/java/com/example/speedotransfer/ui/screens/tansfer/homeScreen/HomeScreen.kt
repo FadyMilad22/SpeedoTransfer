@@ -172,7 +172,7 @@ fun RecentTransactionsArea(navController: NavController,accountId: Long,startDat
             items(transactionList) {
                 TransactionItem(transaction = it , onClick = {
                     // Navigate to the details screen by transaction ID
-                    navController.navigate("${Route.TRANSACTION_DETAILS}/${it.id}")
+                    navController.navigate("${Route.TRANSACTION_DETAILS}/${it.transactionId}")
                 })
 
             }
@@ -237,13 +237,13 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
                 ) {
 
                     Text(
-                        text = transaction.senderAccountId.toString(), style = BodyMedium14, color = G900
+                        text = "From :${ transaction.fromAccount}", style = BodyMedium14, color = G900
                     )
 
 
 
                     Text(
-                        text = "${transaction.description}",//"${transaction.cardType} . ${transaction.cardNumber}",
+                        text = "To :${transaction.toAccount}",//"${transaction.cardType} . ${transaction.cardNumber}",
                         style = BodyRegular14,
                         fontSize = 12.sp,
                         color = G700
@@ -253,7 +253,7 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
 
 
                     Text(
-                        text = "${transaction.transactionDate} - ${transaction.status}",
+                        text = "${transaction.timestamp} - ${transaction.status}",
                         style = BodyRegular14,
                         fontSize = 12.sp,
                         color = G100
@@ -264,7 +264,7 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
             }
 
             Text(
-                text = "${transaction.amount}${transaction.currency}",
+                text = "${transaction.amount} EGP",
                 style = BodyRegular14,
                 fontSize = 12.sp,
                 color = P300

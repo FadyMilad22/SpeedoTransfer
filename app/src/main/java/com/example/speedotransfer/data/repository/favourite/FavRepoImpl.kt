@@ -5,7 +5,7 @@ import com.example.speedotransfer.model.DeleteFavouriteResponse
 import com.example.speedotransfer.model.FavouriteRequest
 import com.example.speedotransfer.model.FavouriteResponse
 
-class FavRepoImpl (remoteDataSource: RemoteDataSource) :FavRepo{
+class FavRepoImpl (private val remoteDataSource: RemoteDataSource) :FavRepo{
 
 
     // Repo function to get all favourites for the logged-in customer

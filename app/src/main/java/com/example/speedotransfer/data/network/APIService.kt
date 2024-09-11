@@ -7,12 +7,12 @@ import CustomerDetailsResponse
 import SignInRequest
 import SignInResponse
 import RegisterCustomerRequest
-import RegisterCustomerResponse
 import com.example.speedotransfer.model.CustomerResponse
 import com.example.speedotransfer.model.DeleteFavouriteResponse
 import com.example.speedotransfer.model.FavouriteRequest
 import com.example.speedotransfer.model.FavouriteResponse
 import com.example.speedotransfer.model.LogoutResponse
+import com.example.speedotransfer.model.RegisterCustomerResponse
 import com.example.speedotransfer.model.TransactionResponse
 import com.example.speedotransfer.model.Transfer
 import com.example.speedotransfer.model.UpdateCustomerRequest
@@ -51,13 +51,20 @@ interface APIService {
 
     // Retrofit API interface
 
-    // APIHelper function to get transaction history
+//    // APIHelper function to get transaction history
+//    @GET(Constants.TRANSACTION_HISTORY_ENDPOINT)
+//    suspend fun getTransactionHistory(
+//        @Query(Constants.ACCOUNT_ID_QUERY) accountId: Long,
+//        @Query(Constants.START_DATE_QUERY) startDate: String,
+//        @Query(Constants.END_DATE_QUERY) endDate: String
+//    ): List<TransactionResponse>
+
     @GET(Constants.TRANSACTION_HISTORY_ENDPOINT)
     suspend fun getTransactionHistory(
-        @Query(Constants.ACCOUNT_ID_QUERY) accountId: Long,
-        @Query(Constants.START_DATE_QUERY) startDate: String,
-        @Query(Constants.END_DATE_QUERY) endDate: String
+        @Query(Constants.PAGE) page: Int = 0,
+        @Query(Constants.SIZE) size: Int = 10
     ): List<TransactionResponse>
+
 
     // APIHelper function to transfer money
     @POST(Constants.TRANSFER_MONEY_ENDPOINT)
@@ -82,8 +89,7 @@ interface APIService {
 
 
     @GET(Constants.GET_CUSTOMER_BY_EMAIL_ENDPOINT)
-    suspend fun getCustomerByEmail(
-        @Path("email") email: String
+    suspend fun getCustomerByEmail(@Header("Authorization")authToken: String,@Path("email") email: String
     ): CustomerResponse
 
     @GET(Constants.GET_ALL_FAVOURITES_ENDPOINT)
