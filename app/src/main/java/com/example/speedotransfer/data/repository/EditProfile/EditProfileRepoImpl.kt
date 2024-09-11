@@ -5,7 +5,7 @@ import com.example.speedotransfer.model.HttpStatusCode
 import com.example.speedotransfer.model.UpdateCustomerRequest
 import com.example.speedotransfer.model.UpdateCustomerResponse
 
-class EditProfileRepoImpl(remoteDataSource: RemoteDataSource) : EditProfileRepo {
+class EditProfileRepoImpl(private val remoteDataSource: RemoteDataSource) : EditProfileRepo {
     override suspend fun updateCustomerByEmail(email: String, updateRequest: UpdateCustomerRequest): UpdateCustomerResponse {
         // Mocked object for testing purposes
         val mockResponse = UpdateCustomerResponse(

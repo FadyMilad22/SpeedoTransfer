@@ -32,7 +32,7 @@ class NotificationsViewModel(private val transferRepo: TransactionRepo):ViewMode
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                val history = transferRepo.getTransactionHistory(accountId, startDate, endDate)
+                val history = transferRepo.getTransactionHistory()
                 _notificationHistory.value = history
             } catch (e: Exception) {
                 _errorMessage.value = "Error fetching notification history: ${e.message}"

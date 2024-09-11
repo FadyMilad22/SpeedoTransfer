@@ -60,6 +60,12 @@ import com.example.speedotransfer.ui.uiConstants
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
+data class CountryData(
+    val iconResId: Int,  // Resource ID for the flag icon
+    val countryName: String,
+    val countryCode :String
+)
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,7 +96,28 @@ fun EditProfileScreen(
     val dateOfBirth by editProfileViewModel.dateOfBirth.collectAsState()
     var country by remember {
         mutableStateOf("EGY")
+
+
     }
+
+    val countries = listOf(
+        CountryData(
+            iconResId = R.drawable.united_states, // Flag resource for the US
+            countryName = "United States"
+            , countryCode = "US"
+        ),
+        CountryData(
+            iconResId = R.drawable.uk_flag, // Replace with UK flag resource
+            countryName = "United Kingdom"
+            , countryCode = "UK"
+        ),
+        CountryData(
+            iconResId = R.drawable.eg_flag, // Replace with Egypt flag resource
+            countryName = "Egypt"
+            , countryCode = "EG"
+        )
+    )
+
     val context = LocalContext.current  // To show the toast
 
     if (updateState?.httpStatusCode?.is2xxSuccessful == true) {
@@ -121,19 +148,21 @@ fun EditProfileScreen(
             scrimColor = Color.Black.copy(alpha = 0.8f),
             dragHandle = null
         ) {
+
             LazyColumn(
                 modifier = modifier
                     .fillMaxWidth()
                     .height(400.dp)
                     .padding(16.dp)
             ) {
-                items(5) {
+                items(countries.size) { index ->
+                    val country = countries[index]
                     CountryRow(
-
-                        countryName = "United States",
-                        isSelected = selectedCountry == "United States",
+                        icon = country.iconResId,  // Circular flag icon
+                        countryName = country.countryName,
+                        isSelected = selectedCountry == country.countryCode,  // FIX: Correct property name
                         onCountrySelected = {
-                            selectedCountry = it
+                            selectedCountry = country.countryCode  // FIX: Set the selected country code properly
                             scope.launch {
                                 showBottomSheet = false
                                 sheetState.hide()
@@ -143,6 +172,7 @@ fun EditProfileScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
+
         }
     }
 

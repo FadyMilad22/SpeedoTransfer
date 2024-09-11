@@ -127,17 +127,17 @@ fun TransactionsScreen(
                 LazyColumn {
                     items(transactionHistory) {
                         TransactionsMenuItem(
-                            accountId == it.recipientAccountId,
+                            accountId.toString() == it.toAccount,
                             true,
                             it.amount.toString(),
-                            it.currency,
-                            it.id.toString(),
-                            if (accountId == it.senderAccountId) it.recipientAccountId.toString() else it.senderAccountId.toString(),
-                            it.transactionDate,
-                            it.description ?: "N/A",
+                            "EGP",
+                            it.transactionId.toString(),
+                            if (accountId.toString() == it.fromAccount) it.toAccount else it.fromAccount,
+                            it.timestamp,
+                            "Successful Transaction",
                             onClick = {
                                 // Navigate to the details screen by transaction ID
-                                navController.navigate("${Route.TRANSACTION_DETAILS}/${it.id}")
+                                navController.navigate("${Route.TRANSACTION_DETAILS}/${it.transactionId}")
                             }
                         )
                         Spacer(modifier = modifier.padding(bottom = 16.dp))

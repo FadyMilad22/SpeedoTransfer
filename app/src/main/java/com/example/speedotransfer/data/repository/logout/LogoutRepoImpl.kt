@@ -3,7 +3,7 @@ package com.example.speedotransfer.data.repository.logout
 import com.example.speedotransfer.data.network.RemoteDataSource
 import com.example.speedotransfer.model.LogoutResponse
 
-class LogoutRepoImpl(remoteDataSource: RemoteDataSource) : LogoutRepo {
+class LogoutRepoImpl(private val remoteDataSource: RemoteDataSource) : LogoutRepo {
 
     // Repo function to log out the user
     override suspend fun logout(token: String): LogoutResponse {

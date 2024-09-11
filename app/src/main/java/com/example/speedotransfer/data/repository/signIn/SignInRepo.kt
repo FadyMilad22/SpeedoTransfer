@@ -7,5 +7,5 @@ import com.example.speedotransfer.model.CustomerResponse
 interface SignInRepo {
 
     suspend fun signIn(signInRequest: SignInRequest): SignInResponse
-    suspend fun getCustomerByEmail(email: String): CustomerResponse
+    suspend fun getCustomerByEmail(authToken :String,email: String): CustomerResponse
 }

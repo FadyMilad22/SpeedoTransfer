@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.elements
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ fun CountryRow(
     countryName: String,
     isSelected: Boolean,
     onCountrySelected: (String) -> Unit,
+    @DrawableRes icon : Int,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -39,7 +41,7 @@ fun CountryRow(
         ){
             Icon(
 
-                painter = painterResource(id = R.drawable.united_states),
+                painter = painterResource(id = icon),
                 contentDescription = countryName,
                 modifier = Modifier
                     .size(28.dp)

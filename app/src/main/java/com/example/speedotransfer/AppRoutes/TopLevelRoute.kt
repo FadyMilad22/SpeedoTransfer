@@ -1,6 +1,7 @@
 package com.example.speedotransfer.AppRoutes
 
 import androidx.annotation.DrawableRes
+import com.example.speedotransfer.AppRoutes.Route.ACCOUNT_INFO
 import com.example.speedotransfer.AppRoutes.Route.MORE
 import com.example.speedotransfer.R
 
@@ -37,7 +38,7 @@ fun getTopLevelRoute(): List<TopLevelRoute> {
             R.drawable.history1
         )
     )
-    bottomNavigationRoutes.add(TopLevelRoute("My cards", Route.HOME, R.drawable.cards1))
+    bottomNavigationRoutes.add(TopLevelRoute("My card", "$ACCOUNT_INFO/{accountDescription}/{accountName}/{accountNumber}/{accountType}/{active}/{balance}/{currency}", R.drawable.cards1))
     bottomNavigationRoutes.add(
         TopLevelRoute(
             "More",

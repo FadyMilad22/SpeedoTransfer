@@ -36,6 +36,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.AppRoutes.AppNavHost
 import com.example.speedotransfer.AppRoutes.Route
+import com.example.speedotransfer.AppRoutes.Route.ACCOUNT_INFO
+import com.example.speedotransfer.AppRoutes.Route.COMPLETE_SIGN_UP
 import com.example.speedotransfer.AppRoutes.Route.MORE
 import com.example.speedotransfer.AppRoutes.getTopLevelRoute
 import com.example.speedotransfer.model.Account
@@ -79,7 +81,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {
-                        if (currentDestination != Route.SPLASH && currentDestination != Route.SIGN_IN && currentDestination != Route.SIGN_UP && currentDestination != Route.COMPLETE_SIGN_UP && currentDestination != Route.ON_BOARDING) {
+                        if (currentDestination != Route.SPLASH && currentDestination != Route.SIGN_IN && currentDestination != Route.SIGN_UP && currentDestination != "$COMPLETE_SIGN_UP/{name}/{email}/{password}" && currentDestination != Route.ON_BOARDING) {
                             BottomNavBar(navController, sharedPreferences)
                         }
                     },
@@ -184,7 +186,8 @@ fun BottomNavBar(
                                     }
                                     "Transactions" -> { "${Route.TRANSACTIONS_LIST}/${account.id.toLong()}/${account.createdAt}/${getCurrentDate()}"
                                     }
-                                    else -> { "$MORE/${customer.id.toLong()}/${customer.name}}/${customer.email}/${customer.birthDate}/{Egypt}/${tokenType} ${authToken}/${account.createdAt}" }
+                                    "My card" ->{"$ACCOUNT_INFO/${account.accountDescription}/${account.accountName}/${account.accountNumber}/${account.accountType}/${account.active}/${account.balance}/${account.currency}"}
+                                    else -> { "$MORE/${customer.id.toLong()}/${customer.name}/${customer.email}/${customer.birthDate}/Egypt/${tokenType} ${authToken}/${account.createdAt}" }
                                 }
                             ){
 //                                "${Route.HOME}/$accountId/$startDate/$endDate/${balance.toFloat()}/$name/$currency"){

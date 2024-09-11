@@ -204,17 +204,20 @@ fun SignUpScreen(
 
                 // Sign Up Button
                 SpeedoButton(
-                    text = "Sign Up",
-                    enabled =  isPasswordLengthValid &&email.isNotBlank()&&fullName.isNotBlank() ,
+                    text = "Continue",
+                    enabled =  signUpViewModel.isFormValid() && confirmPassword.isNotBlank() && isConfirmPasswordValid && confirmPassword==password,
                     isTransparent = false,
                     onClick = {
+
                         // Trigger validation after clicking sign-up
                         showError = true
                         if (signUpViewModel.isFormValid()) {
                             // Navigate to next screen if form is valid
-                            navController.navigate(Route.COMPLETE_SIGN_UP)
+                            navController.navigate("${Route.COMPLETE_SIGN_UP}/${fullName}/${email}/${password}")}  // Calling registerCustomer on click
+
+                        //     navController.navigate(Route.COMPLETE_SIGN_UP)
                         }
-                    }
+
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))

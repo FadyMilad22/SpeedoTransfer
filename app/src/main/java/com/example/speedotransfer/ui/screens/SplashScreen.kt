@@ -68,21 +68,21 @@ fun SplashScreen(navController: NavController, modifier: Modifier = Modifier) {
             )
         )
 
-        // Navigate based on whether onboarding is complete or not
-//        val sharedPreferences = navController.context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-//        val isOnboardingComplete = sharedPreferences.getBoolean("onboarding_complete", false)
-//
-//        if (isOnboardingComplete) {
-//            // Navigate to Login if onboarding is completed
-//            navController.navigate(Route.SIGN_IN) {
-//                popUpTo(Route.SPLASH) { inclusive = true }
-//            }
-//        } else {
-//            // Navigate to Onboarding if onboarding is not complete
-//            navController.navigate(Route.ON_BOARDING) {
-//                popUpTo(Route.SPLASH) { inclusive = true }
-//            }
-//        }
+     //    Navigate based on whether onboarding is complete or not
+        val sharedPreferences = navController.context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val isOnboardingComplete = sharedPreferences.getBoolean("onboarding_complete", false)
+
+        if (isOnboardingComplete) {
+            // Navigate to Login if onboarding is completed
+            navController.navigate(Route.SIGN_IN) {
+                popUpTo(Route.SPLASH) { inclusive = true }
+            }
+        } else {
+            // Navigate to Onboarding if onboarding is not complete
+            navController.navigate(Route.ON_BOARDING) {
+                popUpTo(Route.SPLASH) { inclusive = true }
+            }
+        }
 
          val   currency = "EGP"
          val  transferAmount = 1000
@@ -119,7 +119,7 @@ fun SplashScreen(navController: NavController, modifier: Modifier = Modifier) {
 //        val active = true
 //        val balance = 11
 //        val currency = "xxxx0000"
-        navController.navigate(route = ON_BOARDING)
+      //  navController.navigate(route = ON_BOARDING)
 
 //        navController.navigate(
 //            "$MORE/${accountId}/${name}/${email}/${birthDate}/${country}/${token}"        )

@@ -109,17 +109,17 @@ fun NotificationScreenDesign(
 
 
                 LazyColumn {
-                    items(transactionHistory) {
-                        NotificationMenuItem(
-                            accountId == it.recipientAccountId,
-                            it.amount.toString(),
-                            it.currency,
-                            if (accountId == it.senderAccountId) it.recipientAccountId.toString() else it.senderAccountId.toString(),
-                            it.id.toString(),
-                            it.transactionDate
-                        )
-                        Spacer(modifier = modifier.padding(bottom = 16.dp))
-                    }
+//                    items(transactionHistory) {
+//                        NotificationMenuItem(
+//                            accountId == it.recipientAccountId,
+//                            it.amount.toString(),
+//                            it.currency,
+//                            if (accountId == it.senderAccountId) it.recipientAccountId.toString() else it.senderAccountId.toString(),
+//                            it.id.toString(),
+//                            it.transactionDate
+//                        )
+//                        Spacer(modifier = modifier.padding(bottom = 16.dp))
+//                    }
                 }
 
             }

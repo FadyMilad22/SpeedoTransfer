@@ -51,6 +51,7 @@ import com.example.speedotransfer.ui.screens.tansfer.homeScreen.HomeViewModelFac
 import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyMedium16
 import com.example.speedotransfer.ui.theme.BodyRegular14
+import com.example.speedotransfer.ui.theme.BodyRegular16
 import com.example.speedotransfer.ui.theme.D300
 import com.example.speedotransfer.ui.theme.G0
 import com.example.speedotransfer.ui.theme.G100
@@ -176,7 +177,7 @@ fun RecentTransactionsArea(navController: NavController,accountId: Long,startDat
             items(transactionList) {
                 TransactionItem(transaction = it , onClick = {
                     // Navigate to the details screen by transaction ID
-                    navController.navigate("${Route.TRANSACTION_DETAILS}/${it.id}")
+                    navController.navigate("${Route.TRANSACTION_DETAILS}/${it.transactionId}")
                 })
 
             }
@@ -243,13 +244,13 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
                 ) {
 
                     Text(
-                        text = transaction.senderAccountId.toString(), style = BodyMedium14, color = G900
+                        text = "From :${ transaction.fromAccount}", style = BodyMedium14, color = G900
                     )
 
 
 
                     Text(
-                        text = "${transaction.description}",//"${transaction.cardType} . ${transaction.cardNumber}",
+                        text = "To :${transaction.toAccount}",//"${transaction.cardType} . ${transaction.cardNumber}",
                         style = BodyRegular14,
                         fontSize = 12.sp,
                         color = G700
@@ -259,7 +260,7 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
 
 
                     Text(
-                        text = "${transaction.transactionDate} - ${transaction.status}",
+                        text = "${transaction.timestamp} - ${transaction.status}",
                         style = BodyRegular14,
                         fontSize = 12.sp,
                         color = G100
@@ -270,9 +271,9 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
             }
 
             Text(
-                text = "${transaction.amount}${transaction.currency}",
-                style = BodyMedium16,
-//                fontSize = 12.sp,
+                text = "${transaction.amount} EGP",
+                style = BodyRegular16,
+                fontSize = 12.sp,
                 color = P300
             )
 
