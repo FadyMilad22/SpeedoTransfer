@@ -10,14 +10,18 @@ object uiConstants {
             Color(
                 0xFFFFF8E7
             ), Color(0xFFFFEAEE)
-        )
+        ),
+//        startY = 0f,
+//        endY = 1000f
     )
     val AUTH_BACKGROUND_COLOR = Brush.verticalGradient(
         listOf(
             Color(
                 0xFFFFFFFF
             ), Color(0xFFFFEAEE)
-        )
+        ),
+//        startY = 0f,
+//        endY = 1000f
     )
 
 

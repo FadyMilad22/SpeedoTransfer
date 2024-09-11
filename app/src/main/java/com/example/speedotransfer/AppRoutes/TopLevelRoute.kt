@@ -38,7 +38,13 @@ fun getTopLevelRoute(): List<TopLevelRoute> {
             R.drawable.history1
         )
     )
-    bottomNavigationRoutes.add(TopLevelRoute("My card", "$ACCOUNT_INFO/{accountDescription}/{accountName}/{accountNumber}/{accountType}/{active}/{balance}/{currency}", R.drawable.cards1))
+    bottomNavigationRoutes.add(
+        TopLevelRoute(
+            "My card",
+            "$ACCOUNT_INFO/{accountDescription}/{accountName}/{accountNumber}/{accountType}/{active}/{balance}/{currency}",
+            R.drawable.cards1
+        )
+    )
     bottomNavigationRoutes.add(
         TopLevelRoute(
             "More",

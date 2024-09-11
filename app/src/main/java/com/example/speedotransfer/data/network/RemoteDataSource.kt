@@ -4,9 +4,9 @@ import AccountDetailsResponse
 import CreateAccountRequest
 import CreateAccountResponse
 import CustomerDetailsResponse
+import RegisterCustomerRequest
 import SignInRequest
 import SignInResponse
-import RegisterCustomerRequest
 import com.example.speedotransfer.model.CustomerResponse
 import com.example.speedotransfer.model.DeleteFavouriteResponse
 import com.example.speedotransfer.model.FavouriteRequest
@@ -21,7 +21,6 @@ import com.example.speedotransfer.model.UpdateCustomerResponse
 interface RemoteDataSource {
 
 
-
     suspend fun registerCustomer(registerRequest: RegisterCustomerRequest): RegisterCustomerResponse
     suspend fun login(loginRequest: SignInRequest): SignInResponse
     suspend fun getCustomerById(customerId: Long): CustomerDetailsResponse
@@ -30,11 +29,19 @@ interface RemoteDataSource {
     suspend fun transferMoney(transferRequest: Transfer): Transfer
     suspend fun getTransactionHistory(): List<TransactionResponse>
     suspend fun getTransactionById(transactionId: Long): TransactionResponse
-    suspend fun updateCustomerByEmail(email: String, updateRequest: UpdateCustomerRequest): UpdateCustomerResponse
+    suspend fun updateCustomerByEmail(
+        email: String,
+        updateRequest: UpdateCustomerRequest
+    ): UpdateCustomerResponse
+
     suspend fun logout(token: String): LogoutResponse
-    suspend fun getCustomerByEmail(authToken: String,email: String): CustomerResponse
+    suspend fun getCustomerByEmail(authToken: String, email: String): CustomerResponse
 
     suspend fun getAllFavourites(authToken: String): List<FavouriteResponse>
-    suspend fun addCustomerToFavourite(authToken: String, favouriteRequest: FavouriteRequest): FavouriteResponse
+    suspend fun addCustomerToFavourite(
+        authToken: String,
+        favouriteRequest: FavouriteRequest
+    ): FavouriteResponse
+
     suspend fun deleteFavourite(authToken: String, favouriteId: Long): DeleteFavouriteResponse
 }

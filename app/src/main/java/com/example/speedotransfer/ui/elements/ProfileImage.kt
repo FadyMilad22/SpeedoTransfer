@@ -39,7 +39,11 @@ fun ProfileImage(imageResource: Int?, name: String, modifier: Modifier = Modifie
             Text(
                 text = name.first().uppercaseChar().toString(),
 //                text = "AD",
-                style = TextStyle(color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                style = TextStyle(
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
             )
         }
     }

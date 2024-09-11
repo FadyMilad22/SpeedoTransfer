@@ -76,24 +76,24 @@ class MainActivity : ComponentActivity() {
                 val tokenType = sharedPreferences.getString("token_type", "") ?: ""
                 InactivityHandler(
                     navController = navController,
-                  token = "${tokenType} ${authToken}"
+                    token = "${tokenType} ${authToken}"
                 ) {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    bottomBar = {
-                        if (currentDestination != Route.SPLASH && currentDestination != Route.SIGN_IN && currentDestination != Route.SIGN_UP && currentDestination != "$COMPLETE_SIGN_UP/{name}/{email}/{password}" && currentDestination != Route.ON_BOARDING) {
-                            BottomNavBar(navController, sharedPreferences)
-                        }
-                    },
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        bottomBar = {
+                            if (currentDestination != Route.SPLASH && currentDestination != Route.SIGN_IN && currentDestination != Route.SIGN_UP && currentDestination != "$COMPLETE_SIGN_UP/{name}/{email}/{password}" && currentDestination != Route.ON_BOARDING) {
+                                BottomNavBar(navController, sharedPreferences)
+                            }
+                        },
 
-                    )
-                { _ ->
+                        )
+                    { _ ->
 
-                    AppNavHost(navController = navController)
+                        AppNavHost(navController = navController)
+
+                    }
 
                 }
-
-            }
             }
         }
     }
@@ -116,7 +116,7 @@ fun BottomNavBar(
     Card(
         modifier
             .fillMaxWidth()
-            .navigationBarsPadding()  // This handles the navigation bar padding
+            .navigationBarsPadding()
             .systemBarsPadding(),
         elevation = CardDefaults.elevatedCardElevation(4.dp),
         colors = CardDefaults.cardColors(containerColor = G0),
@@ -170,31 +170,39 @@ fun BottomNavBar(
                                 style = SmallFontTextStyle,
                                 fontSize = 11.sp,
                                 color = if (currentDestination?.hierarchy?.any { it.route == screen.route } == true) P300 else G200,
-                                maxLines = 1,  // Ensure the text stays on one line
-                                softWrap = false,  // Disable text wrapping
+                                maxLines = 1,
+                                softWrap = false,
 
-                            )
+                                )
                         },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
 
                             navController.navigate(
                                 when (screen.name) {
-                                    "Home" -> { "${Route.HOME}/${account.id.toLong()}/${account.createdAt}}/${getCurrentDate()}/${account.balance.toFloat()}/${customer.name}/${account.currency}"
+                                    "Home" -> {
+                                        "${Route.HOME}/${account.id.toLong()}/${account.createdAt}}/${getCurrentDate()}/${account.balance.toFloat()}/${customer.name}/${account.currency}"
                                     }
-                                    "Transfer" -> { "${Route.BEGIN_TRANSACTION}/${customer.name}/${account.accountNumber}/${account.currency}/${tokenType} ${authToken}"
+
+                                    "Transfer" -> {
+                                        "${Route.BEGIN_TRANSACTION}/${customer.name}/${account.accountNumber}/${account.currency}/${tokenType} ${authToken}"
                                     }
-                                    "Transactions" -> { "${Route.TRANSACTIONS_LIST}/${account.id.toLong()}/${account.createdAt}/${getCurrentDate()}"
+
+                                    "Transactions" -> {
+                                        "${Route.TRANSACTIONS_LIST}/${account.id.toLong()}/${account.createdAt}/${getCurrentDate()}"
                                     }
-                                    "My card" ->{"$ACCOUNT_INFO/${account.accountDescription}/${account.accountName}/${account.accountNumber}/${account.accountType}/${account.active}/${account.balance}/${account.currency}"}
-                                    else -> { "$MORE/${customer.id.toLong()}/${customer.name}/${customer.email}/${customer.birthDate}/Egypt/${tokenType} ${authToken}/${account.createdAt}" }
+
+                                    "My card" -> {
+                                        "$ACCOUNT_INFO/${account.accountDescription}/${account.accountName}/${account.accountNumber}/${account.accountType}/${account.active}/${account.balance}/${account.currency}"
+                                    }
+
+                                    else -> {
+                                        "$MORE/${customer.id.toLong()}/${customer.name}/${customer.email}/${customer.birthDate}/Egypt/${tokenType} ${authToken}/${account.createdAt}"
+                                    }
                                 }
-                            ){
+                            ) {
 //                                "${Route.HOME}/$accountId/$startDate/$endDate/${balance.toFloat()}/$name/$currency"){
 
-                                // Pop up to the start destination of the graph to
-                                // avoid building up a large stack of destinations
-                                // on the back stack as users select items
                                 popUpTo(navController.graph.findStartDestination().id) {    // This line causes an Error
                                     saveState = true
                                 }

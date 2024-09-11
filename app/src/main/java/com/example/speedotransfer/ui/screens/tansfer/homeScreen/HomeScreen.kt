@@ -18,10 +18,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -76,15 +74,16 @@ import com.example.speedotransfer.ui.uiConstants
 @Composable
 fun HomeScreen(
     navController: NavController,
-    accountId: Long,    // Passed from the previous screen
-    startDate: String,  // Passed from the previous screen
-    endDate: String,    // Passed from the previous screen
-    balance :Double,    // Passed from the previous screen
-    name: String,       // Passed from the previous screen
-    currency: String,       // Passed from the previous screen
+    accountId: Long,
+    startDate: String,
+    endDate: String,
+    balance: Double,
+    name: String,
+    currency: String,
     modifier: Modifier = Modifier
 ) {
-    val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModelFactory(TransferRepoImpl(APIClient)))
+    val homeViewModel: HomeViewModel =
+        viewModel(factory = HomeViewModelFactory(TransferRepoImpl(APIClient)))
 
     homeViewModel.fetchTransactionHistory(accountId, startDate, endDate)
 
@@ -124,15 +123,19 @@ fun HomeScreen(
                 NameBar(name = name)
                 AmountCard(amount = balance, currency = currency)
                 Spacer(modifier = Modifier.padding(top = 16.dp))
-                RecentTransactionsArea(navController=navController,accountId=accountId,startDate=startDate,endDate=endDate
-                    ,    transactionList = transactionHistory)
+                RecentTransactionsArea(
+                    navController = navController,
+                    accountId = accountId,
+                    startDate = startDate,
+                    endDate = endDate,
+                    transactionList = transactionHistory
+                )
                 if (isLoading) {
 
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
 
                 }
 
-                // Show error message if any
                 if (errorMessage != null) {
                     Text(
                         text = errorMessage!!,
@@ -150,9 +153,21 @@ fun HomeScreen(
 }
 
 @Composable
-fun RecentTransactionsArea(navController: NavController,accountId: Long,startDate: String,endDate: String,transactionList: List<TransactionResponse>, modifier: Modifier = Modifier) {
+fun RecentTransactionsArea(
+    navController: NavController,
+    accountId: Long,
+    startDate: String,
+    endDate: String,
+    transactionList: List<TransactionResponse>,
+    modifier: Modifier = Modifier
+) {
     Column {
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier.fillMaxWidth().padding(bottom = 8.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
+        ) {
 
             Text(
                 text = "Recent transactions",
@@ -175,8 +190,7 @@ fun RecentTransactionsArea(navController: NavController,accountId: Long,startDat
         }
         LazyColumn() {
             items(transactionList) {
-                TransactionItem(transaction = it , onClick = {
-                    // Navigate to the details screen by transaction ID
+                TransactionItem(transaction = it, onClick = {
                     navController.navigate("${Route.TRANSACTION_DETAILS}/${it.transactionId}")
                 })
 
@@ -189,14 +203,20 @@ fun RecentTransactionsArea(navController: NavController,accountId: Long,startDat
 }
 
 @Composable
-fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modifier ,onClick: () -> Unit, ) {
+fun TransactionItem(
+    transaction: TransactionResponse,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
 
     Card(
-        modifier = modifier.fillMaxWidth().clickable { onClick() },
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = G0)  ,
+        colors = CardDefaults.cardColors(containerColor = G0),
 
-    ) {
+        ) {
         Row(
             modifier
                 .padding(top = 16.dp, bottom = 8.dp, start = 8.dp, end = 8.dp)
@@ -244,7 +264,9 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
                 ) {
 
                     Text(
-                        text = "From :${ transaction.fromAccount}", style = BodyMedium14, color = G900
+                        text = "From :${transaction.fromAccount}",
+                        style = BodyMedium14,
+                        color = G900
                     )
 
 
@@ -371,7 +393,6 @@ fun getInitials(name: String): String {
 @Preview(showSystemUi = true)
 @Composable
 private fun HomeScreenPreview() {
-
 
 
 }

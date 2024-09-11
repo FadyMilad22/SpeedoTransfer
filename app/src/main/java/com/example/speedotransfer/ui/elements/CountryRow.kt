@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +24,7 @@ fun CountryRow(
     countryName: String,
     isSelected: Boolean,
     onCountrySelected: (String) -> Unit,
-    @DrawableRes icon : Int,
+    @DrawableRes icon: Int,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -36,9 +35,9 @@ fun CountryRow(
             .clickable { onCountrySelected(countryName) }
             .padding(vertical = 8.dp)
     ) {
-        Box (
+        Box(
 
-        ){
+        ) {
             Icon(
 
                 painter = painterResource(id = icon),
@@ -46,7 +45,7 @@ fun CountryRow(
                 modifier = Modifier
                     .size(28.dp)
                     .padding(end = 8.dp),
-                        tint = Color.Unspecified
+                tint = Color.Unspecified
 
             )
         }

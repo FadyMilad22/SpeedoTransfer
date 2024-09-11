@@ -8,12 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.TitleMedium
 
 @Composable
-fun CutomAppBarTitle(text:String,modifier: Modifier = Modifier) {
+fun CutomAppBarTitle(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
         style = TitleMedium,
@@ -24,7 +23,7 @@ fun CutomAppBarTitle(text:String,modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CustomAppBarIcon(icon:Int ,modifier: Modifier = Modifier) {
+fun CustomAppBarIcon(icon: Int, modifier: Modifier = Modifier) {
     Icon(
         painter = painterResource(id = icon),
         contentDescription = "Back",

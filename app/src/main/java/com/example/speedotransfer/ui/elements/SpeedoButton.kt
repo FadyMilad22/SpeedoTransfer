@@ -22,10 +22,10 @@ fun SpeedoButton(
     enabled: Boolean,
     isTransparent: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}  // Added onClick parameter for button functionality
+    onClick: () -> Unit = {}
 ) {
     Button(
-        onClick = onClick,  // Hook up onClick handler here
+        onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
             .height(52.dp),

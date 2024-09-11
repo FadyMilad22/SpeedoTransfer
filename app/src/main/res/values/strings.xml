@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SpeedoTransfer</string>
+    <string name="app_name">Speedo Transfer</string>
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="account_number">Account ****%s</string>

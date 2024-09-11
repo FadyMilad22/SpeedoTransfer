@@ -54,14 +54,15 @@ fun SignUpScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     signUpViewModel: SignUpViewModel =
-        viewModel(factory = SignUpViewModelFactory(
-            SignUpRepoImpl(
-        APIClient
-    )
-        ))
+        viewModel(
+            factory = SignUpViewModelFactory(
+                SignUpRepoImpl(
+                    APIClient
+                )
+            )
+        )
 ) {
 
-    // Observing StateFlow from ViewModel
     val fullName by signUpViewModel.fullName.collectAsState()
     val email by signUpViewModel.email.collectAsState()
     val password by signUpViewModel.password.collectAsState()
@@ -69,16 +70,17 @@ fun SignUpScreen(
     val isPasswordValid by signUpViewModel.isPasswordValid.collectAsState()
     val isConfirmPasswordValid by signUpViewModel.isConfirmPasswordValid.collectAsState()
 
-    // Local state for toggling visibility of the password fields
     var showError by remember { mutableStateOf(false) } // Local state to control error visibility
 
     var showPassword by remember { mutableStateOf(false) }
     var showConfirmPassword by remember { mutableStateOf(false) }  // Added showConfirmPassword
 
     val isFormValid by derivedStateOf {
-        password.length > 5 && email.isNotBlank() && !isPasswordValid && !signUpViewModel.isValidEmail(email)
+        password.length > 5 && email.isNotBlank() && !isPasswordValid && !signUpViewModel.isValidEmail(
+            email
+        )
     }
-    val isPasswordLengthValid by derivedStateOf { password.length > 5 && confirmPassword.length>5 }
+    val isPasswordLengthValid by derivedStateOf { password.length > 5 && confirmPassword.length > 5 }
 //    val signUpState by signUpViewModel.signUpState.collectAsState()
 //
 //    if (signUpState is SignUpState.Success) {
@@ -115,27 +117,25 @@ fun SignUpScreen(
                 )
                 Spacer(modifier = Modifier.height(64.dp))
 
-                // Full Name TextField
                 SpeedoTextField(
                     labelText = "Full Name",
                     value = fullName,
                     onValueChange = { signUpViewModel.onFullNameChange(it) },
-                    isError = showError && fullName.isBlank() , // Show error if full name is blank after clicking sign-up
-                     showError = showError,
+                    isError = showError && fullName.isBlank(),
+                    showError = showError,
 
-                            placeholderText = "Enter your Full Name",
+                    placeholderText = "Enter your Full Name",
                     icon = R.drawable.user,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     visualTransformation = VisualTransformation.None
                 )
 
-                // Email TextField
                 SpeedoTextField(
                     labelText = "Email",
                     value = email,
                     onValueChange = { signUpViewModel.onEmailChange(it) },
-                    isError = showError && !signUpViewModel.isValidEmail(email)  // Validate email after button click
-,showError = showError,
+                    isError = showError && !signUpViewModel.isValidEmail(email),
+                    showError = showError,
                     errorMessage = "Enter a valid email, e.g., example@domain.com.",
 
                     placeholderText = "Enter your email address",
@@ -144,13 +144,11 @@ fun SignUpScreen(
                     visualTransformation = VisualTransformation.None
                 )
 
-                // Password TextField
                 SpeedoTextField(
                     labelText = "Password",
                     value = password,
                     onValueChange = { signUpViewModel.onPasswordChange(it) },
-                    isError = showError && !isPasswordValid  // Show error after button click if password is invalid
-, showError = showError,
+                    isError = showError && !isPasswordValid, showError = showError,
                     errorMessage = "Password: 6+ chars,uppercase,lowercase,special character.",
 
                     placeholderText = "Enter your password",
@@ -172,16 +170,14 @@ fun SignUpScreen(
 //                    )
 //                }
 
-                // Confirm Password TextField
                 SpeedoTextField(
                     labelText = "Confirm password",
                     value = confirmPassword,
                     onValueChange = { signUpViewModel.onConfirmPasswordChange(it) },
-                    isError = showError && !isConfirmPasswordValid  // Show error if confirm password doesn't match
-                    , showError = showError,
+                    isError = showError && !isConfirmPasswordValid, showError = showError,
                     errorMessage = "Passwords do not match.",
 
-                            placeholderText = "Confirm your password",
+                    placeholderText = "Confirm your password",
                     icon = if (showConfirmPassword) R.drawable.eye_comp2 else R.drawable.eye_comp,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     isPasswordVisible = showConfirmPassword,
@@ -202,35 +198,35 @@ fun SignUpScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Sign Up Button
                 SpeedoButton(
                     text = "Continue",
-                    enabled =  signUpViewModel.isFormValid() && confirmPassword.isNotBlank() && isConfirmPasswordValid && confirmPassword==password,
+                    enabled = signUpViewModel.isFormValid() && confirmPassword.isNotBlank() && isConfirmPasswordValid && confirmPassword == password,
                     isTransparent = false,
                     onClick = {
 
-                        // Trigger validation after clicking sign-up
                         showError = true
                         if (signUpViewModel.isFormValid()) {
-                            // Navigate to next screen if form is valid
-                            navController.navigate("${Route.COMPLETE_SIGN_UP}/${fullName}/${email}/${password}")}  // Calling registerCustomer on click
+                            navController.navigate("${Route.COMPLETE_SIGN_UP}/${fullName}/${email}/${password}")
+                        }  // Calling registerCustomer on click
 
                         //     navController.navigate(Route.COMPLETE_SIGN_UP)
-                        }
+                    }
 
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row() {
-                    Text(text = "${stringResource(id = R.string.already_have_an_account_q)} "
-                        , style = BodyRegular16, color = G100,)
-                        Text(text = stringResource(id = R.string.sign_in_a),
+                    Text(
+                        text = "${stringResource(id = R.string.already_have_an_account_q)} ",
+                        style = BodyRegular16, color = G100,
+                    )
+                    Text(text = stringResource(id = R.string.sign_in_a),
                         style = LinkMediumTextStyle,
                         color = P300,
                         textDecoration = TextDecoration.Underline,
-                        modifier=modifier.clickable {
-                            navController.popBackStack(Route.SIGN_IN,false)
+                        modifier = modifier.clickable {
+                            navController.popBackStack(Route.SIGN_IN, false)
                         }
                     )
 
