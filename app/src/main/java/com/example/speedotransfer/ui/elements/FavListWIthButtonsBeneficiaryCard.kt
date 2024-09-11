@@ -39,11 +39,10 @@ fun FavListWithButtonsBeneficiaryCard(
     clientName: String,
     accountNumberSuffix: String,
     modifier: Modifier = Modifier,
-    onEditClick : ()->Unit={},
+    onEditClick: () -> Unit = {},
     //  onEditClick: (String,String) -> Pair<String, String> = {s1,s2 -> Pair(s1,s2)},
-    onDeleteClick: (String,String) -> Unit = {_,_ ->}
+    onDeleteClick: (String, String) -> Unit = { _, _ -> }
 ) {
-
 
 
     Row(
@@ -109,12 +108,12 @@ fun FavListWithButtonsBeneficiaryCard(
             modifier = modifier
                 .padding(16.dp)
                 .weight(1f)
-                .fillMaxWidth(), // Optional padding around the row
-            horizontalArrangement = Arrangement.End,// Space between the icons
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
         ) {
             IconButton(
                 onClick = {
-                    // Handle edit action here
+
                     onEditClick()
                 }
             ) {
@@ -125,10 +124,8 @@ fun FavListWithButtonsBeneficiaryCard(
             }
             IconButton(
                 onClick = {
-                    onDeleteClick(clientName ,accountNumberSuffix)
-//
+                    onDeleteClick(clientName, accountNumberSuffix)
 
-                    // Handle delete action here
                 }
 
             ) {

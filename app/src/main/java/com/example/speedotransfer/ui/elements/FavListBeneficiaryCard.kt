@@ -1,20 +1,16 @@
 package com.example.speedotransfer.ui.elements
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomSheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,10 +28,8 @@ import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.G40
 import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.G900
-import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
 import com.example.speedotransfer.ui.theme.P75
-import com.example.speedotransfer.ui.theme.TitleSemiBold
 
 
 @Composable
@@ -43,11 +37,8 @@ fun FavListBeneficiaryCard(
     clientName: String,
     accountNumberSuffix: String,
     modifier: Modifier = Modifier,
-    isOnFocus: Boolean= false,
+    isOnFocus: Boolean = false,
 ) {
-
-
-
 
 
     Row(
@@ -55,13 +46,17 @@ fun FavListBeneficiaryCard(
         modifier = modifier
             .then(
                 if (isOnFocus) {
-                    modifier.fillMaxWidth().background(P50, RoundedCornerShape(8.dp)).border(2.dp, P75, RoundedCornerShape(8.dp))
+                    modifier
+                        .fillMaxWidth()
+                        .background(P50, RoundedCornerShape(8.dp))
+                        .border(2.dp, P75, RoundedCornerShape(8.dp))
                 } else {
                     modifier
                         .fillMaxWidth()
                         .background(P50, RoundedCornerShape(8.dp))
                 }
-    )) {
+            )
+    ) {
         Row(modifier = modifier.padding(16.dp)) {
 
 
@@ -123,7 +118,7 @@ fun FavListBeneficiaryCard(
 @Composable
 private fun FavListBeneficiaryCardPreview() {
 
-    FavListBeneficiaryCard( "Fady Milad", "1234" )
+    FavListBeneficiaryCard("Fady Milad", "1234")
 
 
 }

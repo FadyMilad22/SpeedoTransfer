@@ -90,7 +90,8 @@ fun HomeScreen(
     currency: String,       // Passed from the previous screen
     modifier: Modifier = Modifier
 ) {
-    val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModelFactory(TransferRepoImpl(APIClient)))
+    val homeViewModel: HomeViewModel =
+        viewModel(factory = HomeViewModelFactory(TransferRepoImpl(APIClient)))
 
     LaunchedEffect(Unit) {
         Log.d("API History", "$tokenType $authToken")
@@ -174,7 +175,14 @@ fun HomeScreen(
 }
 
 @Composable
-fun RecentTransactionsArea(navController: NavController,accountId: Long,startDate: String,endDate: String,transactionList: List<TransactionResponse>, modifier: Modifier = Modifier) {
+fun RecentTransactionsArea(
+    navController: NavController,
+    accountId: Long,
+    startDate: String,
+    endDate: String,
+    transactionList: List<TransactionResponse>,
+    modifier: Modifier = Modifier
+) {
     Column {
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier
             .fillMaxWidth()
@@ -216,16 +224,20 @@ fun RecentTransactionsArea(navController: NavController,accountId: Long,startDat
 }
 
 @Composable
-fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modifier ,onClick: () -> Unit, ) {
+fun TransactionItem(
+    transaction: TransactionResponse,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
 
     Card(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = G0)  ,
+        colors = CardDefaults.cardColors(containerColor = G0),
 
-    ) {
+        ) {
         Row(
             modifier
                 .padding(top = 16.dp, bottom = 8.dp, start = 8.dp, end = 8.dp)
@@ -273,7 +285,9 @@ fun TransactionItem(transaction: TransactionResponse, modifier: Modifier = Modif
                 ) {
 
                     Text(
-                        text = "From :${ transaction.fromAccount}", style = BodyMedium14, color = G900
+                        text = "From :${transaction.fromAccount}",
+                        style = BodyMedium14,
+                        color = G900
                     )
 
 
@@ -400,7 +414,6 @@ fun getInitials(name: String): String {
 @Preview(showSystemUi = true)
 @Composable
 private fun HomeScreenPreview() {
-
 
 
 }

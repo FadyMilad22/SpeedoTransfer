@@ -22,9 +22,19 @@ fun ProfileInfoItem(
     enableStroke: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Column (modifier = modifier.height(72.dp)){
-        Text(text = title, style = BodyMedium16, color = G900, modifier = modifier.padding(bottom = 8.dp))
-        Text(text = details, style = BodyRegular16, color = G100,modifier = modifier.padding(bottom = 16.dp))
+    Column(modifier = modifier.height(72.dp)) {
+        Text(
+            text = title,
+            style = BodyMedium16,
+            color = G900,
+            modifier = modifier.padding(bottom = 8.dp)
+        )
+        Text(
+            text = details,
+            style = BodyRegular16,
+            color = G100,
+            modifier = modifier.padding(bottom = 16.dp)
+        )
 
         if (enableStroke) {
             HorizontalDivider(

@@ -5,11 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import com.example.speedotransfer.ui.theme.P300
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +14,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,6 +26,7 @@ import com.example.speedotransfer.ui.theme.BodyMedium14
 import com.example.speedotransfer.ui.theme.BodyRegular14
 import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.G900
+import com.example.speedotransfer.ui.theme.P300
 
 
 @Composable
@@ -38,14 +37,14 @@ fun StepIndicator(
 ) {
     val boxColor =
         if (isActive) P300 else Color(0xFFA3AAB2)
-    val numberColor =   if (isActive) P300 else Color(0xFF898886)
-    val textColor =   if (isActive) G900 else G700
-    val textStyle =   if (isActive) BodyMedium14 else BodyRegular14
-    Column(horizontalAlignment = Alignment.CenterHorizontally ) {
+    val numberColor = if (isActive) P300 else Color(0xFF898886)
+    val textColor = if (isActive) G900 else G700
+    val textStyle = if (isActive) BodyMedium14 else BodyRegular14
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             modifier = Modifier.run {
                 size(36.dp)
-                        .border(BorderStroke(2.24.dp, boxColor), shape = CircleShape)
+                    .border(BorderStroke(2.24.dp, boxColor), shape = CircleShape)
             },
             contentAlignment = Alignment.Center
         ) {
@@ -104,10 +103,9 @@ fun StepsRow(currentStep: Int) {
         horizontalArrangement = Arrangement.Center
     ) {
         for ((index, step) in steps.withIndex()) {
-            // StepIndicator with the number inside a Box
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center // Align content inside the column
+                verticalArrangement = Arrangement.Center
             ) {
                 StepIndicator(
                     isActive = index + 1 <= currentStep,
@@ -116,29 +114,26 @@ fun StepsRow(currentStep: Int) {
                 )
             }
 
-            // Add Divider between the steps, but align it with the circle, not the whole column
             if (index < steps.size - 1) {
-            //    Spacer(modifier = Modifier.width(8.dp))  // Add some space between StepIndicator and Divider
-                // Use Box to align Divider with the StepIndicator
+                //    Spacer(modifier = Modifier.width(8.dp))
                 Box(
-                    contentAlignment = Alignment.Center,  // Align divider vertically with the center of the Box
+                    contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .height(36.dp)  // Match the height of the circle Box (36.dp)
-                      //  .padding(horizontal = 4.dp)  // Adjust padding if necessary
+                        .height(36.dp)
+                    //  .padding(horizontal = 4.dp)
                 ) {
                     Divider(
                         modifier = Modifier
                             .width(85.dp)
-                                 .height(1.5.dp),
+                            .height(1.5.dp),
                         color = if (index + 1 < currentStep) P300 else Color(0xFFA3AAB2)
                     )
                 }
-             //   Spacer(modifier = Modifier.width(8.dp))  // Add some space between Divider and next StepIndicator
+                //   Spacer(modifier = Modifier.width(8.dp))
             }
         }
     }
 }
-
 
 
 @Preview(showSystemUi = true)

@@ -17,8 +17,8 @@ import com.example.speedotransfer.AppRoutes.Route.CONFIRMED_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.CONFIRM_TRANSACTION
 import com.example.speedotransfer.AppRoutes.Route.EDIT_PROFILE
 import com.example.speedotransfer.AppRoutes.Route.HOME
-import com.example.speedotransfer.AppRoutes.Route.ON_BOARDING
 import com.example.speedotransfer.AppRoutes.Route.MORE
+import com.example.speedotransfer.AppRoutes.Route.ON_BOARDING
 import com.example.speedotransfer.AppRoutes.Route.PERSONAL_INFO
 import com.example.speedotransfer.AppRoutes.Route.PROFILE
 import com.example.speedotransfer.AppRoutes.Route.SETTINGS
@@ -26,20 +26,20 @@ import com.example.speedotransfer.AppRoutes.Route.SIGN_IN
 import com.example.speedotransfer.AppRoutes.Route.SIGN_UP
 import com.example.speedotransfer.AppRoutes.Route.SPLASH
 import com.example.speedotransfer.ui.screens.SplashScreen
-import com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen.TransferConfirmationDesign
 import com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInScreen
 import com.example.speedotransfer.ui.screens.authentication.signUpScreen.CompleteSignUpScreen
 import com.example.speedotransfer.ui.screens.authentication.signUpScreen.SignUpScreen
-import com.example.speedotransfer.ui.screens.more.favourite.FavouriteScreen
 import com.example.speedotransfer.ui.screens.more.MoreScreenDesign
+import com.example.speedotransfer.ui.screens.more.favourite.FavouriteScreen
+import com.example.speedotransfer.ui.screens.onboarding.OnboardingScreen
+import com.example.speedotransfer.ui.screens.profile.AccountInfoScreen
 import com.example.speedotransfer.ui.screens.profile.ChangePasswordScreen
+import com.example.speedotransfer.ui.screens.profile.EditProfileScreen.EditProfileScreen
 import com.example.speedotransfer.ui.screens.profile.ProfileInfoScreen
 import com.example.speedotransfer.ui.screens.profile.ProfileScreen
 import com.example.speedotransfer.ui.screens.profile.SettingsScreen
-import com.example.speedotransfer.ui.screens.onboarding.OnboardingScreen
-import com.example.speedotransfer.ui.screens.profile.AccountInfoScreen
-import com.example.speedotransfer.ui.screens.profile.EditProfileScreen.EditProfileScreen
 import com.example.speedotransfer.ui.screens.tansfer.HomeScreen
+import com.example.speedotransfer.ui.screens.tansfer.transferConfirmationScreen.TransferConfirmationDesign
 import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.notificationsScreen.NotificationScreenDesign
 import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionDetailsScreen
 import com.example.speedotransfer.ui.screens.transactionAndNotificationScreens.transactionScreen.TransactionsScreen
@@ -73,22 +73,21 @@ object Route {
 @Composable
 fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
 
-    NavHost( navController, startDestination = SPLASH, modifier = modifier) {
-        // Add the routes
-        composable(route = SPLASH) { SplashScreen(navController ,modifier=modifier) }
+    NavHost(navController, startDestination = SPLASH, modifier = modifier) {
+        composable(route = SPLASH) { SplashScreen(navController, modifier = modifier) }
         composable(route = ON_BOARDING) { OnboardingScreen(navController) }
-        composable(route = "$COMPLETE_SIGN_UP/{name}/{email}/{password}", arguments = listOf(
-            navArgument("name") { type = NavType.StringType },
-            navArgument("email") { type = NavType.StringType },
-            navArgument("password") { type = NavType.StringType })){
+        composable(
+            route = "$COMPLETE_SIGN_UP/{name}/{email}/{password}", arguments = listOf(
+                navArgument("name") { type = NavType.StringType },
+                navArgument("email") { type = NavType.StringType },
+                navArgument("password") { type = NavType.StringType })
+        ) {
             val name = it.arguments?.getString("name")!!
             val email = it.arguments?.getString("email")!!
             val password = it.arguments?.getString("password")!!
-            CompleteSignUpScreen(navController, name , email , password)
+            CompleteSignUpScreen(navController, name, email, password)
         }
-       // composable(route = HOME) { HomeScreen(navController = navController ,modifier=modifier) }
-        // You can add other routes here in the future
-        // Define the route as a string constant
+
 
         composable(
             route = "$HOME/{accountId}/{startDate}/{endDate}/{balance}/{name}/{currency}",
@@ -139,13 +138,13 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             val senderName = it.arguments?.getString("senderName")!!
             val receiverName = it.arguments?.getString("receiverName")!!
             val senderAccountNumberSuffix = it.arguments?.getString("senderAccountNumberSuffix")!!
-            val receiverAccountNumberSuffix = it.arguments?.getString("receiverAccountNumberSuffix")!!
+            val receiverAccountNumberSuffix =
+                it.arguments?.getString("receiverAccountNumberSuffix")!!
             val token = it.arguments?.getString("token")!!
 
 
-            // Call the Composable function CONFIRMEDTRANSACTION with the extracted parameters
             TransferConfirmedDesign(
-                navController= navController,
+                navController = navController,
                 transferAmount = transferAmount,
                 currency = currency,
                 senderName = senderName,
@@ -185,7 +184,6 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 )
         ) { backStackEntry ->
 
-            // Extracting the arguments from the NavBackStackEntry
             val transferAmount = backStackEntry.arguments?.getInt("transferAmount")!!
             val currency = backStackEntry.arguments?.getString("currency")!!
             val senderName = backStackEntry.arguments?.getString("senderName")!!
@@ -196,7 +194,6 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 backStackEntry.arguments?.getString("receiverAccountNumberSuffix")!!
             val token = backStackEntry.arguments?.getString("token")!!
 
-            // Calling the TransferConfirmationDesign composable with default values if none are passed
             TransferConfirmationDesign(
                 navController = navController,
                 transferAmount = transferAmount,
@@ -222,19 +219,17 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 navArgument("currency") {
                     type = NavType.StringType
                 },
-                        navArgument("token") { type = NavType.StringType },
+                navArgument("token") { type = NavType.StringType },
 
                 )
         ) { backStackEntry ->
 
-            // Extracting the arguments from the NavBackStackEntry and ensuring they are non-null using !!
             val senderName = backStackEntry.arguments?.getString("senderName")!!
             val senderAccountNumberSuffix =
                 backStackEntry.arguments?.getString("senderAccountNumberSuffix")!!
             val currency = backStackEntry.arguments?.getString("currency")!!
             val token = backStackEntry.arguments?.getString("token")!!
 
-            // Call the TransferAmountDesign composable with the extracted parameters
             TransferAmountDesign(
                 navController = navController,
                 senderName = senderName,
@@ -285,10 +280,10 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         }
 
         composable(route = SIGN_IN) {
-            SignInScreen(navController = navController)  // Pass the navController to SignInScreen for navigation
+            SignInScreen(navController = navController)
         }
         composable(route = SIGN_UP) {
-            SignUpScreen(navController = navController)  // Pass the navController to SignInScreen for navigation
+            SignUpScreen(navController = navController)
         }
 
         composable(
@@ -390,7 +385,8 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 navArgument("email") { type = NavType.StringType },
                 navArgument("birthDate") { type = NavType.StringType },
                 navArgument("country") { type = NavType.StringType },
-            ) )
+            )
+        )
 
         {
             val accountId = it.arguments?.getLong("accountId")!!
@@ -485,8 +481,8 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             FavouriteScreen(
                 navController = navController,
 //                favouriteList= list,
-                token= token,
-                )
+                token = token,
+            )
         }
 
 

@@ -28,6 +28,7 @@ object Constants {
     const val CUSTOMER_ID_QUERY = "customerId"
     const val ACCOUNT_ID_QUERY = "accountId"
     const val EMAIL_QUERY = "email"
+
     // Path Parameters
     const val PAGE ="page"
     const val SIZE="size"
