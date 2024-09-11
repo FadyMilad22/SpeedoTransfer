@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -58,17 +59,20 @@ import com.example.speedotransfer.ui.uiConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransactionsScreen(navController: NavController,
-                       accountId: Long,    // Passed from the previous screen
-                       startDate: String,  // Passed from the previous screen
-                       endDate: String,    // Passed from the previous screen
-                       modifier: Modifier = Modifier) {
+fun TransactionsScreen(
+    navController: NavController,
+    accountId: Long,    // Passed from the previous screen
+    startDate: String,  // Passed from the previous screen
+    endDate: String,    // Passed from the previous screen
+    modifier: Modifier = Modifier
+) {
 
-                       val transactionViewModel: TransactionViewModel = viewModel(factory = TransactionViewModelFactory(
-        TransactionRepoImpl(
-            APIClient
+    val transactionViewModel: TransactionViewModel = viewModel(
+        factory = TransactionViewModelFactory(
+            TransactionRepoImpl(
+                APIClient
+            )
         )
-    )
     )
     transactionViewModel.fetchTransactionHistory(accountId, startDate, endDate)
 
@@ -89,11 +93,11 @@ fun TransactionsScreen(navController: NavController,
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {
-                    IconButton(onClick = {navController.popBackStack()}) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         CustomAppBarIcon(
                             icon = R.drawable.drop_down
                         )
@@ -106,47 +110,49 @@ fun TransactionsScreen(navController: NavController,
         },
         content = { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier
+                    .padding(paddingValues)
                     .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
 
-        Text(
-            text = "Your Last Transactions",
-            style = TitleSemiBold,
-            color = G900,
-            modifier = modifier.padding(bottom = 16.dp)
-        )
-
-        LazyColumn {
-            items(transactionHistory) {
-                TransactionsMenuItem(
-                    accountId == it.recipientAccountId,
-                    true,
-                    it.amount.toString(),
-                    it.currency,
-                    it.id.toString(),
-                    if(accountId == it.senderAccountId) it.recipientAccountId.toString()  else it.senderAccountId.toString() ,
-                    it.transactionDate,
-                    it.description?: "N/A",
-                    onClick = {
-                        // Navigate to the details screen by transaction ID
-                        navController.navigate("${Route.TRANSACTION_DETAILS}/${it.id}")
-                    }
+                Text(
+                    text = "Your Last Transactions",
+                    style = TitleSemiBold,
+                    color = G900,
+                    modifier = modifier.padding(bottom = 16.dp)
                 )
-                Spacer(modifier = modifier.padding(bottom = 16.dp))
+
+                LazyColumn {
+                    items(transactionHistory) {
+                        TransactionsMenuItem(
+                            accountId == it.recipientAccountId,
+                            true,
+                            it.amount.toString(),
+                            it.currency,
+                            it.id.toString(),
+                            if (accountId == it.senderAccountId) it.recipientAccountId.toString() else it.senderAccountId.toString(),
+                            it.transactionDate,
+                            it.description ?: "N/A",
+                            onClick = {
+                                // Navigate to the details screen by transaction ID
+                                navController.navigate("${Route.TRANSACTION_DETAILS}/${it.id}")
+                            }
+                        )
+                        Spacer(modifier = modifier.padding(bottom = 16.dp))
+                    }
+
+                }
+
+
+
             }
-        }
-
-    }
+            Spacer(modifier = modifier.height(64.dp))
 
 
-    })}
-
-
-
-
-
+        })
+}
 
 
 @Composable
@@ -170,7 +176,7 @@ fun TransactionsMenuItem(
 
     Card(
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = G0) ,
+        colors = CardDefaults.cardColors(containerColor = G0),
         modifier = modifier.clickable { onClick() }
     ) {
 
@@ -259,15 +265,15 @@ fun TransactionsMenuItem(
 
 
                 ) {
-                Text(
-                    text = status,
-                    color = statusColor,
-                    fontSize = 10.sp,
-                    lineHeight = 14.sp,
-                    style = BodyRegular14,
+                    Text(
+                        text = status,
+                        color = statusColor,
+                        fontSize = 10.sp,
+                        lineHeight = 14.sp,
+                        style = BodyRegular14,
 
-                )
-            }
+                        )
+                }
             }
 
         }

@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
@@ -73,7 +72,7 @@ fun TransferAmountDesign(
                     )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
                 navigationIcon = {
                     IconButton(onClick = {}) {
@@ -176,7 +175,9 @@ fun RecipientInformationArea(
 
     Spacer(modifier = modifier.padding(bottom = 32.dp))
 
-    SpeedoButton(text = "Continue", enabled = true, isTransparent = false) {
+    SpeedoButton(text = "Continue",
+        enabled = amount.isNotBlank() && recipientAccountNumber.isNotBlank()&&recipientName.isNotBlank(),
+        isTransparent = false) {
         navController.navigate(
             route = "${Route.CONFIRM_TRANSACTION}/${amount}/${currency}/$senderName/${recipientName}/$senderAccountNumberSuffix/$recipientAccountNumber/$token"
         )

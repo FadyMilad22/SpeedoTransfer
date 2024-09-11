@@ -27,7 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -47,13 +49,17 @@ import com.example.speedotransfer.AppRoutes.Route.SETTINGS
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
 import com.example.speedotransfer.data.repository.EditProfile.EditProfileRepoImpl
+import com.example.speedotransfer.ui.elements.CountryRow
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
+import com.example.speedotransfer.ui.screens.authentication.signUpScreen.DatePickerChooser
 import com.example.speedotransfer.ui.theme.BodyMedium16
 import com.example.speedotransfer.ui.uiConstants
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,11 +96,55 @@ fun EditProfileScreen(
     if (updateState?.httpStatusCode?.is2xxSuccessful == true) {
         // Show the success toast and navigate back to the profile screen
         Toast.makeText(context, "Successfully", Toast.LENGTH_SHORT).show()
-        navController.popBackStack("$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{createdDate}", inclusive = false) // Navigate back to the profile screen
+        navController.popBackStack(
+            "$PROFILE/{accountId}/{name}/{email}/{birthDate}/{country}/{createdDate}",
+            inclusive = false
+        ) // Navigate back to the profile screen
     }
 //    var birthDate by remember {
 //        mutableStateOf("")
 //    }
+    var showBottomSheet by remember { mutableStateOf(false) } // Track Bottom Sheet visibility
+    var isDatePickerShown by remember { mutableStateOf(false) } // Track Date Picker visibility
+    val sheetState = rememberModalBottomSheetState()
+    var selectedCountry by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
+
+
+    // Fix: Only show Bottom Sheet if Date Picker is not shown
+    if (showBottomSheet && !isDatePickerShown) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showBottomSheet = false
+            },
+            sheetState = sheetState,
+            scrimColor = Color.Black.copy(alpha = 0.8f),
+            dragHandle = null
+        ) {
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(400.dp)
+                    .padding(16.dp)
+            ) {
+                items(5) {
+                    CountryRow(
+
+                        countryName = "United States",
+                        isSelected = selectedCountry == "United States",
+                        onCountrySelected = {
+                            selectedCountry = it
+                            scope.launch {
+                                showBottomSheet = false
+                                sheetState.hide()
+                            }
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -106,7 +156,7 @@ fun EditProfileScreen(
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {
@@ -137,7 +187,10 @@ fun EditProfileScreen(
                     .fillMaxSize()
             ) {
 
+                var showError by remember { mutableStateOf(false) } // Local state to control error visibility
 
+                var showPassword by remember { mutableStateOf(false) }
+                var showConfirmPassword by remember { mutableStateOf(false) }
                 val sheetState = rememberModalBottomSheetState()
                 val scope = rememberCoroutineScope()
                 var showBottomSheet by remember { mutableStateOf(false) }
@@ -204,6 +257,9 @@ fun EditProfileScreen(
                     value = fullName,
                     onValueChange = { editProfileViewModel.fullName.value = it },
                     placeholderText = name,
+                    isError = showError && fullName.isBlank(), // Show error if full name is blank after clicking sign-up
+                    showError = showError,
+
                     icon = R.drawable.user,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     visualTransformation = VisualTransformation.None
@@ -213,6 +269,9 @@ fun EditProfileScreen(
                     labelText = "Email",
                     value = emailValue,
                     onValueChange = { editProfileViewModel.email.value = it },
+                    isError = showError && !editProfileViewModel.isValidEmail(email)  // Validate email after button click
+                    , showError = showError,
+                    errorMessage = "Enter a valid email, e.g., example@domain.com.",
                     placeholderText = email,
                     icon = R.drawable.email,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -224,44 +283,63 @@ fun EditProfileScreen(
                     value = country,
                     onValueChange = { country = it },
                     placeholderText = country,
+                    isError = showError, showError = showError,
                     icon = R.drawable.chevron_down,
                     keyboardOptions = KeyboardOptions.Default,
                     visualTransformation = VisualTransformation.None,
                     modifier = modifier.clickable {
-                        showBottomSheet = true
-                        scope.launch {
-                            sheetState.show()
+                        if (!isDatePickerShown) {  // Only show Bottom Sheet if DatePicker is not shown
+                            showBottomSheet = true
+                            scope.launch { sheetState.show() }
                         }
                     }
                 )
-
+                var dateOfBirth by remember { mutableStateOf("") }
+                var dateMillis by remember { mutableLongStateOf(0) }
+                if (isDatePickerShown) {
+                    DatePickerChooser(onConfirm = {
+                        val dateFormatted = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                        dateMillis = it.selectedDateMillis!!
+                        dateOfBirth = dateFormatted.format(dateMillis)
+                        isDatePickerShown = false
+                    }, onDismiss = {
+                        isDatePickerShown = false
+                    })
+                }
                 SpeedoTextField(
                     labelText = "Date Of Birth",
                     value = dateOfBirth,
                     onValueChange = { editProfileViewModel.dateOfBirth.value = it },
                     placeholderText = birthDate,
+                    isError = showError, showError = showError,
                     icon = R.drawable.date,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    visualTransformation = VisualTransformation.None
+                    visualTransformation = VisualTransformation.None,
+                    modifier = modifier.clickable {
+                        if (!showBottomSheet) {  // Only show DatePicker if Bottom Sheet is not shown
+                            isDatePickerShown = true
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
-val context = LocalContext.current
+                val context = LocalContext.current
                 SpeedoButton(
                     text = "Save",
-                    enabled = true,
+                    enabled = fullName.isNotBlank() && email.isNotBlank() && country.isNotBlank() && dateOfBirth.isNotBlank(),
                     isTransparent = false,
-                    onClick = { try {
-                        editProfileViewModel.updateProfile()
+                    onClick = {
+                        try {
+                            editProfileViewModel.updateProfile()
 //
 //                            }
 //
 
 //                            }
 //                        Toast.makeText(context, "$", Toast.LENGTH_SHORT).show()
-                    }catch (e : Exception){
-                        Log.d("trace","Error : ${e.localizedMessage}")
-                    }
+                        } catch (e: Exception) {
+                            Log.d("trace", "Error : ${e.localizedMessage}")
+                        }
 
                     }
 

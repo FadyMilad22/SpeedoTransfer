@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -85,8 +87,10 @@ fun OnboardingScreen(navController: NavController,modifier: Modifier=Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .padding(paddingValues).padding(horizontal = 16.dp)
-                    .fillMaxSize()
+                    .fillMaxSize().verticalScroll(rememberScrollState())
             ) {
+                Spacer(modifier = Modifier.height(32.dp))
+
                 HorizontalPager(
                     count = pages.size,
                     state = pagerState,
@@ -129,6 +133,8 @@ fun OnboardingScreen(navController: NavController,modifier: Modifier=Modifier) {
                 ) {
                     Text(text = if (pagerState.currentPage == pages.size - 1) "Finish" else "Next")
                 }
+                Spacer(modifier = Modifier.height(48.dp))
+
             }
         }
     )

@@ -85,7 +85,7 @@ fun FavouriteScreen(navController: NavController,favouriteList: List<Client>, mo
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {

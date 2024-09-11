@@ -28,6 +28,10 @@ class SignUpViewModel(private val signUpRepo: SignUpRepo) : ViewModel() {
 
     val response = MutableStateFlow<RegisterCustomerResponse?>(null)
 
+    fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+        return email.matches(Regex(emailRegex))
+    }
     // Regex pattern for password validation
     private val passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W_]).{6,}$".toRegex()
 

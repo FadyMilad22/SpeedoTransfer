@@ -1,7 +1,6 @@
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -32,8 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.AppRoutes.Route
 import com.example.speedotransfer.AppRoutes.Route.HOME
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
@@ -94,7 +90,7 @@ fun TransferConfirmedDesign(
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {
@@ -197,7 +193,7 @@ fun TransferConfirmedDesign(
                     }
                 )
 
-                Spacer(modifier = Modifier.padding(bottom = 16.dp))
+                Spacer(modifier = Modifier.padding(bottom = 80.dp))
             }
 
 

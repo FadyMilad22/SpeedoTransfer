@@ -174,7 +174,7 @@ fun CompleteSignUpScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { CutomAppBarTitle(text = "Sign Up") },
-                Modifier.background(brush = uiConstants.BRUSH2),
+                Modifier.background(brush = uiConstants.AUTH_BACKGROUND_COLOR),
                 navigationIcon = {
                     IconButton(onClick = {}) {
                         CustomAppBarIcon(icon = R.drawable.drop_down)
@@ -278,7 +278,7 @@ fun CompleteSignUpScreen(
 
                 SpeedoButton(
                     text = "Sign Up",
-                    enabled = isFormValid,
+                    enabled = dateOfBirth.isNotBlank() && selectedCountry.isNotBlank(),
                     isTransparent = false,
                     onClick = {
                         signUpViewModel.onCountryChange(selectedCountry)
@@ -302,6 +302,8 @@ fun CompleteSignUpScreen(
                     distination = Route.SIGN_IN,
                     navController = navController
                 )
+                Spacer(modifier = Modifier.height(32.dp))
+
             }
         }
     )

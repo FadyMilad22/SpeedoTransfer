@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,9 +41,7 @@ import com.example.speedotransfer.data.repository.singUp.SignUpRepoImpl
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
-import com.example.speedotransfer.ui.theme.BodyRegular14
 import com.example.speedotransfer.ui.theme.BodyRegular16
-import com.example.speedotransfer.ui.theme.D300
 import com.example.speedotransfer.ui.theme.G100
 import com.example.speedotransfer.ui.theme.LinkMediumTextStyle
 import com.example.speedotransfer.ui.theme.P300
@@ -71,8 +70,15 @@ fun SignUpScreen(
     val isConfirmPasswordValid by signUpViewModel.isConfirmPasswordValid.collectAsState()
 
     // Local state for toggling visibility of the password fields
+    var showError by remember { mutableStateOf(false) } // Local state to control error visibility
+
     var showPassword by remember { mutableStateOf(false) }
     var showConfirmPassword by remember { mutableStateOf(false) }  // Added showConfirmPassword
+
+    val isFormValid by derivedStateOf {
+        password.length > 5 && email.isNotBlank() && !isPasswordValid && !signUpViewModel.isValidEmail(email)
+    }
+    val isPasswordLengthValid by derivedStateOf { password.length > 5 && confirmPassword.length>5 }
 //    val signUpState by signUpViewModel.signUpState.collectAsState()
 //
 //    if (signUpState is SignUpState.Success) {
@@ -85,7 +91,7 @@ fun SignUpScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { CutomAppBarTitle(text = "Sign Up") },
-                Modifier.background(brush = uiConstants.BRUSH2)
+                Modifier.background(brush = uiConstants.AUTH_BACKGROUND_COLOR)
             )
         },
         content = { paddingValues ->
@@ -114,7 +120,10 @@ fun SignUpScreen(
                     labelText = "Full Name",
                     value = fullName,
                     onValueChange = { signUpViewModel.onFullNameChange(it) },
-                    placeholderText = "Enter your Full Name",
+                    isError = showError && fullName.isBlank() , // Show error if full name is blank after clicking sign-up
+                     showError = showError,
+
+                            placeholderText = "Enter your Full Name",
                     icon = R.drawable.user,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     visualTransformation = VisualTransformation.None
@@ -125,6 +134,10 @@ fun SignUpScreen(
                     labelText = "Email",
                     value = email,
                     onValueChange = { signUpViewModel.onEmailChange(it) },
+                    isError = showError && !signUpViewModel.isValidEmail(email)  // Validate email after button click
+,showError = showError,
+                    errorMessage = "Enter a valid email, e.g., example@domain.com.",
+
                     placeholderText = "Enter your email address",
                     icon = R.drawable.email,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -136,6 +149,10 @@ fun SignUpScreen(
                     labelText = "Password",
                     value = password,
                     onValueChange = { signUpViewModel.onPasswordChange(it) },
+                    isError = showError && !isPasswordValid  // Show error after button click if password is invalid
+, showError = showError,
+                    errorMessage = "Password: 6+ chars,uppercase,lowercase,special character.",
+
                     placeholderText = "Enter your password",
                     icon = if (showPassword) R.drawable.eye_comp2 else R.drawable.eye_comp,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -144,23 +161,27 @@ fun SignUpScreen(
                     onTrailingIconClick = { showPassword = !showPassword }
                 )
 
-                // Error message if password is invalid
-                if (!isPasswordValid) {
-                    Text(
-                        text = "Password must be at least 6 characters, include one uppercase letter, one lowercase letter, and one special character.",
-                        color = D300,
-                        style = BodyRegular14,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
-                    )
-                }
+//                // Error message if password is invalid
+//                if (showError && !isPasswordValid) {
+//                    Text(
+//                        text = "Password must be at least 6 characters, include one uppercase letter, one lowercase letter, and one special character.",
+//                        color = D300,
+//                        style = BodyRegular14,
+//                        textAlign = TextAlign.Start,
+//                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+//                    )
+//                }
 
                 // Confirm Password TextField
                 SpeedoTextField(
                     labelText = "Confirm password",
                     value = confirmPassword,
                     onValueChange = { signUpViewModel.onConfirmPasswordChange(it) },
-                    placeholderText = "Confirm your password",
+                    isError = showError && !isConfirmPasswordValid  // Show error if confirm password doesn't match
+                    , showError = showError,
+                    errorMessage = "Passwords do not match.",
+
+                            placeholderText = "Confirm your password",
                     icon = if (showConfirmPassword) R.drawable.eye_comp2 else R.drawable.eye_comp,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     isPasswordVisible = showConfirmPassword,
@@ -169,15 +190,15 @@ fun SignUpScreen(
                 )
 
                 // Error message if confirm password doesn't match
-                if (!isConfirmPasswordValid) {
-                    Text(
-                        text = "Passwords do not match.",
-                        color = D300,
-                        style = BodyRegular14,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
-                    )
-                }
+//                if (showError && !isConfirmPasswordValid) {
+//                    Text(
+//                        text = "Passwords do not match.",
+//                        color = D300,
+//                        style = BodyRegular14,
+//                        textAlign = TextAlign.Start,
+//                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+//                    )
+//                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -188,7 +209,15 @@ fun SignUpScreen(
                     isTransparent = false,
                     onClick = {
 
-                        navController.navigate("${Route.COMPLETE_SIGN_UP}/${fullName}/${email}/${password}")}  // Calling registerCustomer on click
+                        // Trigger validation after clicking sign-up
+                        showError = true
+                        if (signUpViewModel.isFormValid()) {
+                            // Navigate to next screen if form is valid
+                            navController.navigate("${Route.COMPLETE_SIGN_UP}/${fullName}/${email}/${password}")}  // Calling registerCustomer on click
+
+                        //     navController.navigate(Route.COMPLETE_SIGN_UP)
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -206,6 +235,8 @@ fun SignUpScreen(
                     )
 
                 }
+                Spacer(modifier = Modifier.height(32.dp))
+
 
             }
         }

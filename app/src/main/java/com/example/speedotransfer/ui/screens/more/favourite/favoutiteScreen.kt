@@ -46,22 +46,18 @@ import com.example.speedotransfer.AppRoutes.Route.PROFILE
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
 import com.example.speedotransfer.data.repository.favourite.FavRepoImpl
-import com.example.speedotransfer.data.repository.logout.LogoutRepoImpl
 import com.example.speedotransfer.model.Client
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
 import com.example.speedotransfer.ui.elements.FavListWithButtonsBeneficiaryCard
 import com.example.speedotransfer.ui.elements.SpeedoButton
 import com.example.speedotransfer.ui.elements.SpeedoTextField
-import com.example.speedotransfer.ui.screens.more.logout.LogoutViewModel
-import com.example.speedotransfer.ui.screens.more.logout.LogoutViewModelFactory
 import com.example.speedotransfer.ui.theme.BodyRegular16
 import com.example.speedotransfer.ui.theme.G700
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.TitleSemiBold
 import com.example.speedotransfer.ui.uiConstants
-import kotlinx.coroutines.launch
 
 
 /*
@@ -121,7 +117,7 @@ modifier: Modifier = Modifier
                         )
                 },
                 Modifier.background(
-                    brush = uiConstants.BRUSH
+                    brush = uiConstants.APP_BACKGROUND_COLOR
                 ),
 
                 navigationIcon = {
