@@ -117,6 +117,7 @@ val Typography = Typography(
     )
 )
 
+
 //
 
 // Define Font styles
@@ -217,4 +218,5 @@ val SmallFontTextStyle = TextStyle(
     fontSize = 8.sp,
     lineHeight = 12.sp // 150% of 8px is approximately 12px
 )
+
 
