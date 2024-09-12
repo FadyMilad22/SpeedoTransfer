@@ -16,7 +16,7 @@ import com.example.speedotransfer.AppRoutes.Route.SIGN_IN
 import com.example.speedotransfer.data.network.APIClient
 import com.example.speedotransfer.data.repository.logout.LogoutRepoImpl
 
-private const val INACTIVITY_TIMEOUT = 2 * 90 * 1000L // 2 minutes
+private const val INACTIVITY_TIMEOUT = 2 * 60 * 1000L // 2 minutes
 
 @Composable
 fun InactivityHandler(
@@ -37,7 +37,7 @@ fun InactivityHandler(
     // Check if logout was successful and navigate to Sign-In screen
     if (logoutState?.httpStatus == "OK") {
         if (navController.currentDestination?.route != SIGN_IN) {
-            Toast.makeText(LocalContext.current, "Successfully logged out", Toast.LENGTH_SHORT).show()
+            Toast.makeText(LocalContext.current, "We Logged you out because you were \ninactive for 2 minutes - it’s to help your \naccount secure ", Toast.LENGTH_SHORT).show()
             navController.navigate(SIGN_IN) {
                 popUpTo(0) { inclusive = true } // Clear the backstack and navigate to sign in
             }

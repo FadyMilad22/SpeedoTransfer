@@ -1,6 +1,8 @@
 package com.example.speedotransfer.ui.screens.more
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -31,6 +33,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,10 +56,13 @@ import com.example.speedotransfer.AppRoutes.Route.SIGN_IN
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.network.APIClient
 import com.example.speedotransfer.data.repository.logout.LogoutRepoImpl
+import com.example.speedotransfer.data.repository.signIn.SignInRepoImpl
 import com.example.speedotransfer.ui.uiConstants
 import com.example.speedotransfer.ui.elements.ArrowedSmallMenuItem
 import com.example.speedotransfer.ui.elements.CustomAppBarIcon
 import com.example.speedotransfer.ui.elements.CutomAppBarTitle
+import com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInViewModel
+import com.example.speedotransfer.ui.screens.authentication.signInScreen.SignInViewModelFactory
 import com.example.speedotransfer.ui.screens.more.logout.LogoutViewModel
 import com.example.speedotransfer.ui.screens.more.logout.LogoutViewModelFactory
 import com.example.speedotransfer.ui.theme.BodyMedium14
@@ -65,6 +71,11 @@ import com.example.speedotransfer.ui.theme.G0
 import com.example.speedotransfer.ui.theme.G900
 import com.example.speedotransfer.ui.theme.P300
 import com.example.speedotransfer.ui.theme.P50
+
+
+ fun getSharedPref(context: Context):SharedPreferences {
+     return context.getSharedPreferences("customerPrefs", Context.MODE_PRIVATE)
+ }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,11 +91,14 @@ fun MoreScreenDesign(
     modifier: Modifier = Modifier,
     logoutViewModel: LogoutViewModel = viewModel(
         factory = LogoutViewModelFactory(
-            LogoutRepoImpl(APIClient)
+            LogoutRepoImpl(APIClient), getSharedPref(LocalContext.current)
         )
-
     )
+
 ) {
+
+
+
 
     val logoutState by logoutViewModel.logoutState.collectAsState()
 
@@ -97,11 +111,17 @@ fun MoreScreenDesign(
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
+
+
+
+
+    LaunchedEffect(logoutState){
     if (logoutState?.httpStatus  == "OK") {
         // Show the success toast and navigate back to the profile screen
-        Log.d("logout" , "${logoutState?.httpStatus}")
-        Toast.makeText(context, "Successfully", Toast.LENGTH_SHORT).show()
+        Log.d("logout", "${logoutState?.httpStatus}")
+        Toast.makeText(context, "Logged Out", Toast.LENGTH_SHORT).show()
         navController.popBackStack(SIGN_IN, inclusive = false)
+    }
     }
     Scaffold(
         topBar = {

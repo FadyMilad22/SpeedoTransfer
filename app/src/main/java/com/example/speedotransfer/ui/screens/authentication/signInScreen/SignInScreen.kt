@@ -119,10 +119,11 @@ fun SignInScreen(
             if (it.id != -1) {
                 signInViewModel.saveCustomerDataToPreferences(it)
                 Log.d("API Test SignIN", customerState.toString())
-
+                it.id = -1
                 navController.navigate(
                     "${Route.HOME}/${it.accounts[0].id.toLong()}/${it.accounts[0].createdAt}/${getCurrentDate()}/${it.accounts[0].balance.toFloat()}/${it.name}/${it.accounts[0].currency}"
                 )
+
 
 
             } else {

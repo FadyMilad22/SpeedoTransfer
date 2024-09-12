@@ -6,7 +6,7 @@ data class CustomerResponse(
     val createdAt: String,
     val email: String,
     val gender: String,
-    val id: Int= -1,
+    var id: Int= -1,
     val name: String,
     val phoneNumber: String,
     val updatedAt: String,

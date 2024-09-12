@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.more.logout
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.repository.logout.LogoutRepo
@@ -9,7 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class LogoutViewModel (private val logoutRepo: LogoutRepo) : ViewModel(){
+class LogoutViewModel (private val logoutRepo: LogoutRepo ,     private val sharedPreferences: SharedPreferences
+) : ViewModel(){
     private val _logoutState = MutableStateFlow<LogoutResponse?>(null)
     val logoutState: StateFlow<LogoutResponse?> = _logoutState
     // Loading states
@@ -30,6 +32,10 @@ class LogoutViewModel (private val logoutRepo: LogoutRepo) : ViewModel(){
             try {
                 val response = logoutRepo.logout(token)
                 _logoutState.value = response
+                val editor = sharedPreferences.edit()
+                editor.clear()
+                editor.apply()
+
             } catch (e: Exception) {
                 _errorMessage.value = "Error during editing logout: ${e.message}"}
             finally {
