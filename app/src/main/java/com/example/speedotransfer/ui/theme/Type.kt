@@ -118,4 +118,105 @@ val Typography = Typography(
 )
 
 
+//
+
+// Define Font styles
+val Heading1 = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 32.sp,
+    lineHeight = 48.sp // 150% of 32px is 48px
+)
+
+val Heading2 = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 28.sp,
+    lineHeight = 42.sp // 150% of 28px is 42px
+)
+
+val Heading3 = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 24.sp,
+    lineHeight = 36.sp // 150% of 24px is 36px
+)
+
+val TitleSemiBold = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 20.sp,
+    lineHeight = 30.sp // 150% of 20px is 30px
+)
+
+val TitleMedium = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Medium,
+    fontSize = 20.sp,
+    lineHeight = 30.sp // 150% of 20px is 30px
+)
+
+val BodyRegular16 = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Normal,
+    fontSize = 16.sp,
+    lineHeight = 24.sp // 150% of 16px is 24px
+)
+
+val BodyMedium16 = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Medium,
+    fontSize = 16.sp,
+    lineHeight = 24.sp // 150% of 16px is 24px
+)
+
+val BodyRegular14 = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Normal,
+    fontSize = 14.sp,
+    lineHeight = 21.sp // 150% of 14px is 21px
+)
+
+val BodyMedium14 = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Medium,
+    fontSize = 14.sp,
+    lineHeight = 21.sp // 150% of 14px is 21px
+)
+
+val Body2 = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Normal,
+    fontSize = 12.sp,
+    lineHeight = 18.sp // 150% of 12px is 18px
+)
+
+val ButtonTextStyle = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Medium,
+    fontSize = 16.sp,
+    lineHeight = 20.8.sp // 130% of 16px is approximately 20.8px
+)
+
+val LinkMediumTextStyle = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Medium,
+    fontSize = 16.sp,
+    lineHeight = 20.8.sp // 130% of 16px is approximately 20.8px
+)
+
+val LinkRegularTextStyle = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Normal,
+    fontSize = 16.sp,
+    lineHeight = 20.8.sp // 130% of 16px is approximately 20.8px
+)
+
+val SmallFontTextStyle = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Normal,
+    fontSize = 8.sp,
+    lineHeight = 12.sp // 150% of 8px is approximately 12px
+)
+
 
